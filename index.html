@@ -333,6 +333,17 @@ summary::-webkit-details-marker { display: none; }
 .sheet .trio { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .sheet .trio .kpi { min-height: 80px; padding: 8px 4px; }
 .sheet .trio .kpi-value { font-size: clamp(14px, 4.4vw, 18px); }
+.pw { position: relative; flex: 1 1 auto; min-width: 0; display: flex; }
+.pw input { padding-right: var(--s6); }
+.eye { position: absolute; right: 0; top: 0; width: var(--ctl); height: var(--ctl); display: flex; align-items: center; justify-content: center; border: 0; background: none; color: var(--sub); cursor: pointer; border-radius: var(--r); }
+.eye:hover { color: var(--navy); }
+.row-ctl .pw { height: var(--ctl); }
+.mkt { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s1); }
+.mkt-card { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 104px; gap: 2px; padding: 12px var(--s1); cursor: pointer; font: inherit; color: inherit; width: 100%; }
+.mkt-card + .mkt-card { margin-top: 0; }
+.mkt-card b { font-size: clamp(16px, 4.6vw, 20px); color: var(--navy); line-height: 1.3; }
+.mkt-card .tiny { line-height: 1.5; }
+.mkt-card[aria-pressed=true] { border: 2px solid var(--navy); padding: 11px 7px; }
 
 </style>
 </head>
@@ -365,18 +376,18 @@ summary::-webkit-details-marker { display: none; }
         <input type="text" name="username" autocomplete="username" value="asset-compass" hidden>
         <div class="row-ctl">
           <label for="pw" class="sr-only">密碼</label>
-          <input id="pw" type="password" autocomplete="current-password" placeholder="請輸入密碼（至少 8 碼）" minlength="8" required>
+          <input id="pw" type="password" autocomplete="current-password" placeholder="輸入密碼" minlength="8" required>
           <button class="btn" type="submit" id="loginBtn">登入</button>
         </div>
         <div id="loginMsg" class="muted" role="alert" aria-live="assertive"></div>
       </form>
 
       <div class="login-links">
-        <button type="button" class="link-btn" id="setupBtn">設定後端連線</button>
+        <button type="button" class="link-btn" id="forgotBtn">忘記密碼？</button>
         <span aria-hidden="true" class="tiny">｜</span>
         <button type="button" class="link-btn" id="demoBtn">示範模式瀏覽</button>
       </div>
-      <p class="login-note" id="loginNote">資料加密傳輸並儲存於你自己的 Google 雲端硬碟。</p>
+      <p class="login-note"><span id="loginNote">資料加密傳輸並儲存於你自己的 Google 雲端硬碟。</span> <button type="button" class="link-btn" id="setupBtn" style="min-height:24px;padding:0;font-size:12px">變更後端連線</button></p>
     </div>
   </section>
 
@@ -1333,7 +1344,8 @@ var Demo = (function () {
       case 'indices': return { ok: true, indices: indices };
       case 'news': return { ok: true, news: news };
       case 'save': return { ok: true, updatedAt: new Date().toISOString() };
-      case 'secretStatus': return { ok: true, status: { gemini: false, openai: false, claude: false, email: 'you@example.com', trigger: true } };
+      case 'secretStatus': return { ok: true, status: { gemini: false, openai: false, claude: false, email: 'you@example.com', recoveryEmail: 'you@example.com', trigger: true } };
+      case 'setRecovery': return { ok: true, email: p.email || 'you@example.com' };
       case 'secrets': return { ok: false, error: '示範模式無法儲存金鑰' };
       case 'schedule': return { ok: true, settings: state.data.settings, data: state.data };
       case 'report': {
@@ -1432,13 +1444,15 @@ var Demo = (function () {
   // 由 Apps Script 網址直接開啟時（內建模式），用 google.script.run 呼叫後端，不需設定網址
   var GAS = !!(window.google && google.script && google.script.run);
   var MEM = {};
+  // 預設後端（你的 Apps Script 網址）：換手機、加到主畫面、換瀏覽器都不用重新設定
+  var DEFAULT_API = 'https://script.google.com/macros/s/AKfycbykol3jy94IyPPDfshnQcjWTckLBxNSLaxXneYfLhd7PuYCJ6wx85mZZ90r2xjEe_PCwQ/exec';
   var API = {
     gas: GAS,
-    url: function () { return GAS ? 'Apps Script（內建）' : (LS.get('fc_api') || ''); },
-    ready: function () { return GAS || !!LS.get('fc_api'); },
+    url: function () { return GAS ? 'Apps Script（內建）' : (LS.get('fc_api') || DEFAULT_API); },
+    ready: function () { return GAS || !!(LS.get('fc_api') || DEFAULT_API); },
     token: function () { return LS.get('fc_token') || MEM.token || ''; },
     setToken: function (t) { MEM.token = t; LS.set('fc_token', t); },
-    call: function (action, payload) {
+    call: function (action, payload, opt) {
       payload = payload || {};
       if (S.demo) return new Promise(function (res) { setTimeout(function () { res(Demo.handle(action, payload, S)); }, 250); });
       payload.action = action; payload.token = API.token();
@@ -1451,37 +1465,76 @@ var Demo = (function () {
             .api(JSON.stringify(payload));
         });
       }
-      var url = LS.get('fc_api');
+      var url = LS.get('fc_api') || DEFAULT_API;
       if (!url) return Promise.resolve({ ok: false, error: '尚未設定後端網址' });
-      return fetch(url, { method: 'POST', redirect: 'follow', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) })
+      var body = JSON.stringify(payload);
+      return fetch(url, { method: 'POST', redirect: 'follow', keepalive: !!(opt && opt.keepalive && body.length < 60000), headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: body })
         .then(function (r) { return r.json(); })
         .then(done)
         .catch(function (e) { return { ok: false, error: '連線失敗：' + (e.message || e) }; });
     }
   };
 
-  var saveTimer = null;
+  // ── 儲存佇列：一次只送一筆、失敗自動重試，未同步的修改先存在本機，重新登入會自動補送 ──
+  var saveTimer = null, retryTimer = null, saving = false, dirty = false;
+  function pendingKey() { return 'fc_pending'; }
+  function keepPending() { if (S.demo || !S.data) return; LS.set(pendingKey(), JSON.stringify({ base: S.data.updatedAt || '', at: new Date().toISOString(), data: S.data })); }
   function commit(msg) {
-    S.data.updatedAtLocal = new Date().toISOString();
+    if (!S.data) return;
+    dirty = true; keepPending();
     setSync('saving');
     clearTimeout(saveTimer);
-    saveTimer = setTimeout(doSave, 500);
+    saveTimer = setTimeout(function () { doSave(); }, 400);
     if (msg) toast(msg);
   }
-  function doSave(force) {
+  function doSave(force, keepalive) {
+    clearTimeout(saveTimer); clearTimeout(retryTimer);
+    if (!S.data) return Promise.resolve();
+    if (saving) { dirty = true; return S.savingP; }
+    saving = true; dirty = false;
     var base = force ? null : S.data.updatedAt;
     var payload = JSON.parse(JSON.stringify(S.data));
     delete payload.updatedAtLocal;
-    API.call('save', { data: payload, baseUpdatedAt: base }).then(function (r) {
-      if (r.ok) { S.data.updatedAt = r.updatedAt; setSync(S.demo ? 'demo' : 'ok'); return; }
-      setSync('error');
+    S.savingP = API.call('save', { data: payload, baseUpdatedAt: base }, { keepalive: keepalive }).then(function (r) {
+      saving = false;
+      if (!S.data) return;
+      if (r.ok) {
+        S.data.updatedAt = r.updatedAt; S.saveFails = 0;
+        if (dirty) { keepPending(); return doSave(); }
+        LS.del(pendingKey()); setSync(S.demo ? 'demo' : 'ok'); return;
+      }
+      setSync('error'); dirty = true; keepPending();
       if (r.error === 'CONFLICT') {
-        openSheet('資料衝突', '<p>雲端資料已在其他裝置更新。要使用哪一份？</p>', [
-          { label: '載入雲端版本', ghost: true, fn: function () { S.data = FC.normalize(r.data); closeSheet(); route(); setSync('ok'); } },
-          { label: '以此裝置覆蓋', fn: function () { closeSheet(); doSave(true); } }
+        openSheet('資料衝突', '<p>雲端資料已在其他裝置更新。要使用哪一份？</p><p class="muted">「以此裝置為準」會用這台裝置目前的內容覆蓋雲端。</p>', [
+          { label: '載入雲端版本', ghost: true, fn: function () { S.data = FC.normalize(r.data); dirty = false; LS.del(pendingKey()); closeSheet(); route(); setSync('ok'); } },
+          { label: '以此裝置為準', fn: function () { closeSheet(); doSave(true); } }
         ]);
-      } else toast('儲存失敗：' + (r.message || r.error));
+      } else if (r.error !== 'AUTH') {
+        S.saveFails = (S.saveFails || 0) + 1;
+        if (S.saveFails === 1 || S.saveFails % 5 === 0) toast('尚未同步（' + (r.message || r.error) + '），修改已暫存在本機，會自動重試');
+        retryTimer = setTimeout(function () { doSave(); }, Math.min(60000, 5000 * S.saveFails));
+      }
     });
+    return S.savingP;
+  }
+  /** 離開頁面、切到背景、登出前，立刻把未送出的修改送出 */
+  function flushSave() { if (S.data && !S.demo && (dirty || saveTimer && dirty)) return doSave(false, true); return S.savingP || Promise.resolve(); }
+  document.addEventListener('visibilitychange', function () { if (document.hidden && dirty) flushSave(); });
+  window.addEventListener('pagehide', function () { if (dirty) flushSave(); });
+  /** 登入後檢查本機是否有上次沒送出的修改 */
+  function restorePending() {
+    if (S.demo) return;
+    var p; try { p = JSON.parse(LS.get(pendingKey()) || 'null'); } catch (e) { p = null; }
+    if (!p || !p.data) return;
+    if (p.base === S.data.updatedAt) {
+      S.data = FC.normalize(p.data); S.data.updatedAt = p.base; dirty = true; doSave();
+      toast('已補上次尚未同步的修改');
+    } else {
+      openSheet('發現未同步的修改', '<p>這台裝置在 ' + esc((p.at || '').slice(0, 16).replace('T', ' ')) + ' 有一份尚未同步到雲端的修改，但雲端資料之後也有更新。</p><p class="muted">要使用哪一份？</p>', [
+        { label: '使用雲端版本', ghost: true, fn: function () { LS.del(pendingKey()); closeSheet(); } },
+        { label: '使用本機版本', fn: function () { var up = S.data.updatedAt; S.data = FC.normalize(p.data); S.data.updatedAt = up; closeSheet(); dirty = true; doSave(true); route(); } }
+      ]);
+    }
   }
   function setSync(s) { var b = $('#syncBtn'); if (b) { b.dataset.s = s; b.setAttribute('aria-label', { ok: '已同步', saving: '同步中', error: '同步失敗，點擊重試', demo: '示範模式' }[s]); } }
 
@@ -1505,6 +1558,17 @@ var Demo = (function () {
   }
   function escClose(e) { if (e.key === 'Escape') closeSheet(); }
   function closeSheet() { $('#layer').innerHTML = ''; document.removeEventListener('keydown', escClose); }
+  var EYE = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+  var EYE_OFF = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l18 18M10.6 5.1A10 10 0 0112 5c6.5 0 10 7 10 7a17 17 0 01-3.2 4.1M6.1 6.1A17 17 0 002 12s3.5 7 10 7a9.7 9.7 0 004.1-.9"/><path d="M9.9 9.9a3 3 0 004.2 4.2"/></svg>';
+  /** 在密碼欄右側加上「顯示／隱藏」眼睛 */
+  function addEye(input) {
+    if (!input || input.parentNode.classList.contains('pw')) return;
+    var w = document.createElement('div'); w.className = 'pw';
+    input.parentNode.insertBefore(w, input); w.appendChild(input);
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'eye'; b.setAttribute('aria-label', '顯示密碼'); b.innerHTML = EYE;
+    b.onclick = function () { var show = input.type === 'password'; input.type = show ? 'text' : 'password'; b.innerHTML = show ? EYE_OFF : EYE; b.setAttribute('aria-label', show ? '隱藏密碼' : '顯示密碼'); input.focus(); };
+    w.appendChild(b);
+  }
   function val(id) { var el = $('#' + id); return el ? el.value.trim() : ''; }
   function confirmDel(what, fn) {
     openSheet('確認刪除', '<p>確定要刪除「' + esc(what) + '」嗎？此動作無法復原。</p>', [{ label: '取消', ghost: true, fn: closeSheet }, { label: '刪除', danger: true, fn: function () { fn(); closeSheet(); } }]);
@@ -1537,7 +1601,14 @@ var Demo = (function () {
       if (r && r.ok && !r.initialized) { $('#loginNote').textContent = '第一次使用：請自訂一組至少 8 碼的密碼，按登入後即完成設定。'; $('#loginBtn').textContent = '設定密碼'; }
     });
   }
-  function logout(msg) { LS.del('fc_token'); MEM.token = ''; S.data = null; S.demo = false; showLogin(msg); }
+  function logout(msg) {
+    if (S.data && !S.demo && dirty && API.token() && msg == null) {
+      toast('同步中，請稍候…');
+      return flushSave().then(function () { logout(dirty ? '有修改尚未同步，已暫存在本機，下次登入會自動補上' : ''); });
+    }
+    clearTimeout(saveTimer); clearTimeout(retryTimer);
+    LS.del('fc_token'); MEM.token = ''; S.data = null; S.demo = false; dirty = false; saving = false; showLogin(msg);
+  }
 
   function bindLogin() {
     $('#loginSprite').onclick = function () { $('#loginBubble').textContent = bubbleText(); };
@@ -1557,6 +1628,46 @@ var Demo = (function () {
     };
     $('#setupBtn').onclick = setupBackend;
     $('#demoBtn').onclick = function () { S.demo = true; startApp(); };
+    $('#forgotBtn').onclick = forgotFlow;
+    addEye($('#pw'));
+  }
+  /** 忘記密碼：寄 6 位數驗證碼到重設信箱 → 輸入驗證碼與新密碼 */
+  function forgotFlow() {
+    if (S.demo) return;
+    var cool = 0, timer = null;
+    function body(sent, msg) {
+      return '<div class="stack">' + (sent ? '<div class="alert ok"><span>✓ 驗證碼已寄到 ' + esc(sent) + '，15 分鐘內有效</span></div>' : '<p class="muted" style="margin:0">會寄一組 6 位數驗證碼到你的「密碼重設信箱」（預設為建立 Apps Script 的 Google 帳號信箱）。</p>') +
+        (msg ? '<div class="alert"><span>' + esc(msg) + '</span></div>' : '') +
+        (sent ? '<div class="field"><label for="fgCode">6 位數驗證碼</label><input id="fgCode" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div>' +
+          '<div class="field"><label for="fgPw">新密碼（至少 8 碼）</label><input id="fgPw" type="password" autocomplete="new-password"></div>' +
+          '<p class="tiny" style="margin:0">收件信箱可在「設定 › 帳號與資料 › 密碼重設信箱」修改。沒收到信請查看垃圾郵件，或 1 分鐘後重新寄送。</p>' : '') + '</div>';
+    }
+    function send() {
+      if (cool > 0) return;
+      $('#sheetBody').innerHTML = '<div class="empty"><span class="typing"><i></i><i></i><i></i></span>寄送中…</div>';
+      API.call('forgot').then(function (r) {
+        if (!r.ok) { open(null, r.error); return; }
+        open(r.sentTo); cool = 60; tick();
+      });
+    }
+    function tick() { clearInterval(timer); timer = setInterval(function () { cool--; var b = $('#fgResend'); if (b) { b.textContent = cool > 0 ? '重新寄送（' + cool + '）' : '重新寄送'; b.disabled = cool > 0; } if (cool <= 0) clearInterval(timer); }, 1000); }
+    function open(sent, msg) {
+      openSheet('重設密碼', body(sent, msg), sent ? [
+        { label: '重新寄送（60）', ghost: true, fn: send },
+        { label: '重設並登入', fn: function () {
+          var code = val('fgCode'), pw = $('#fgPw').value;
+          if (!/^\d{6}$/.test(code)) { toast('請輸入 6 位數驗證碼'); return; }
+          if (pw.length < 8) { toast('新密碼至少 8 碼'); return; }
+          API.call('resetPassword', { code: code, newPassword: pw }).then(function (r) {
+            if (!r.ok) { toast(r.error); return; }
+            clearInterval(timer); API.setToken(r.token); closeSheet(); toast('密碼已重設'); startApp();
+          });
+        } }
+      ] : [{ label: '取消', ghost: true, fn: closeSheet }, { label: '寄送驗證碼', fn: send }], function (b) {
+        if (sent) { var rb = $('#layer [data-b="0"]'); rb.id = 'fgResend'; rb.disabled = true; addEye($('#fgPw')); }
+      });
+    }
+    open(null, null);
   }
   function setupBackend() {
     openSheet('設定後端連線', '<div class="stack"><div class="field"><label for="apiUrl">Google Apps Script 網頁應用程式網址</label>' +
@@ -1586,6 +1697,7 @@ var Demo = (function () {
       if (!r.ok) { if (r.error !== 'AUTH') { setSync('error'); $('#view').innerHTML = '<div class="empty">' + esc(r.error || '載入失敗') + '<button class="btn" id="retry">重試</button></div>'; $('#retry').onclick = startApp; } return; }
       S.data = FC.normalize(r.data);
       setSync(S.demo ? 'demo' : 'ok');
+      restorePending();
       if (!location.hash || location.hash === '#') location.hash = '#/home'; else route();
       refreshMarket();
       if (!S.data.profile.name && !S.demo) setTimeout(function () { toast('歡迎！建議先到「更多 › 設定」填寫個人財務檔案'); }, 800);
@@ -1598,6 +1710,13 @@ var Demo = (function () {
   }
   function nowHMS() { var t = new Date(Date.now() + 8 * 3600000); var p = function (n) { return (n < 10 ? '0' : '') + n; }; return p(t.getUTCHours()) + ':' + p(t.getUTCMinutes()) + ':' + p(t.getUTCSeconds()); }
   function marketOpenLocal() { var t = FC.twTime(), w = FC.dayOfWeek(FC.twDay()); return w >= 1 && w <= 5 && t >= '09:00' && t <= '13:35'; }
+  function twStatus() { var t = FC.twTime(), w = FC.dayOfWeek(FC.twDay()); if (w === 0 || w === 6) return '休市'; return t < '09:00' ? '開盤前' : t <= '13:30' ? '盤中' : '13:30 收盤'; }
+  function etNow() {
+    try { var f = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', weekday: 'short', hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(new Date()), o = {};
+      f.forEach(function (p) { o[p.type] = p.value; }); return { wd: o.weekday, hm: (o.hour === '24' ? '00' : o.hour) + ':' + o.minute }; } catch (e) { return null; }
+  }
+  function usOpen() { var e = etNow(); return !!(e && e.wd !== 'Sat' && e.wd !== 'Sun' && e.hm >= '09:30' && e.hm < '16:00'); }
+  function usStatus() { var e = etNow(); if (!e) return ''; if (e.wd === 'Sat' || e.wd === 'Sun') return '休市'; return e.hm < '04:00' ? '休市' : e.hm < '09:30' ? '盤前' : e.hm < '16:00' ? '盤中' : e.hm < '20:00' ? '盤後' : '已收盤'; }
   var mkBusy = false;
   function refreshMarket(force, silent) {
     if (mkBusy) return Promise.resolve();
@@ -1621,7 +1740,7 @@ var Demo = (function () {
   setInterval(function () {
     if (!S.data || document.hidden || S.demo && !S.demoTick) return;
     if (['home', 'invest', 'assets'].indexOf(currentRoute()) < 0 || $('#layer').innerHTML) return;
-    var gap = marketOpenLocal() ? 60000 : 600000;
+    var gap = marketOpenLocal() || (usOpen() && S.data.trades.some(function (t) { return t.market === 'US'; })) ? 60000 : 600000;
     if (!S.lastMk || Date.now() - S.lastMk >= gap) refreshMarket(false, true);
   }, 15000);
   document.addEventListener('visibilitychange', function () { if (!document.hidden && S.data && S.lastMk && Date.now() - S.lastMk > 60000) refreshMarket(false, true); });
@@ -1814,18 +1933,25 @@ var Demo = (function () {
   function pageInvest(v) {
     var s = sum();
     var h = liveBarHTML() + '<div style="height:16px"></div>';
-    h += '<div class="kpis">' + kpi('總成本', money(s.investCost)) + kpi('總市值' + (s.live ? '（即時）' : ''), money(s.investValue), s.holdings.length ? '今日 ' + plSpan(s.dayChange) : '') +
+    h += '<div class="kpis">' + kpi('總成本', money(s.investCost)) + kpi('股票總市值（台＋美）', money(s.investValue), s.holdings.length ? '今日 ' + plSpan(s.dayChange) : '') +
       kpi('總未實現損益', plSpan(s.upl), plPct(s.uplPct)) + kpi('已實現損益', plSpan(s.realized), '累計') + '</div>';
-    h += '<div class="bigbtns" style="margin-top:24px"><button class="btn" id="addTr">' + I.plus + '記錄買賣</button><button class="btn btn-ghost" id="addHold">' + I.plus + '輸入現有持股</button></div>';
-    h += '<section class="sec">' + secHead('HOLDINGS', '持股明細') + '<div class="list">';
-    if (!s.holdings.length) h += '<div class="empty">還沒有持股<br>已經持有的股票請按「輸入現有持股」</div>';
-    s.holdings.forEach(function (x) {
-      var cp = x.changePct;
+    var tw = s.holdings.filter(function (x) { return x.market !== 'US'; }), us = s.holdings.filter(function (x) { return x.market === 'US'; });
+    function agg(list) { var v = 0, c = 0, vt = 0, ct = 0, d = 0; list.forEach(function (x) { v += x.value; c += x.cost; vt += x.valueTWD; ct += x.costTWD; d += x.dayChange || 0; }); return { v: v, c: c, vt: vt, ct: ct, d: d, p: c ? (v - c) / c : 0 }; }
+    var aT = agg(tw), aU = agg(us), tab = S.mktTab || 'TW';
+    h += '<div class="mkt" style="margin-top:8px">' +
+      '<button type="button" class="card mkt-card" data-mk="TW" aria-pressed="' + (tab === 'TW') + '"><span class="tiny">台股・' + twStatus() + '</span><b class="num">NT$' + fmt(aT.vt) + '</b><span class="tiny">' + (tw.length ? '損益 ' + plPct(aT.p) + '</span><span class="tiny">今日 ' + plSpan(aT.d) : '尚無台股') + '</span></button>' +
+      '<button type="button" class="card mkt-card" data-mk="US" aria-pressed="' + (tab === 'US') + '"><span class="tiny">美股・' + usStatus() + '</span><b class="num">US$' + fmt(aU.v, 0) + '</b><span class="tiny">' + (us.length ? '損益 ' + plPct(aU.p) + '</span><span class="tiny">≈ NT$' + fmt(aU.vt) : '尚無美股') + '</span></button></div>';
+    h += '<div class="bigbtns" style="margin-top:16px"><button class="btn" id="addTr">' + I.plus + '記錄買賣</button><button class="btn btn-ghost" id="addHold">' + I.plus + '輸入現有持股</button></div>';
+    h += '<section class="sec">' + secHead('HOLDINGS', '持股明細') + segHTML('mkTab', [['TW', '台股（' + tw.length + '）'], ['US', '美股（' + us.length + '）']], tab) + '<div class="list" style="margin-top:8px">';
+    var shown = tab === 'US' ? us : tw;
+    if (!shown.length) h += '<div class="empty">' + (tab === 'US' ? '還沒有美股持股' : '還沒有台股持股') + '<br>按「輸入現有持股」新增</div>';
+    shown.forEach(function (x) {
+      var cp = x.changePct, isUS = x.market === 'US';
       h += '<button class="item" data-sym="' + esc(x.symbol) + '"><span class="item-icon sym" style="background:' + FC.CLASSES[x.cls].color + ';color:#fff">' + esc(x.symbol.slice(0, 6)) + '</span>' +
         '<span class="item-main"><span class="item-title">' + esc(x.name) + '</span><span class="item-sub">' + fmt(x.qty) + ' 股・均 ' + fmt(x.avgCost, 2) + '</span><span class="item-sub">損益 ' + plPct(x.uplPct) + ' ' +
         (x.verified ? '<span class="badge ok" title="已雙來源驗證">✓</span>' : x.quote ? '<span class="badge warn" title="單一來源">單一</span>' : '<span class="badge err">無報價</span>') + '</span></span>' +
-        '<span class="item-right"><span class="item-amt">' + fmt(x.valueTWD) + '</span>' +
-        '<span class="item-sub">' + fmt(x.price, x.price >= 1000 ? 0 : 2) + (cp != null ? ' <span class="chg ' + (cp > 0 ? 'up' : cp < 0 ? 'down' : '') + '">' + (cp > 0 ? '▲' : cp < 0 ? '▼' : '') + pct(Math.abs(cp), 2) + '</span>' : '') + '</span></span></button>';
+        '<span class="item-right"><span class="item-amt">' + (isUS ? 'US$' + fmt(x.value, 0) : fmt(x.valueTWD)) + '</span>' +
+        '<span class="item-sub">' + (isUS ? '$' + fmt(x.price, 2) : fmt(x.price, x.price >= 1000 ? 0 : 2)) + (cp != null ? ' <span class="chg ' + (cp > 0 ? 'up' : cp < 0 ? 'down' : '') + '">' + (cp > 0 ? '▲' : cp < 0 ? '▼' : '') + pct(Math.abs(cp), 2) + '</span>' : '') + '</span></span></button>';
     });
     h += '</div><p class="tiny" style="margin-top:8px">' + (Object.keys(S.quotes).length ? '報價時間：' + quoteStamp() + '。' : '') + '盤中為證交所即時成交價，每 60 秒自動更新；收盤後改用官方收盤價。✓＝官方與 Yahoo Finance 同日價格差異 &lt;0.5%。點持股可看來源與調整分類。</p></section>';
 
@@ -1844,6 +1970,8 @@ var Demo = (function () {
       '<a class="btn btn-ghost btn-block" href="#/report">前往每日報表</a></div></section>';
     v.innerHTML = h;
     bindRefQ();
+    bindSeg('mkTab', function (m) { S.mktTab = m; var y = window.scrollY; route(); window.scrollTo(0, y); });
+    $$('.mkt-card').forEach(function (c) { c.onclick = function () { S.mktTab = c.dataset.mk; var y = window.scrollY; route(); window.scrollTo(0, y); }; });
     $('#addTr').onclick = function () { tradeForm(); };
     $('#addHold').onclick = function () { holdingForm(); };
     $$('[data-tr]').forEach(function (b) { b.onclick = function () { var t = find(S.data.trades, b.dataset.tr); if (t.side === 'adjust') adjForm(t); else if (t.opening) holdingForm(t); else tradeForm(t); }; });
@@ -2411,6 +2539,8 @@ var Demo = (function () {
       '<div class="field"><label for="pwO">目前密碼</label><input id="pwO" type="password" autocomplete="current-password"></div>' +
       '<div class="field"><label for="pwN">新密碼（至少 8 碼）</label><input id="pwN" type="password" autocomplete="new-password"></div>' +
       '<button class="btn btn-ghost btn-block" id="pwSave">變更密碼</button><hr class="hr">' +
+      '<div class="field"><label for="rcMail">密碼重設信箱（忘記密碼時，驗證碼寄到這裡）</label><input id="rcMail" type="email" inputmode="email" placeholder="讀取中…"></div>' +
+      '<button class="btn btn-ghost btn-block" id="rcSave">儲存重設信箱</button><hr class="hr">' +
       '<div class="grid2"><button class="btn btn-ghost" id="exp">匯出備份</button><label class="btn btn-ghost" for="imp" style="cursor:pointer">匯入備份</label></div><input id="imp" type="file" accept="application/json,.json" hidden>' +
       '<div class="field"><label for="apiU">後端網址</label><input id="apiU" type="url" value="' + esc(API.url()) + '" readonly></div>' +
       (GAS ? '' : '<button class="btn btn-ghost btn-block" id="apiChange">變更後端連線</button>') + '</div></section>';
@@ -2433,6 +2563,7 @@ var Demo = (function () {
       var el = $('#keyStat'); if (!el) return;
       if (!r.ok) { el.textContent = r.error; return; }
       var s2 = r.status; S.secret = s2;
+      var rc = $('#rcMail'); if (rc) { rc.value = s2.recoveryEmail || ''; rc.placeholder = '例：you@gmail.com'; }
       el.innerHTML = '已設定：' + ['gemini', 'openai', 'claude'].map(function (k) { return '<span class="badge ' + (s2[k] ? 'ok' : '') + '">' + { gemini: 'Gemini', openai: 'ChatGPT', claude: 'Claude' }[k] + (s2[k] ? ' ✓' : ' 未設定') + '</span>'; }).join(' ') + '<br>寄件帳號：' + esc(s2.email || '—');
     });
     $('#keySave').onclick = function () {
@@ -2440,6 +2571,8 @@ var Demo = (function () {
       if (!Object.keys(sec).length) { toast('請至少貼上一組金鑰'); return; }
       API.call('secrets', { secrets: sec }).then(function (r) { if (r.ok) { toast('金鑰已安全儲存'); route(); } else toast(r.error); });
     };
+    addEye($('#pwO')); addEye($('#pwN'));
+    $('#rcSave').onclick = function () { API.call('setRecovery', { email: val('rcMail') }).then(function (r) { if (r.ok) { $('#rcMail').value = r.email; toast('已設定重設信箱：' + r.email); } else toast(r.error); }); };
     $('#pwSave').onclick = function () {
       API.call('changePassword', { oldPassword: $('#pwO').value, newPassword: $('#pwN').value }).then(function (r) { if (r.ok) { API.setToken(r.token); toast('密碼已變更'); $('#pwO').value = $('#pwN').value = ''; } else toast(r.error || '失敗'); });
     };
@@ -2468,7 +2601,7 @@ var Demo = (function () {
     $('#exitDemo').onclick = function () { logout(); };
     var q = new URLSearchParams(location.search);
     if (q.get('demo') === '1') { S.demo = true; startApp(); return; }
-    if (GAS) { $('#setupBtn').hidden = true; var sep = $('#setupBtn').nextElementSibling; if (sep) sep.hidden = true; $('#apiChangeWrap') && ($('#apiChangeWrap').hidden = true); }
+    if (GAS) { $('#setupBtn').hidden = true; $('#apiChangeWrap') && ($('#apiChangeWrap').hidden = true); }
     if (API.token() && API.ready()) startApp(); else showLogin();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
