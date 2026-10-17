@@ -330,6 +330,9 @@ summary::-webkit-details-marker { display: none; }
   .item-icon.sym { width: 40px; flex-basis: 40px; font-size: 9px; letter-spacing: -.04em; }
   .item-right .item-sub .chg { margin-left: 2px; }
 }
+.sheet .trio { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.sheet .trio .kpi { min-height: 80px; padding: 8px 4px; }
+.sheet .trio .kpi-value { font-size: clamp(14px, 4.4vw, 18px); }
 
 </style>
 </head>
@@ -682,7 +685,8 @@ var FC = (function () {
       var s = t.symbol;
       if (!pos[s]) pos[s] = { symbol: s, name: t.name || secOf(data, s).name || s, market: t.market || secOf(data, s).market || 'TW', qty: 0, cost: 0 };
       var p = pos[s], q = num(t.qty), px = num(t.price), fee = num(t.fee), tax = num(t.tax);
-      if (t.side === 'buy') { p.qty += q; p.cost += q * px + fee; }
+      if (t.side === 'adjust') { p.qty = q; p.cost = q * px; }
+      else if (t.side === 'buy') { p.qty += q; p.cost += q * px + fee; }
       else {
         var avg = p.qty > 0 ? p.cost / p.qty : 0;
         var sellQ = Math.min(q, p.qty);
@@ -805,7 +809,7 @@ var FC = (function () {
   function unsettledTrades(data, today, fx) {
     var out = [];
     (data.trades || []).forEach(function (t) {
-      if (t.settled || t.opening) return;
+      if (t.settled || t.opening || t.side === 'adjust') return;
       var sd = addBizDays(t.date, 2);
       if (sd < today) return; // 已過交割日視為完成
       var gross = num(t.qty) * num(t.price);
@@ -1002,7 +1006,7 @@ var FC = (function () {
     var today = ctx.today || twDay();
     var sum = summarize(data, ctx.quotes || {}, ctx.fx || {}, today);
     var sc = scores(data, sum);
-    var todayTrades = (data.trades || []).filter(function (t) { return t.date === today && !t.opening; });
+    var todayTrades = (data.trades || []).filter(function (t) { return t.date === today && !t.opening && t.side !== 'adjust'; });
     var reviews = todayTrades.map(function (t) { return tradeReview(t, (ctx.ohlc || {})[t.symbol], data, sum); });
     return {
       date: today, generatedAt: twDay() + ' ' + twTime(), name: data.profile.name,
@@ -1830,19 +1834,19 @@ var Demo = (function () {
     if (!tr.length) h += '<div class="empty">尚無交易紀錄</div>';
     tr.slice(0, 50).forEach(function (t) {
       var sd = FC.addBizDays(t.date, 2), pending = !t.settled && !t.opening && sd >= FC.twDay();
-      var icon = t.opening ? '<span class="item-icon" style="background:var(--blue-soft);color:var(--navy)">期初</span>' : '<span class="item-icon" style="' + (t.side === 'buy' ? 'background:#FDECEC;color:#C62828' : 'background:#EAF6EC;color:#2E7D32') + '">' + (t.side === 'buy' ? '買' : '賣') + '</span>';
+      var icon = t.side === 'adjust' ? '<span class="item-icon" style="background:var(--warn-bg);color:var(--warn)">調整</span>' : t.opening ? '<span class="item-icon" style="background:var(--blue-soft);color:var(--navy)">期初</span>' : '<span class="item-icon" style="' + (t.side === 'buy' ? 'background:#FDECEC;color:#C62828' : 'background:#EAF6EC;color:#2E7D32') + '">' + (t.side === 'buy' ? '買' : '賣') + '</span>';
       h += '<button class="item" data-tr="' + t.id + '">' + icon +
-        '<span class="item-main"><span class="item-title">' + esc(t.symbol) + ' ' + esc(t.name || '') + '</span><span class="item-sub wrap">' + (t.opening ? '現有持股・' : t.date + '・') + fmt(t.qty) + ' 股 @ ' + fmt(t.price, 2) + (pending ? ' <span class="badge warn">' + sd.slice(5) + ' 交割</span>' : '') + '</span></span>' +
+        '<span class="item-main"><span class="item-title">' + esc(t.symbol) + ' ' + esc(t.name || '') + '</span><span class="item-sub wrap">' + (t.side === 'adjust' ? t.date.slice(5).replace('-', '/') + '・調整為 ' : t.opening ? '現有持股・' : t.date + '・') + fmt(t.qty) + ' 股 @ ' + fmt(t.price, 2) + (pending ? ' <span class="badge warn">' + sd.slice(5) + ' 交割</span>' : '') + '</span></span>' +
         '<span class="item-right"><span class="item-amt">' + fmt(num(t.qty) * num(t.price)) + '</span></span></button>';
     });
-    h += '</div></section>';
+    h += '</div><p class="tiny" style="margin-top:8px">每一筆紀錄點開都能修改或刪除；點上方持股可直接改股數或刪除整檔股票。</p></section>';
     h += '<section class="sec">' + secHead('REVIEW', '交易復盤') + '<div class="card"><p class="muted" style="margin:0 0 16px">有當日買賣時，每日報表會自動加入「當日交易復盤」：開高低收／VWAP 量化成交位置、配置合理性、市場情緒與 A+～D 評分。</p>' +
       '<a class="btn btn-ghost btn-block" href="#/report">前往每日報表</a></div></section>';
     v.innerHTML = h;
     bindRefQ();
     $('#addTr').onclick = function () { tradeForm(); };
     $('#addHold').onclick = function () { holdingForm(); };
-    $$('[data-tr]').forEach(function (b) { b.onclick = function () { var t = find(S.data.trades, b.dataset.tr); if (t.opening) holdingForm(t); else tradeForm(t); }; });
+    $$('[data-tr]').forEach(function (b) { b.onclick = function () { var t = find(S.data.trades, b.dataset.tr); if (t.side === 'adjust') adjForm(t); else if (t.opening) holdingForm(t); else tradeForm(t); }; });
     $$('[data-sym]').forEach(function (b) { b.onclick = function () { secForm(b.dataset.sym); }; });
     if (!S.lastMk && !mkBusy) refreshMarket();
   }
@@ -1961,16 +1965,59 @@ var Demo = (function () {
       bindLookup('trSym', 'trName', 'trMkt', 'trInfo', function (r) { if (!val('trPx') && r.price) { $('#trPx').value = r.price; } auto(); });
     });
   }
+  /** 持股詳情：可直接修改股數／平均成本（新增「調整」紀錄），或刪除整檔股票 */
   function secForm(sym) {
     var sec = S.data.securities[sym] || {}, h = sum().holdings.filter(function (x) { return x.symbol === sym; })[0];
-    var q = h && h.quote;
-    var body = '<div class="stack"><dl class="kv"><dt>名稱</dt><dd>' + esc(h.name) + '</dd><dt>持有股數</dt><dd>' + fmt(h.qty) + '</dd><dt>平均成本</dt><dd>' + fmt(h.avgCost, 2) + '</dd>' +
-      '<dt>收盤價</dt><dd>' + fmt(h.price, 2) + '</dd><dt>市值（台幣）</dt><dd>' + fmt(h.valueTWD) + '</dd><dt>未實現</dt><dd>' + plSpan(h.uplTWD) + '（' + plPct(h.uplPct) + '）</dd></dl>' +
-      (q && q.sources ? '<div class="card" style="background:var(--bg)"><b style="font-size:13px">報價來源交叉驗證</b>' + q.sources.map(function (x) { return '<div class="flex between tiny"><span>' + esc(x.source) + (x.official ? '（官方）' : '') + '</span><span>' + fmt(x.close, 2) + '｜' + esc(x.date) + '</span></div>'; }).join('') + '</div>' : '') +
-      '<div class="field"><label for="secCls">配置分類</label><select id="secCls">' + ['core', 'satellite', 'bond', 'defensive', 'other'].map(function (k) { return '<option value="' + k + '"' + (k === h.cls ? ' selected' : '') + '>' + FC.CLASSES[k].label + '</option>'; }).join('') + '</select></div></div>';
-    openSheet(esc(sym) + ' 持股', body, [
+    if (!h) return;
+    var q = h.quote, cp = h.changePct;
+    var recs = S.data.trades.filter(function (t) { return t.symbol === sym; });
+    var body = '<div class="stack">' +
+      '<div class="trio">' + kpi('現價', fmt(h.price, h.price >= 1000 ? 0 : 2), cp != null ? '<span class="' + (cp > 0 ? 'up' : cp < 0 ? 'down' : '') + '">' + (cp > 0 ? '▲' : cp < 0 ? '▼' : '') + pct(Math.abs(cp), 2) + '</span>' : '') +
+      kpi('市值', fmt(h.valueTWD)) + kpi('未實現', plSpan(h.uplTWD), plPct(h.uplPct)) + '</div>' +
+      '<div class="grid2"><div class="field"><label for="secQty">持有股數</label><input id="secQty" type="number" inputmode="decimal" min="0" value="' + FC.round(h.qty, 4) + '"></div>' +
+      '<div class="field"><label for="secCost">平均成本</label><input id="secCost" type="number" inputmode="decimal" min="0" step="0.01" value="' + FC.round(h.avgCost, 2) + '"></div></div>' +
+      '<div class="field"><label for="secCls">配置分類</label><select id="secCls">' + ['core', 'satellite', 'bond', 'defensive', 'other'].map(function (k) { return '<option value="' + k + '"' + (k === h.cls ? ' selected' : '') + '>' + FC.CLASSES[k].label + '</option>'; }).join('') + '</select></div>' +
+      '<p class="tiny" style="margin:0">修改股數或成本會新增一筆「調整」紀錄，原本的買賣紀錄仍保留。股數改成 0 等於清空持股。</p>' +
+      (q && q.sources ? '<div class="card" style="background:var(--bg)"><b style="font-size:13px">報價來源</b>' + q.sources.map(function (x) { return '<div class="flex between tiny"><span>' + esc(x.source) + '</span><span>' + fmt(x.close, 2) + '｜' + esc((x.date || '').slice(5)) + (x.time ? ' ' + esc(x.time.slice(0, 5)) : '') + '</span></div>'; }).join('') + '</div>' : '') +
+      '<button type="button" class="btn btn-danger btn-block" id="secDel">' + I.trash + '刪除這檔股票（含 ' + recs.length + ' 筆紀錄）</button></div>';
+    openSheet(esc(sym) + ' ' + esc(h.name), body, [
       { label: 'AI 分析', ghost: true, fn: function () { closeSheet(); askAI('請以三方驗證的官方資料，分析 ' + sym + ' ' + h.name + ' 的基本面（營收成長、估值、護城河）、產業前景與風險，並依我目前的持股權重與風險屬性，說明是否適合續抱、加碼或減碼，附停損停利與再平衡邏輯。'); } },
-      { label: '儲存', fn: function () { S.data.securities[sym] = Object.assign({}, sec, { name: sec.name || h.name, market: sec.market || h.market, cls: val('secCls') }); closeSheet(); commit('已更新分類'); route(); } }
+      { label: '儲存', fn: function () {
+        var nq = num(val('secQty')), nc = num(val('secCost'));
+        if (val('secQty') === '' || nq < 0) { toast('請輸入股數'); return; }
+        if (nq > 0 && nc <= 0) { toast('請輸入平均成本'); return; }
+        S.data.securities[sym] = Object.assign({}, sec, { name: sec.name || h.name, market: sec.market || h.market, cls: val('secCls') });
+        var changed = Math.abs(nq - h.qty) > 1e-9 || Math.abs(nc - FC.round(h.avgCost, 2)) > 0.005;
+        if (changed) S.data.trades.push({ id: FC.uid(), side: 'adjust', date: FC.twDay(), symbol: sym, name: h.name, market: h.market, qty: nq, price: nq > 0 ? nc : 0, fee: 0, tax: 0, settled: true, note: '手動調整（原 ' + fmt(h.qty) + ' 股 @ ' + fmt(h.avgCost, 2) + '）' });
+        closeSheet(); commit(changed ? '已更新持股' : '已更新分類'); route();
+      } }
+    ], function () {
+      $('#secDel').onclick = function () {
+        openSheet('確認刪除', '<p>確定要刪除「' + esc(sym) + ' ' + esc(h.name) + '」嗎？</p><p class="muted">會一併刪除這檔股票的 ' + recs.length + ' 筆買賣／持股紀錄，此動作無法復原（雲端仍保留每日備份）。</p>', [
+          { label: '取消', ghost: true, fn: function () { secForm(sym); } },
+          { label: '刪除', danger: true, fn: function () {
+            S.data.trades = S.data.trades.filter(function (t) { return t.symbol !== sym; });
+            delete S.data.securities[sym]; delete S.quotes[sym];
+            closeSheet(); commit('已刪除 ' + sym); route();
+          } }
+        ]);
+      };
+    });
+  }
+  /** 編輯「調整」紀錄 */
+  function adjForm(t) {
+    var body = '<div class="stack"><p class="muted" style="margin:0">' + esc(t.symbol) + ' ' + esc(t.name || '') + '・' + esc(t.note || '手動調整') + '</p>' +
+      '<div class="grid2"><div class="field"><label for="adQty">調整後股數</label><input id="adQty" type="number" inputmode="decimal" min="0" value="' + esc(t.qty) + '"></div>' +
+      '<div class="field"><label for="adCost">調整後平均成本</label><input id="adCost" type="number" inputmode="decimal" min="0" step="0.01" value="' + esc(t.price) + '"></div></div>' +
+      '<div class="field"><label for="adDate">日期</label><input id="adDate" type="date" value="' + esc(t.date) + '"></div></div>';
+    openSheet('編輯調整紀錄', body, [
+      { label: '刪除', danger: true, fn: function () { confirmDel(t.symbol + ' 調整紀錄', function () { S.data.trades = S.data.trades.filter(function (x) { return x.id !== t.id; }); commit('已刪除'); route(); }); } },
+      { label: '儲存', fn: function () {
+        var nq = num(val('adQty')), nc = num(val('adCost'));
+        if (nq < 0 || (nq > 0 && nc <= 0)) { toast('請確認股數與成本'); return; }
+        S.data.trades = S.data.trades.map(function (x) { return x.id === t.id ? Object.assign({}, x, { qty: nq, price: nc, date: val('adDate') || x.date }) : x; });
+        closeSheet(); commit('已儲存'); route();
+      } }
     ]);
   }
 
