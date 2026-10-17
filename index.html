@@ -309,6 +309,27 @@ summary::-webkit-details-marker { display: none; }
 .item-sub .badge { margin-left: 2px; }
 .topbar { padding-left: max(var(--s2), calc((100% - 720px) / 2 + var(--s2))); padding-right: max(var(--s2), calc((100% - 720px) / 2 + var(--s2))); }
 .tabbar { padding-left: max(0px, calc((100% - 720px) / 2)); padding-right: max(0px, calc((100% - 720px) / 2)); }
+.live { display: flex; align-items: center; justify-content: space-between; gap: var(--s1); min-height: 48px; padding: 4px 4px 4px var(--s2); border-radius: var(--r); background: var(--ok-bg); color: #1F5A23; font-size: 13px; }
+.live .l { display: flex; align-items: center; gap: var(--s1); min-width: 0; }
+.live .dot { width: 8px; height: 8px; flex: 0 0 8px; border-radius: 50%; background: #2E7D32; box-shadow: 0 0 0 4px rgba(46,125,50,.18); }
+.live.off { background: var(--bg); color: var(--sub); border: 1px solid var(--line); } .live.off .dot { background: var(--mute); box-shadow: none; }
+.live.err { background: var(--err-bg); color: var(--up); } .live.err .dot { background: var(--up); box-shadow: none; }
+.live .live-btn { height: 40px; flex: 0 0 auto; }
+.live.on .dot { animation: pulse 2s infinite; }
+@keyframes pulse { 50% { box-shadow: 0 0 0 7px rgba(46,125,50,0); } }
+.live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #2E7D32; margin: 0 4px 1px 4px; vertical-align: middle; }
+.bigbtns { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s1); }
+.bigbtns .btn { height: 56px; font-size: 15px; }
+.chg { font-size: 12px; font-weight: 700; margin-left: 4px; }
+.fxrow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s1); }
+.fxrow .kpi { min-height: 88px; }
+.fxrow .fxv { font-size: clamp(16px, 4.6vw, 20px); }
+@media (prefers-reduced-motion: reduce) { .live.on .dot { animation: none; } }
+@media (max-width: 400px) {
+  .item { gap: 12px; padding-left: 12px; padding-right: 12px; }
+  .item-icon.sym { width: 40px; flex-basis: 40px; font-size: 9px; letter-spacing: -.04em; }
+  .item-right .item-sub .chg { margin-left: 2px; }
+}
 
 </style>
 </head>
@@ -680,7 +701,9 @@ var FC = (function () {
       var price = q && q.close ? q.close : (p.cost / p.qty);
       var rate = cur === 'TWD' ? 1 : ((fx && fx.rates && fx.rates[cur]) || 0);
       var value = p.qty * price;
+      var prevC = q && q.prevClose ? q.prevClose : null;
       list.push({
+        prevClose: prevC, dayChange: prevC ? (price - prevC) * p.qty * rate : 0, changePct: q && q.changePct != null ? q.changePct : null, live: !!(q && q.live), quoteTime: q && q.time || '',
         symbol: s, name: sec.name || p.name, market: p.market, cls: sec.cls || guessClass(s, sec.name || p.name),
         currency: cur, qty: p.qty, avgCost: p.cost / p.qty, cost: p.cost, price: price,
         value: value, valueTWD: value * rate, costTWD: p.cost * rate,
@@ -744,8 +767,8 @@ var FC = (function () {
     });
     var other = 0, otherByCls = {};
     (data.otherAssets || []).forEach(function (o) { var v = toTWD(o.value, o.currency, fx); other += v; otherByCls[o.cls || 'other'] = (otherByCls[o.cls || 'other'] || 0) + v; });
-    var investValue = 0, investCost = 0;
-    h.list.forEach(function (x) { investValue += x.valueTWD; investCost += x.costTWD; });
+    var investValue = 0, investCost = 0, dayChange = 0;
+    h.list.forEach(function (x) { investValue += x.valueTWD; investCost += x.costTWD; dayChange += x.dayChange || 0; });
 
     // 未交割（T+2）
     var unsettled = unsettledTrades(data, today, fx);
@@ -769,6 +792,7 @@ var FC = (function () {
       cashRows: cashRows, cashByType: cashByType, cashTotal: cashTotal,
       receivable: recv, payable: pay, recvRows: recvRows, payRows: payRows,
       otherTotal: other, investValue: investValue, investCost: investCost,
+      dayChange: dayChange, live: h.list.some(function (x) { return x.live; }),
       upl: investValue - investCost, uplPct: investCost ? (investValue - investCost) / investCost : 0,
       financial: financial, totalAssets: totalAssets, netWorth: netWorth,
       alloc: alloc, cashflow: cf, avgExpense: avgExp, avgIncome: avgInc,
@@ -781,7 +805,7 @@ var FC = (function () {
   function unsettledTrades(data, today, fx) {
     var out = [];
     (data.trades || []).forEach(function (t) {
-      if (t.settled) return;
+      if (t.settled || t.opening) return;
       var sd = addBizDays(t.date, 2);
       if (sd < today) return; // 已過交割日視為完成
       var gross = num(t.qty) * num(t.price);
@@ -978,7 +1002,7 @@ var FC = (function () {
     var today = ctx.today || twDay();
     var sum = summarize(data, ctx.quotes || {}, ctx.fx || {}, today);
     var sc = scores(data, sum);
-    var todayTrades = (data.trades || []).filter(function (t) { return t.date === today; });
+    var todayTrades = (data.trades || []).filter(function (t) { return t.date === today && !t.opening; });
     var reviews = todayTrades.map(function (t) { return tradeReview(t, (ctx.ohlc || {})[t.symbol], data, sum); });
     return {
       date: today, generatedAt: twDay() + ' ' + twTime(), name: data.profile.name,
@@ -1261,14 +1285,16 @@ var Demo = (function () {
     return D;
   }
 
+  var live = (function () { var t = FC.twTime(), w = FC.dayOfWeek(today); return w >= 1 && w <= 5 && t >= '09:00' && t <= '13:35'; })();
+  function q(close, prev, o, hi, lo, verified) { return { close: close, prevClose: prev, change: close - prev, changePct: (close - prev) / prev, open: o, high: hi, low: lo, date: today, time: live ? FC.twTime() + ':00' : '13:30:00', live: live, source: '示範報價', verified: verified !== false }; }
   var quotes = {
-    '0050': { close: 78.35, open: 77.2, high: 78.6, low: 76.9, date: today, source: '示範報價', verified: true },
-    '006208': { close: 143.2, open: 142.0, high: 143.5, low: 141.8, date: today, source: '示範報價', verified: true },
-    '00679B': { close: 27.42, open: 27.5, high: 27.6, low: 27.35, date: today, source: '示範報價', verified: true },
-    '2330': { close: 2385, open: 2395, high: 2410, low: 2380, date: today, source: '示範報價', verified: true },
-    'VT': { close: 142.6, open: 141.9, high: 143.0, low: 141.5, date: today, source: '示範報價', verified: false }
+    '0050': q(78.35, 77.80, 77.2, 78.6, 76.9),
+    '006208': q(143.2, 142.4, 142.0, 143.5, 141.8),
+    '00679B': q(27.42, 27.46, 27.5, 27.6, 27.35),
+    '2330': q(2385, 2370, 2395, 2410, 2380),
+    'VT': q(142.6, 141.9, 141.9, 143.0, 141.5, false)
   };
-  var fx = { rates: { USD: 31.76, JPY: 0.2104, EUR: 36.92, CNY: 4.43, HKD: 4.08, GBP: 42.1, AUD: 20.9 }, source: '示範匯率（非即時）', date: today };
+  var fx = { rates: { USD: 31.755, JPY: 0.2105, EUR: 36.92, CNY: 4.43, HKD: 4.08, GBP: 42.1, AUD: 20.9 }, prev: { USD: 31.795, JPY: 0.2102, EUR: 36.92 }, source: '示範匯率（非即時）', date: today + ' ' + FC.twTime() };
   var indices = {
     TWII: { close: 27850.4, changePct: 0.0062, date: today }, GSPC: { close: 6820.1, changePct: 0.0031, date: d(1) },
     IXIC: { close: 23110.5, changePct: 0.0048, date: d(1) }, SOX: { close: 7120.3, changePct: 0.0105, date: d(1) }, VIX: { close: 15.2, date: d(1) }
@@ -1294,7 +1320,11 @@ var Demo = (function () {
   /** 模擬後端 API */
   function handle(action, p, state) {
     switch (action) {
-      case 'quotes': return { ok: true, quotes: quotes };
+      case 'quotes': return { ok: true, quotes: quotes, session: { open: live } };
+      case 'lookup': {
+        var k = String(p.symbol || '').toUpperCase(), names = { '2330': ['台積電', 'TW', 2385], '0050': ['元大台灣50', 'TW', 78.35], '2317': ['鴻海', 'TW', 212.5], '00679B': ['元大美債20年', 'TWO', 27.42], 'VT': ['Vanguard Total World Stock ETF', 'US', 142.6] };
+        var n = names[k]; return n ? { ok: true, symbol: k, name: n[0], market: n[1], price: n[2], date: today, time: live ? FC.twTime() : '13:30' } : { ok: false, error: '示範模式只能查 2330、0050、2317、00679B、VT' };
+      }
       case 'fx': return { ok: true, fx: fx };
       case 'indices': return { ok: true, indices: indices };
       case 'news': return { ok: true, news: news };
@@ -1562,18 +1592,43 @@ var Demo = (function () {
     (S.data.trades || []).forEach(function (t) { m[t.symbol] = t.market || 'TW'; });
     return Object.keys(m).map(function (s) { return { symbol: s, market: m[s] }; });
   }
-  function refreshMarket(force) {
+  function nowHMS() { var t = new Date(Date.now() + 8 * 3600000); var p = function (n) { return (n < 10 ? '0' : '') + n; }; return p(t.getUTCHours()) + ':' + p(t.getUTCMinutes()) + ':' + p(t.getUTCSeconds()); }
+  function marketOpenLocal() { var t = FC.twTime(), w = FC.dayOfWeek(FC.twDay()); return w >= 1 && w <= 5 && t >= '09:00' && t <= '13:35'; }
+  var mkBusy = false;
+  function refreshMarket(force, silent) {
+    if (mkBusy) return Promise.resolve();
+    mkBusy = true; S.mkLoading = true; updateLiveBar();
     var items = marketItems();
     return Promise.all([
       items.length ? API.call('quotes', { items: items }) : Promise.resolve({ ok: true, quotes: {} }),
       API.call('fx')
     ]).then(function (rs) {
-      if (rs[0].ok) S.quotes = rs[0].quotes || {};
-      if (rs[1].ok) S.fx = rs[1].fx;
-      if (force) toast('報價已更新');
-      var r = currentRoute(); if (['home', 'invest', 'assets'].indexOf(r) >= 0) route();
+      mkBusy = false; S.mkLoading = false;
+      if (rs[0].ok) { S.quotes = rs[0].quotes || {}; S.session = rs[0].session || { open: marketOpenLocal() }; S.quoteAt = nowHMS(); S.quoteErr = ''; }
+      else S.quoteErr = rs[0].error || '報價更新失敗';
+      if (rs[1].ok && rs[1].fx && Object.keys(rs[1].fx.rates || {}).length) { S.fx = rs[1].fx; S.fxErr = ''; } else S.fxErr = (rs[1] && rs[1].error) || '匯率更新失敗';
+      S.lastMk = Date.now();
+      if (force) toast(S.quoteErr || S.fxErr ? '部分更新失敗：' + (S.quoteErr || S.fxErr) : '報價與匯率已更新');
+      var r = currentRoute();
+      if (['home', 'invest', 'assets'].indexOf(r) >= 0 && !$('#layer').innerHTML) { var y = window.scrollY; route(); window.scrollTo(0, y); }
     });
   }
+  // 自動更新：盤中每 60 秒，其餘時間每 10 分鐘；只在頁面可見、停在首頁／投資／資產時
+  setInterval(function () {
+    if (!S.data || document.hidden || S.demo && !S.demoTick) return;
+    if (['home', 'invest', 'assets'].indexOf(currentRoute()) < 0 || $('#layer').innerHTML) return;
+    var gap = marketOpenLocal() ? 60000 : 600000;
+    if (!S.lastMk || Date.now() - S.lastMk >= gap) refreshMarket(false, true);
+  }, 15000);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden && S.data && S.lastMk && Date.now() - S.lastMk > 60000) refreshMarket(false, true); });
+  function liveBarHTML() {
+    var open = S.session ? S.session.open : marketOpenLocal();
+    var cls = S.quoteErr ? 'err' : open ? 'on' : 'off';
+    var txt = S.mkLoading ? '更新中…' : S.quoteErr ? '更新失敗：' + esc(S.quoteErr) : (open ? '盤中即時' : '已收盤') + (S.quoteAt ? '・' + S.quoteAt + ' 更新' : '');
+    return '<div class="live ' + cls + '" id="liveBar" role="status"><span class="l"><span class="dot"></span><span id="liveTxt">' + txt + '</span></span><button class="btn btn-ghost btn-sm live-btn" id="refQ">立即更新</button></div>';
+  }
+  function updateLiveBar() { var b = $('#liveBar'); if (b) { b.outerHTML = liveBarHTML(); bindRefQ(); } }
+  function bindRefQ() { var b = $('#refQ'); if (b) b.onclick = function () { refreshMarket(true); }; }
   function sum() { return FC.summarize(S.data, S.quotes, S.fx || {}); }
 
   // ═════════ 路由 ═════════
@@ -1630,9 +1685,10 @@ var Demo = (function () {
     h += '<section class="sec">' + secHead('01 OVERVIEW', '財務總覽') + '<div class="kpis">' +
       kpi('淨資產', money(s.netWorth), '目標達成 ' + pct(prog), 'dark') +
       kpi('金融資產總市值', money(s.financial), '現金 ' + pct(s.cashTotal / fin, 0) + '・投資 ' + pct((s.investValue + s.otherTotal) / fin, 0)) +
-      kpi('股票總市值', money(s.investValue), '未實現 ' + plPct(s.uplPct)) +
+      kpi('股票總市值' + (s.live ? ' <span class="live-dot" aria-label="即時"></span>即時' : ''), money(s.investValue), s.holdings.length && s.dayChange ? '今日 ' + plSpan(s.dayChange) : '未實現 ' + plPct(s.uplPct)) +
       kpi('財務評分', sc.total + '<small style="font-size:13px;font-weight:500"> / 100</small>', '等級 ' + sc.grade) + '</div></section>';
 
+    h += fxSectionHTML();
     h += '<section class="sec">' + secHead('02 GOAL', '目標進度', '<a class="btn btn-ghost btn-sm" href="#/goals">管理</a>') + '<div class="card">' +
       '<div class="goal-head"><span class="muted">' + money(s.netWorth) + ' / ' + money(s.target) + '</span><span class="goal-pct">' + pct(prog, 1) + '</span></div>' +
       '<div class="prog lg" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + Math.round(prog * 100) + '"><i style="width:' + FC.clamp(prog * 100) + '%"></i></div>' +
@@ -1684,6 +1740,15 @@ var Demo = (function () {
       el.innerHTML = items.length ? items.map(newsItemHTML).join('') : '<div class="empty">暫無新聞</div>';
       bindNewsActs(el, items);
     });
+  }
+  function fxSectionHTML() {
+    var fx = S.fx, cur = ['USD', 'JPY', 'EUR'];
+    var head = secHead('FX', '即時匯率', '<span class="tiny">' + (fx ? esc((fx.source || '').replace(/（.*）/, '')) + '・' + esc((fx.date || '').slice(11, 16)) : '') + '</span>');
+    if (!fx || !fx.rates || !Object.keys(fx.rates).length) return '<section class="sec">' + head + '<div class="card empty">' + (S.fxErr ? '匯率更新失敗：' + esc(S.fxErr) : '匯率載入中…') + '</div></section>';
+    return '<section class="sec">' + head + '<div class="fxrow">' + cur.map(function (c) {
+      var r = fx.rates[c], p = fx.prev && fx.prev[c], d = p ? r - p : null, dp = c === 'JPY' ? 4 : 3;
+      return '<div class="kpi"><span class="kpi-label">' + c + '</span><span class="kpi-value fxv">' + (r ? fmt(r, dp) : '—') + '</span><span class="kpi-sub ' + (d > 0 ? 'up' : d < 0 ? 'down' : '') + '">' + (d ? (d > 0 ? '▲' : '▼') + fmt(Math.abs(d), dp) : '—') + '</span></div>';
+    }).join('') + '</div></section>';
   }
   function uniqDates() { var d = {}; Object.keys(S.quotes).forEach(function (k) { if (S.quotes[k].date) d[S.quotes[k].date] = 1; }); return Object.keys(d).join('、') + ' 收盤'; }
 
@@ -1744,35 +1809,99 @@ var Demo = (function () {
   // ═════════ 投資 ═════════
   function pageInvest(v) {
     var s = sum();
-    var h = '<div class="kpis">' + kpi('總成本', money(s.investCost)) + kpi('總市值', money(s.investValue)) +
+    var h = liveBarHTML() + '<div style="height:16px"></div>';
+    h += '<div class="kpis">' + kpi('總成本', money(s.investCost)) + kpi('總市值' + (s.live ? '（即時）' : ''), money(s.investValue), s.holdings.length ? '今日 ' + plSpan(s.dayChange) : '') +
       kpi('總未實現損益', plSpan(s.upl), plPct(s.uplPct)) + kpi('已實現損益', plSpan(s.realized), '累計') + '</div>';
-    h += '<section class="sec">' + secHead('HOLDINGS', '持股明細', '<button class="btn btn-ghost btn-sm" id="refQ">' + I.refresh + '更新報價</button>') + '<div class="list">';
-    if (!s.holdings.length) h += '<div class="empty">尚無持股，新增一筆交易開始吧</div>';
+    h += '<div class="bigbtns" style="margin-top:24px"><button class="btn" id="addTr">' + I.plus + '記錄買賣</button><button class="btn btn-ghost" id="addHold">' + I.plus + '輸入現有持股</button></div>';
+    h += '<section class="sec">' + secHead('HOLDINGS', '持股明細') + '<div class="list">';
+    if (!s.holdings.length) h += '<div class="empty">還沒有持股<br>已經持有的股票請按「輸入現有持股」</div>';
     s.holdings.forEach(function (x) {
+      var cp = x.changePct;
       h += '<button class="item" data-sym="' + esc(x.symbol) + '"><span class="item-icon sym" style="background:' + FC.CLASSES[x.cls].color + ';color:#fff">' + esc(x.symbol.slice(0, 6)) + '</span>' +
-        '<span class="item-main"><span class="item-title">' + esc(x.name) + '</span><span class="item-sub wrap">' + fmt(x.qty) + ' 股・均價 ' + fmt(x.avgCost, 2) + '・收 ' + fmt(x.price, 2) + ' ' +
-        (x.verified ? '<span class="badge ok">已驗證</span>' : x.quote ? '<span class="badge warn">單一來源</span>' : '<span class="badge err">無報價</span>') + '</span></span>' +
-        '<span class="item-right"><span class="item-amt">' + fmt(x.valueTWD) + '</span><span class="item-sub">' + plPct(x.uplPct) + '</span></span></button>';
+        '<span class="item-main"><span class="item-title">' + esc(x.name) + '</span><span class="item-sub">' + fmt(x.qty) + ' 股・均 ' + fmt(x.avgCost, 2) + '</span><span class="item-sub">損益 ' + plPct(x.uplPct) + ' ' +
+        (x.verified ? '<span class="badge ok" title="已雙來源驗證">✓</span>' : x.quote ? '<span class="badge warn" title="單一來源">單一</span>' : '<span class="badge err">無報價</span>') + '</span></span>' +
+        '<span class="item-right"><span class="item-amt">' + fmt(x.valueTWD) + '</span>' +
+        '<span class="item-sub">' + fmt(x.price, x.price >= 1000 ? 0 : 2) + (cp != null ? ' <span class="chg ' + (cp > 0 ? 'up' : cp < 0 ? 'down' : '') + '">' + (cp > 0 ? '▲' : cp < 0 ? '▼' : '') + pct(Math.abs(cp), 2) + '</span>' : '') + '</span></span></button>';
     });
-    h += '</div><p class="tiny" style="margin-top:8px">收盤價：' + (Object.keys(S.quotes).length ? uniqDates() : '—') + '。「已驗證」= 官方（證交所／櫃買）與 Yahoo Finance 同交易日價格一致（差異 &lt;0.5%）。點持股可調整分類。</p></section>';
+    h += '</div><p class="tiny" style="margin-top:8px">' + (Object.keys(S.quotes).length ? '報價時間：' + quoteStamp() + '。' : '') + '盤中為證交所即時成交價，每 60 秒自動更新；收盤後改用官方收盤價。✓＝官方與 Yahoo Finance 同日價格差異 &lt;0.5%。點持股可看來源與調整分類。</p></section>';
 
     var tr = S.data.trades.slice().sort(function (a, b) { return a.date < b.date ? 1 : -1; });
-    h += '<section class="sec">' + secHead('TRADES', '交易紀錄', '<button class="btn btn-sm" id="addTr">' + I.plus + '新增交易</button>') + '<div class="list">';
+    h += '<section class="sec">' + secHead('TRADES', '交易紀錄') + '<div class="list">';
     if (!tr.length) h += '<div class="empty">尚無交易紀錄</div>';
     tr.slice(0, 50).forEach(function (t) {
-      var sd = FC.addBizDays(t.date, 2), pending = !t.settled && sd >= FC.twDay();
-      h += '<button class="item" data-tr="' + t.id + '"><span class="item-icon" style="' + (t.side === 'buy' ? 'background:#FDECEC;color:#C62828' : 'background:#EAF6EC;color:#2E7D32') + '">' + (t.side === 'buy' ? '買' : '賣') + '</span>' +
-        '<span class="item-main"><span class="item-title">' + esc(t.symbol) + ' ' + esc(t.name || '') + '</span><span class="item-sub wrap">' + t.date + '・' + fmt(t.qty) + ' 股 @ ' + fmt(t.price, 2) + (pending ? ' <span class="badge warn">' + sd.slice(5) + ' 交割</span>' : '') + '</span></span>' +
+      var sd = FC.addBizDays(t.date, 2), pending = !t.settled && !t.opening && sd >= FC.twDay();
+      var icon = t.opening ? '<span class="item-icon" style="background:var(--blue-soft);color:var(--navy)">期初</span>' : '<span class="item-icon" style="' + (t.side === 'buy' ? 'background:#FDECEC;color:#C62828' : 'background:#EAF6EC;color:#2E7D32') + '">' + (t.side === 'buy' ? '買' : '賣') + '</span>';
+      h += '<button class="item" data-tr="' + t.id + '">' + icon +
+        '<span class="item-main"><span class="item-title">' + esc(t.symbol) + ' ' + esc(t.name || '') + '</span><span class="item-sub wrap">' + (t.opening ? '現有持股・' : t.date + '・') + fmt(t.qty) + ' 股 @ ' + fmt(t.price, 2) + (pending ? ' <span class="badge warn">' + sd.slice(5) + ' 交割</span>' : '') + '</span></span>' +
         '<span class="item-right"><span class="item-amt">' + fmt(num(t.qty) * num(t.price)) + '</span></span></button>';
     });
     h += '</div></section>';
     h += '<section class="sec">' + secHead('REVIEW', '交易復盤') + '<div class="card"><p class="muted" style="margin:0 0 16px">有當日買賣時，每日報表會自動加入「當日交易復盤」：開高低收／VWAP 量化成交位置、配置合理性、市場情緒與 A+～D 評分。</p>' +
       '<a class="btn btn-ghost btn-block" href="#/report">前往每日報表</a></div></section>';
     v.innerHTML = h;
-    $('#refQ').onclick = function () { this.disabled = true; refreshMarket(true); };
+    bindRefQ();
     $('#addTr').onclick = function () { tradeForm(); };
-    $$('[data-tr]').forEach(function (b) { b.onclick = function () { tradeForm(S.data.trades.filter(function (t) { return t.id === b.dataset.tr; })[0]); }; });
+    $('#addHold').onclick = function () { holdingForm(); };
+    $$('[data-tr]').forEach(function (b) { b.onclick = function () { var t = find(S.data.trades, b.dataset.tr); if (t.opening) holdingForm(t); else tradeForm(t); }; });
     $$('[data-sym]').forEach(function (b) { b.onclick = function () { secForm(b.dataset.sym); }; });
+    if (!S.lastMk && !mkBusy) refreshMarket();
+  }
+  function quoteStamp() {
+    var d = {}; Object.keys(S.quotes).forEach(function (k) { var q = S.quotes[k]; if (q.date) d[q.date.slice(5).replace('-', '/') + (q.live && q.time ? ' ' + q.time.slice(0, 5) : ' 收盤')] = 1; });
+    return Object.keys(d).join('、');
+  }
+  /** 代號查詢：自動帶入名稱與市場 */
+  function bindLookup(symId, nameId, mktId, infoId, onFound) {
+    var last = '';
+    function go() {
+      var sym = val(symId).toUpperCase(); if (!sym || sym === last) return; last = sym;
+      var known = S.data.securities[sym];
+      if (known && !val(nameId)) $('#' + nameId).value = known.name;
+      var info = $('#' + infoId); info.hidden = false; info.className = 'alert info'; info.innerHTML = '<span>查詢 ' + esc(sym) + ' 中…</span>';
+      API.call('lookup', { symbol: sym }).then(function (r) {
+        if (val(symId).toUpperCase() !== sym) return;
+        if (!r.ok) { info.className = 'alert'; info.innerHTML = '<span>' + esc(r.error || '查不到這個代號') + '，仍可手動填寫名稱與市場</span>'; return; }
+        if (r.name && (!val(nameId) || !known)) $('#' + nameId).value = r.name;
+        if (mktId && r.market) $('#' + mktId).value = r.market;
+        info.className = 'alert ok';
+        info.innerHTML = '<span>✓ ' + ({ TW: '上市', TWO: '上櫃', US: '美股' }[r.market] || '') + '・' + (marketOpenLocal() && r.date === FC.twDay() ? '即時價 ' : '收盤價 ') + fmt(r.price, 2) + '（' + esc((r.date || '').slice(5).replace('-', '/') + ' ' + (r.time || '').slice(0, 5)) + '）</span>';
+        if (onFound) onFound(r);
+      });
+    }
+    $('#' + symId).addEventListener('change', go);
+    $('#' + symId).addEventListener('blur', go);
+  }
+  /** 輸入現有持股：以「期初持股」記錄，不必補登每一筆買賣 */
+  function holdingForm(t) {
+    var isNew = !t;
+    t = t || { symbol: '', name: '', market: 'TW', qty: '', price: '', date: '' };
+    var sec = S.data.securities[t.symbol] || {};
+    var body = '<div class="stack"><p class="muted" style="margin:0">已經持有的股票，不必補登每一筆買賣，直接輸入目前股數與平均成本即可。</p>' +
+      '<div class="grid2"><div class="field"><label for="hdSym">股票代號</label><input id="hdSym" type="text" autocapitalize="characters" value="' + esc(t.symbol) + '" placeholder="例：2330、0050、VT"></div>' +
+      '<div class="field"><label for="hdName">名稱（自動帶入）</label><input id="hdName" type="text" value="' + esc(t.name) + '"></div></div>' +
+      '<div class="alert info" id="hdInfo" hidden></div>' +
+      '<div class="grid2"><div class="field"><label for="hdQty">持有股數</label><input id="hdQty" type="number" inputmode="decimal" min="0" value="' + esc(t.qty) + '" placeholder="1 張 = 1000 股"></div>' +
+      '<div class="field"><label for="hdCost">平均成本（含手續費）</label><input id="hdCost" type="number" inputmode="decimal" min="0" step="0.01" value="' + esc(t.price) + '"></div></div>' +
+      '<div class="grid2"><div class="field"><label for="hdMkt">市場</label><select id="hdMkt"><option value="TW">上市（TWSE）</option><option value="TWO">上櫃（TPEx）</option><option value="US">美股（USD）</option></select></div>' +
+      '<div class="field"><label for="hdCls">配置分類</label><select id="hdCls">' + ['core', 'satellite', 'bond', 'defensive', 'other'].map(function (k) { return '<option value="' + k + '">' + FC.CLASSES[k].label + '</option>'; }).join('') + '</select></div></div>' +
+      '<div class="field"><label for="hdDate">買進日期（選填）</label><input id="hdDate" type="date" value="' + esc(t.openDate || '') + '"></div></div>';
+    var btns = [];
+    if (!isNew) btns.push({ label: '刪除', danger: true, fn: function () { confirmDel(t.symbol + ' 現有持股', function () { S.data.trades = S.data.trades.filter(function (x) { return x.id !== t.id; }); commit('已刪除'); route(); }); } });
+    else btns.push({ label: '取消', ghost: true, fn: closeSheet });
+    btns.push({ label: '儲存持股', fn: function () {
+      var sym = val('hdSym').toUpperCase(), qty = num(val('hdQty')), cost = num(val('hdCost'));
+      if (!sym || qty <= 0 || cost <= 0) { toast('請填寫代號、股數與平均成本'); return; }
+      var mkt = val('hdMkt');
+      var rec = { id: t.id || FC.uid(), opening: true, openDate: val('hdDate'), date: val('hdDate') || '2000-01-01', symbol: sym, name: val('hdName') || sym, market: mkt, side: 'buy', qty: qty, price: cost, fee: 0, tax: 0, settled: true, note: '現有持股' };
+      S.data.securities[sym] = { name: rec.name, market: mkt, cls: val('hdCls') };
+      if (isNew) S.data.trades.push(rec); else S.data.trades = S.data.trades.map(function (x) { return x.id === t.id ? rec : x; });
+      closeSheet(); commit('已加入持股'); S.lastMk = 0; route(); refreshMarket();
+    } });
+    openSheet(isNew ? '輸入現有持股' : '編輯現有持股', body, btns, function () {
+      $('#hdMkt').value = t.market || sec.market || 'TW';
+      $('#hdCls').value = sec.cls || FC.guessClass(t.symbol, t.name);
+      bindLookup('hdSym', 'hdName', 'hdMkt', 'hdInfo', function () { $('#hdCls').value = (S.data.securities[val('hdSym').toUpperCase()] || {}).cls || FC.guessClass(val('hdSym').toUpperCase(), val('hdName')); });
+    });
   }
   function calcFee(market, side, qty, price, sym) {
     if (market === 'US') return { fee: 0, tax: 0 };
@@ -1787,7 +1916,8 @@ var Demo = (function () {
     var sec = S.data.securities[t.symbol] || {};
     var body = '<div class="stack">' + segHTML('trSide', [['buy', '買進'], ['sell', '賣出']], t.side) +
       '<div class="grid2"><div class="field"><label for="trSym">代號</label><input id="trSym" type="text" autocapitalize="characters" value="' + esc(t.symbol) + '" placeholder="例：0050"></div>' +
-      '<div class="field"><label for="trName">名稱</label><input id="trName" type="text" value="' + esc(t.name) + '" placeholder="例：元大台灣50"></div></div>' +
+      '<div class="field"><label for="trName">名稱（自動帶入）</label><input id="trName" type="text" value="' + esc(t.name) + '" placeholder="例：元大台灣50"></div></div>' +
+      '<div class="alert info" id="trInfo" hidden></div>' +
       '<div class="grid2"><div class="field"><label for="trMkt">市場</label><select id="trMkt"><option value="TW">上市（TWSE）</option><option value="TWO">上櫃（TPEx）</option><option value="US">美股（USD）</option></select></div>' +
       '<div class="field"><label for="trCls">配置分類</label><select id="trCls">' + ['core', 'satellite', 'bond', 'defensive', 'other'].map(function (k) { return '<option value="' + k + '">' + FC.CLASSES[k].label + '</option>'; }).join('') + '</select></div></div>' +
       '<div class="grid2"><div class="field"><label for="trQty">股數</label><input id="trQty" type="number" inputmode="decimal" min="0" value="' + esc(t.qty) + '" placeholder="1 張 = 1000 股"></div>' +
@@ -1808,7 +1938,7 @@ var Demo = (function () {
       var rec = { id: t.id || FC.uid(), date: val('trDate') || FC.twDay(), symbol: sym, name: val('trName') || sym, market: mkt, side: segVal('trSide'), qty: qty, price: px, fee: num(val('trFee')), tax: num(val('trTax')), settled: $('#trSet').checked, note: val('trNote') };
       S.data.securities[sym] = { name: rec.name, market: mkt, cls: val('trCls') };
       if (isNew) S.data.trades.push(rec); else S.data.trades = S.data.trades.map(function (x) { return x.id === t.id ? rec : x; });
-      closeSheet(); commit('已儲存交易'); route(); refreshMarket();
+      closeSheet(); commit('已儲存交易'); S.lastMk = 0; route(); refreshMarket();
     } });
     openSheet(isNew ? '新增交易' : '編輯交易', body, btns, function () {
       $('#trMkt').value = t.market || sec.market || 'TW';
@@ -1828,6 +1958,7 @@ var Demo = (function () {
         else $('#trCls').value = FC.guessClass(s2, val('trName'));
         auto();
       });
+      bindLookup('trSym', 'trName', 'trMkt', 'trInfo', function (r) { if (!val('trPx') && r.price) { $('#trPx').value = r.price; } auto(); });
     });
   }
   function secForm(sym) {
