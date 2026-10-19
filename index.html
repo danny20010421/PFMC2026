@@ -669,6 +669,38 @@ a.kpi-link { text-decoration: none; color: inherit; cursor: pointer; }
 .tv-head select.sel { flex: 0 1 auto; min-width: 0; max-width: 62%; width: auto; text-overflow: ellipsis; }
 .ms-head .mid .tiny { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
+/* ── 基金 ── */
+.fd .lg.fd-eq { background: #E7F5F3; color: #0F7F72; }
+.fd .lg.fd-bd { background: #EAF0FF; color: #234E99; }
+.fd .lg.fd-bl { background: #F1EBFB; color: #6B46B5; }
+.fd .lg.fd-mm { background: #FFF5E5; color: #B26A00; }
+.fd .lg.fd-ot { background: #EEF2F7; color: #475569; }
+.fd-kpis { margin: 8px 0 4px; }
+.fd-kpis .kpi { min-height: 88px; }
+.fd-dca { display: flex; align-items: center; gap: 8px; min-height: 28px; margin: 6px 0 0 52px; font-size: 12px; color: var(--sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fd-dca i { font-style: normal; height: 20px; padding: 0 8px; border-radius: 10px; background: var(--blue-soft); color: var(--navy); font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; }
+.fd-dca b { color: var(--warn); font-weight: 600; }
+.fd-due { display: flex; align-items: center; gap: 12px; min-height: 56px; margin: 8px 0; padding: 8px 12px; border-radius: 12px; background: var(--blue-soft); }
+.fd-due .mid { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
+.fd-due .mid b { font-size: 14px; color: var(--navy); line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fd-due .mid span { font-size: 12px; color: var(--sub); line-height: 1.45; }
+.fd-due .btn { flex: 0 0 auto; }
+.fd-hist { display: flex; flex-direction: column; gap: 4px; padding: 12px; border-radius: 12px; background: var(--bg); }
+.fd-hist > b { font-size: 13px; color: var(--navy); margin-bottom: 4px; }
+.fd-tx { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 8px; min-height: 40px; border: 0; border-top: 1px solid #E3E8F0; background: none; padding: 0; font: inherit; font-size: 12px; color: var(--sub); text-align: left; cursor: pointer; }
+.fd-tx span:nth-child(2) { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fd-tx b { color: var(--navy); font-variant-numeric: tabular-nums; }
+.fd .stk-sub i.k { font-style: normal; }
+@media (max-width: 359px) { .fd .stk-sub i.k { display: none; } .fd .stk-sub { gap: 10px; } }
+.kpi-value.long { font-size: clamp(15px, 4.5vw, 24px); letter-spacing: -.01em; }
+@media (max-width: 359px) { .fd .stk .mid b em { display: none; } }
+.fd-pre { display: flex; flex-wrap: wrap; gap: 8px; }
+.fd-pre .chip { height: 40px; font-size: 13px; padding: 0 12px; }
+.fd-code { display: flex; gap: 8px; align-items: center; }
+.fd-code input { flex: 1; min-width: 0; }
+.fd-code .btn { flex: 0 0 auto; height: var(--ctl); }
+.fd-ok { font-style: normal; color: var(--down); font-weight: 700; }
+
 </style>
 </head>
 <body>
@@ -971,6 +1003,7 @@ var FC = (function () {
     cash: { label: '現金', color: '#C68A16' },
     satellite: { label: '衛星個股', color: '#3A8FE0' },
     defensive: { label: '防禦資產', color: '#D2566A' },
+    fund: { label: '基金', color: '#7A9A2C' },
     other: { label: '其他', color: '#8B62D1' }
   };
   var EXPENSE_CATS = ['餐飲', '交通', '居住', '日用', '娛樂', '購物', '醫療', '教育', '保險', '投資手續費', '孝親', '其他'];
@@ -987,13 +1020,15 @@ var FC = (function () {
         targetAmount: 1000000, targetDate: (parseInt(today.slice(0, 4), 10) + 2) + '-12-31',
         startDate: today, startAmount: 0
       },
-      targetAllocation: { core: 50, satellite: 15, bond: 15, defensive: 5, cash: 15 },
+      targetAllocation: { core: 50, satellite: 15, bond: 15, defensive: 5, fund: 0, cash: 15 },
       accounts: [],       // {id,name,type:bank|cash|broker|ewallet,currency,balance}
       ledger: [],         // {id,type:receivable|payable,name,amount,currency,due,done}
       transactions: [],   // {id,date,type:expense|income,category,amount,note}
       trades: [],         // {id,date,symbol,name,market:TW|TWO|US,side:buy|sell,qty,price,fee,tax,note,settled}
       securities: {},     // symbol -> {name, market, cls}
       otherAssets: [],    // {id,name,cls,value,currency}
+      funds: [],          // {id,name,type,currency,units,cost,nav,navDate,platform,dca:{on,day,amount},dcaLast}
+      fundTx: [],         // {id,fundId,date,side:buy|sell,amount,units,nav,fee,realized}
       plans: [],          // {id,title,kind:netWorth|savings|invest|manual,target,current,deadline}
       snapshots: [],      // {date,netWorth,financial,cash,invest}
       watchlist: [],      // {symbol,name,market}
@@ -1089,6 +1124,63 @@ var FC = (function () {
     return 'satellite';
   }
 
+  // ───────── 基金（手動淨值） ─────────
+  var FUND_TYPES = { equity: '股票型', bond: '債券型', balanced: '平衡型', money: '貨幣型', other: '其他' };
+  /** 基金淨值代碼：可貼 MoneyDJ 網址或代碼（例 ACDD04） */
+  function fundCode(x) { var s = String(x || '').trim(), m = s.match(/[?&]a=([A-Za-z0-9]+)/); if (m) s = m[1]; return s.replace(/[^A-Za-z0-9]/g, '').toUpperCase(); }
+  /** 常用基金（MoneyDJ 代碼；淨值由 MoneyDJ 轉載各投信公告） */
+  var FUND_PRESETS = [
+    { code: 'ACDD04', name: '安聯台灣科技基金', house: '安聯投信', type: 'equity', official: 'https://tw.allianzgi.com/zh-tw/products-solutions/taiwan-onshore/allianz-global-investors-taiwan-technology-fund?nav=overview' },
+    { code: 'ACPS10', name: '統一奔騰基金', house: '統一投信', type: 'equity' },
+    { code: 'ACYT151', name: '元大台灣卓越50ETF連結基金-台幣A不配息', house: '元大投信', type: 'equity' },
+    { code: 'ACYT209', name: '元大台灣卓越50ETF連結基金-台幣TISA', house: '元大投信', type: 'equity' },
+    { code: 'ACIC01', name: '野村優質基金-累積型', house: '野村投信', type: 'equity' }
+  ];
+  function htmlText(h) {
+    return String(h || '').replace(/<script[\s\S]*?<\/script>/gi, ' ').replace(/<style[\s\S]*?<\/style>/gi, ' ').replace(/<br\s*\/?>/gi, ' ').replace(/<[^>]+>/g, ' ')
+      .replace(/&nbsp;|&#160;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/[|｜]/g, ' ').replace(/\s+/g, ' ');
+  }
+  /**
+   * 解析基金淨值頁（MoneyDJ 桌機／手機版）。回傳 {date, nav, change, name, how} 或 null。
+   * 優先以「最新淨值／淨值日期」標籤後的「日期＋數字」為準；找不到才退回「最新且不晚於今天」的日期＋數字。
+   */
+  function parseFundNav(html, today) {
+    var t = htmlText(html), tdy = today || twDay(), n = function (x) { return parseFloat(String(x).replace(/,/g, '')); };
+    var iso = function (y, m, d) { return y + '-' + pad(+m) + '-' + pad(+d); };
+    var RE = /(20\d{2})[\/\-.](\d{1,2})[\/\-.](\d{1,2})\s*([\d,]+\.\d+)(?:\s+([+\-]?[\d,]*\.?\d+)(?!\s*%))?/g;
+    var pick = function (from, to) { RE.lastIndex = from; var m, out = null; while ((m = RE.exec(t)) && m.index < to) { var d = iso(m[1], m[2], m[3]), v = n(m[4]); if (v > 0 && d <= tdy) { out = { date: d, nav: v, change: m[5] != null ? n(m[5]) : null }; break; } } return out; };
+    var name = ((t.match(/[\u4e00-\u9fffA-Za-z0-9（）()\-－&＆]{2,40}基金[\u4e00-\u9fffA-Za-z0-9（）()\-－]{0,24}/g) || []).filter(function (x) { return x.length >= 5 && !/^(首頁|境內|境外|基金|淨值|我的|熱門)/.test(x) && !/基金(淨值|資料|列表|公司|經理)/.test(x); })[0]) || '';
+    var res = null, k = t.search(/最新淨值|淨值日期/);
+    if (k >= 0) { res = pick(k, k + 400); if (res) res.how = 'label'; }
+    if (!res) { // 手機版：「淨值 471.96 … 2026/10/19」
+      var lab = t.match(/(?:最新)?淨值\s*[:：]?\s*(?:\(?[A-Z]{3}\)?\s*)?([\d,]+\.\d+)/), dm = t.match(/(20\d{2})[\/\-.](\d{1,2})[\/\-.](\d{1,2})/);
+      if (lab && dm && n(lab[1]) > 0 && iso(dm[1], dm[2], dm[3]) <= tdy) { var ch = t.slice(lab.index + lab[0].length, lab.index + lab[0].length + 40).match(/^\s*(?:漲跌\s*[:：]?\s*)?([+\-]?[\d,]*\.\d+)(?!\s*%)/); res = { date: iso(dm[1], dm[2], dm[3]), nav: n(lab[1]), change: ch ? n(ch[1]) : null, how: 'mobile' }; }
+    }
+    if (!res) { var m, best = null; RE.lastIndex = 0; while ((m = RE.exec(t))) { var d = iso(m[1], m[2], m[3]), v = n(m[4]); if (v > 0 && d <= tdy && (!best || d > best.date)) best = { date: d, nav: v, change: m[5] != null ? n(m[5]) : null, how: 'scan' }; } res = best; }
+    if (res) res.name = name;
+    return res;
+  }
+  function dcaDue(f, today) {
+    if (!f.dca || !f.dca.on || !(num(f.dca.amount) > 0)) return null;
+    var m = today.slice(0, 7), day = Math.min(28, Math.max(1, num(f.dca.day) || 1)), d = m + '-' + pad(day);
+    if (f.dcaLast === m || today < d) return null;
+    return { date: d, amount: num(f.dca.amount) };
+  }
+  function computeFunds(data, fx, today) {
+    today = today || twDay();
+    var realized = 0;
+    (data.fundTx || []).forEach(function (t) { realized += num(t.realized) * (t.currency && t.currency !== 'TWD' ? ((fx && fx.rates && fx.rates[t.currency]) || 0) : 1); });
+    var list = (data.funds || []).map(function (f) {
+      var cur = f.currency || 'TWD', rate = cur === 'TWD' ? 1 : ((fx && fx.rates && fx.rates[cur]) || 0);
+      var units = num(f.units), nav = num(f.nav), cost = num(f.cost), value = units * nav;
+      return { id: f.id, name: f.name, type: f.type || 'other', typeLabel: FUND_TYPES[f.type] || '其他', currency: cur, units: units, nav: nav, navDate: f.navDate || '', platform: f.platform || '', code: f.code || '', official: f.official || '', verified: !!(f.navSrc && f.navSrc.verified && f.navSrc.date === f.navDate),
+        cost: cost, value: value, valueTWD: value * rate, costTWD: cost * rate, upl: value - cost, uplTWD: (value - cost) * rate, uplPct: cost ? (value - cost) / cost : 0,
+        dca: f.dca && f.dca.on ? f.dca : null, due: dcaDue(f, today), noRate: cur !== 'TWD' && !rate };
+    });
+    list.sort(function (a, b) { return b.valueTWD - a.valueTWD; });
+    return { list: list, realized: realized };
+  }
+
   // ───────── 現金流 ─────────
   function monthsBack(n, from) {
     var out = [], y = parseInt(from.slice(0, 4), 10), m = parseInt(from.slice(5, 7), 10);
@@ -1132,17 +1224,19 @@ var FC = (function () {
     (data.otherAssets || []).forEach(function (o) { var v = toTWD(o.value, o.currency, fx); other += v; otherByCls[o.cls || 'other'] = (otherByCls[o.cls || 'other'] || 0) + v; });
     var investValue = 0, investCost = 0, dayChange = 0;
     h.list.forEach(function (x) { investValue += x.valueTWD; investCost += x.costTWD; dayChange += x.dayChange || 0; });
+    var fd = computeFunds(data, fx, today), fundValue = 0, fundCost = 0;
+    fd.list.forEach(function (x) { fundValue += x.valueTWD; fundCost += x.costTWD; });
 
     // 未交割（T+2）
     var unsettled = unsettledTrades(data, today, fx);
     var unsettledNet = 0; // 正值=應付
     unsettled.forEach(function (u) { unsettledNet += u.amountTWD * (u.side === 'buy' ? 1 : -1); });
 
-    var alloc = { core: 0, satellite: 0, bond: 0, defensive: 0, cash: cashTotal, other: 0 };
+    var alloc = { core: 0, satellite: 0, bond: 0, defensive: 0, fund: fundValue, cash: cashTotal, other: 0 };
     h.list.forEach(function (x) { alloc[x.cls] = (alloc[x.cls] || 0) + x.valueTWD; });
     Object.keys(otherByCls).forEach(function (k) { alloc[k] = (alloc[k] || 0) + otherByCls[k]; });
 
-    var financial = cashTotal + investValue + other;   // 金融資產總市值
+    var financial = cashTotal + investValue + fundValue + other;   // 金融資產總市值
     var totalAssets = financial + recv;
     var netWorth = totalAssets - pay;
     var cf = cashflow(data, 6, today);
@@ -1155,6 +1249,7 @@ var FC = (function () {
       cashRows: cashRows, cashByType: cashByType, cashTotal: cashTotal,
       receivable: recv, payable: pay, recvRows: recvRows, payRows: payRows,
       otherTotal: other, investValue: investValue, investCost: investCost,
+      funds: fd.list, fundValue: fundValue, fundCost: fundCost, fundUpl: fundValue - fundCost, fundUplPct: fundCost ? (fundValue - fundCost) / fundCost : 0, fundRealized: fd.realized,
       dayChange: dayChange, live: h.list.some(function (x) { return x.live; }),
       upl: investValue - investCost, uplPct: investCost ? (investValue - investCost) / investCost : 0,
       financial: financial, totalAssets: totalAssets, netWorth: netWorth,
@@ -1182,7 +1277,7 @@ var FC = (function () {
   function planProgress(plan, sum, data) {
     var cur = num(plan.current);
     if (plan.kind === 'netWorth') cur = sum.netWorth;
-    else if (plan.kind === 'invest') cur = sum.investValue;
+    else if (plan.kind === 'invest') cur = sum.investValue + (sum.fundValue || 0);
     else if (plan.kind === 'financial') cur = sum.financial;
     else if (plan.kind === 'savings') {
       var y = (plan.deadline || twDay()).slice(0, 4);
@@ -1238,7 +1333,7 @@ var FC = (function () {
       '差額 ' + fmt(Math.max(0, target - sum.netWorth)) + ' 元；以儲蓄與核心定期定額為主要動能'));
     out[out.length - 1].m = { prog: prog, pace: pace };
     // 4. 投資組合分散／集中 25%
-    var inv = sum.investValue + sum.otherTotal;
+    var inv = sum.investValue + (sum.fundValue || 0) + sum.otherTotal;
     var sDiv, basisD, strD, riskD, impD;
     if (inv <= 0) {
       sDiv = 50; basisD = '尚未建立投資組合'; strD = '無集中風險'; riskD = '資金全為現金，長期可能跑輸通膨'; impD = '依風險屬性先以核心 ETF 分批建立部位';
@@ -1471,8 +1566,14 @@ var FC = (function () {
         p('原則：避免結果偏誤；持有不等於繼續買；不因低於成本自動攤平；不為達成目標提高風險。', 'font-size:12px;color:' + C.sub));
     }
 
+    // 4c 基金
+    if (s.funds && s.funds.length) {
+      var fr = s.funds.map(function (x) { return [esc(x.name) + '<br><span style="color:' + C.sub + ';font-size:12px">' + x.typeLabel + '・' + x.currency + '</span>', fmt(x.units, 2), fmt(x.nav, 4) + '<br><span style="color:' + C.sub + ';font-size:12px">' + (x.navDate || '—') + '</span>', fmt(x.valueTWD), pl(x.uplTWD) + '<br>' + plp(x.uplPct)]; });
+      h += sec('04-C', '基金明細', table(['基金', '單位數', '淨值', '市值', '未實現'], fr, true) + table(['', '金額'], [['總投入', fmt(s.fundCost)], ['總市值', fmt(s.fundValue)], ['總未實現損益', pl(s.fundUpl) + '（' + plp(s.fundUplPct) + '）']], true) + p('基金淨值為手動更新，請留意淨值日期。', 'font-size:12px;color:' + C.sub));
+    }
+
     // 5 金融資產
-    h += sec('05', '金融資產總市值', table(['項目', '金額（台幣）'], [['現金', fmt(s.cashTotal)], ['股票／ETF', fmt(s.investValue)], ['其他金融資產', fmt(s.otherTotal)], ['<b>金融資產總市值</b>', '<b>' + fmt(s.financial) + '</b>'], ['應收', fmt(s.receivable)], ['應付', '-' + fmt(s.payable)], ['<b>淨資產</b>', '<b>' + fmt(s.netWorth) + '</b>']], true));
+    h += sec('05', '金融資產總市值', table(['項目', '金額（台幣）'], [['現金', fmt(s.cashTotal)], ['股票／ETF', fmt(s.investValue)]].concat(s.fundValue ? [['基金', fmt(s.fundValue)]] : []).concat([['其他金融資產', fmt(s.otherTotal)], ['<b>金融資產總市值</b>', '<b>' + fmt(s.financial) + '</b>'], ['應收', fmt(s.receivable)], ['應付', '-' + fmt(s.payable)], ['<b>淨資產</b>', '<b>' + fmt(s.netWorth) + '</b>']]), true));
 
     // 6 配置圖
     var fin = s.financial || 1, ta = r.targetAllocation || {}, tsum = 0;
@@ -1554,6 +1655,7 @@ var FC = (function () {
     lines.push('風險屬性：' + p.riskProfile + '；投資期限：' + p.horizonYears + ' 年；目標：' + fmt(p.targetAmount) + ' 元於 ' + p.targetDate + ' 前');
     if (p.goalShort || p.goalMid || p.goalLong) lines.push('短/中/長期目標：' + [p.goalShort, p.goalMid, p.goalLong].join(' / '));
     lines.push('淨資產 ' + fmt(sum.netWorth) + '；金融資產 ' + fmt(sum.financial) + '；現金 ' + fmt(sum.cashTotal) + '；股票市值 ' + fmt(sum.investValue) + '（成本 ' + fmt(sum.investCost) + '，未實現 ' + signed(sum.upl) + '）');
+    if (sum.funds && sum.funds.length) lines.push('基金：' + sum.funds.map(function (x) { return x.name + '（' + x.typeLabel + '）市值' + fmt(x.valueTWD) + ' 報酬' + pct(x.uplPct) + (x.dca ? ' 定期定額每月' + fmt(x.dca.amount) : ''); }).join('；'));
     lines.push('應收 ' + fmt(sum.receivable) + '；應付 ' + fmt(sum.payable) + '；近 3 月平均月收入 ' + fmt(sum.avgIncome) + '、月支出 ' + fmt(sum.avgExpense));
     var fin = sum.financial || 1;
     lines.push('配置：' + Object.keys(CLASSES).map(function (k) { return CLASSES[k].label + ' ' + pct((sum.alloc[k] || 0) / fin); }).join('、') +
@@ -1566,7 +1668,7 @@ var FC = (function () {
   return {
     twDay: twDay, twTime: twTime, twMonth: twMonth, addDays: addDays, addBizDays: addBizDays, diffDays: diffDays, dayOfWeek: dayOfWeek,
     uid: uid, num: num, round: round, clamp: clamp, fmt: fmt, money: money, signed: signed, pct: pct, esc: esc, rocToISO: rocToISO,
-    CLASSES: CLASSES, EXPENSE_CATS: EXPENSE_CATS, INCOME_CATS: INCOME_CATS, emptyData: emptyData, normalize: normalize,
+    CLASSES: CLASSES, FUND_TYPES: FUND_TYPES, FUND_PRESETS: FUND_PRESETS, fundCode: fundCode, parseFundNav: parseFundNav, htmlText: htmlText, computeFunds: computeFunds, dcaDue: dcaDue, EXPENSE_CATS: EXPENSE_CATS, INCOME_CATS: INCOME_CATS, emptyData: emptyData, normalize: normalize,
     toTWD: toTWD, computeHoldings: computeHoldings, guessClass: guessClass, cashflow: cashflow, summarize: summarize,
     planProgress: planProgress, scores: scores, tradeReview: tradeReview, sentiment: sentiment, actions: actions,
     buildReport: buildReport, reportHTML: reportHTML, typeLabel: typeLabel, SYSTEM_PROMPT: SYSTEM_PROMPT, contextForAI: contextForAI
@@ -1620,6 +1722,13 @@ var Demo = (function () {
       { id: 't8', date: today, symbol: '0050', name: '元大台灣50', market: 'TW', side: 'buy', qty: 300, price: 77.6, fee: 33, tax: 0, settled: false }
     ];
     D.otherAssets = [{ id: 'o1', name: '儲蓄險解約金', cls: 'defensive', value: 36000, currency: 'TWD' }];
+    D.targetAllocation = { core: 40, satellite: 15, bond: 15, defensive: 5, fund: 10, cash: 15 };
+    var lm = FC.addDays(today.slice(0, 8) + '01', -1).slice(0, 7);
+    D.funds = [
+      { id: 'f1', name: '安聯台灣科技基金', code: 'ACDD04', type: 'equity', currency: 'TWD', units: 165.2, cost: 100000, nav: 760.5, navDate: d(5), platform: '示範銀行', dca: { on: true, day: 6, amount: 5000 }, dcaLast: lm },
+      { id: 'f2', name: '示範全球投資級債券基金', type: 'bond', currency: 'USD', units: 412.6, cost: 5300, nav: 13.21, navDate: d(3), platform: '示範平台', dca: { on: false, day: 6, amount: 0 } }
+    ];
+    D.fundTx = [{ id: 'ft1', fundId: 'f1', date: lm + '-06', side: 'buy', amount: 5000, units: 51.2, nav: 97.6, fee: 0, currency: 'TWD', dca: true }];
     D.plans = [
       { id: 'p1', title: '今年存下 30 萬', kind: 'savings', target: 300000, deadline: today.slice(0, 4) + '-12-31' },
       { id: 'p2', title: '淨資產 100 萬', kind: 'netWorth', target: 1000000, deadline: D.profile.targetDate },
@@ -1723,6 +1832,9 @@ var Demo = (function () {
         var n = names[k]; return n ? { ok: true, symbol: k, name: n[0], market: n[1], price: n[2], date: today, time: live ? FC.twTime() : '13:30' } : { ok: false, error: '示範模式只能查 2330、0050、2317、00679B、VT' };
       }
       case 'fx': return { ok: true, fx: fx };
+      case 'fundNav': { var NV = { ACDD04: [788.11, 6.12, 2], ACPS10: [769.65, 3.21, 2], ACYT151: [66.31, 0.42, 0], ACYT209: [66.30, 0.42, 0], ACIC01: [471.96, -1.11, 0] }, o = {};
+        (p.codes || []).forEach(function (c) { c = FC.fundCode(c); var v = NV[c], pr = FC.FUND_PRESETS.filter(function (x) { return x.code === c; })[0]; o[c] = v ? { code: c, nav: v[0], change: v[1], date: d(v[2]), name: pr ? pr.name : '', verified: true, source: 'MoneyDJ（示範資料）', at: today + ' ' + FC.twTime() } : { code: c, error: '示範模式只提供五檔常用基金' }; });
+        return { ok: true, navs: o }; }
       case 'indices': return { ok: true, indices: indices };
       case 'news': return { ok: true, news: news };
       case 'save': return { ok: true, updatedAt: new Date().toISOString() };
@@ -2189,7 +2301,7 @@ var Demo = (function () {
   function secHead(no, title, act) {
     return '<div class="sec-head"><div><span class="sec-no">' + no + '</span><h2 class="sec-title">' + title + '</h2></div>' + (act ? '<div class="act">' + act + '</div>' : '') + '</div>';
   }
-  function kpi(label, value, sub, cls) { return '<div class="kpi ' + (cls || '') + '"><span class="kpi-label">' + label + '</span><span class="kpi-value" title="' + esc(String(value).replace(/<[^>]+>/g, '')) + '">' + value + '</span>' + (sub != null ? '<span class="kpi-sub">' + sub + '</span>' : '') + '</div>'; }
+  function kpi(label, value, sub, cls) { var plain = String(value).replace(/<[^>]+>/g, ''); return '<div class="kpi ' + (cls || '') + '"><span class="kpi-label">' + label + '</span><span class="kpi-value' + (plain.length >= 12 ? ' long' : '') + '" title="' + esc(plain) + '">' + value + '</span>' + (sub != null ? '<span class="kpi-sub">' + sub + '</span>' : '') + '</div>'; }
   var DOTS = '<span class="dots" aria-label="金額已隱藏">••••••</span>';
   function A(x) { return S.hide ? DOTS : x; }
   function fa(v, d) { return A(fmt(v, d)); }
@@ -2224,7 +2336,7 @@ var Demo = (function () {
       '<div class="chips"><span class="hchip">目標 ' + shortMoney(s.target).replace(' ', '') + '・達成 ' + pct(prog) + '</span><span class="hchip">尚差 ' + fa(gap) + '</span><a class="hchip" href="#/goals">剩 ' + Math.max(0, days) + ' 天・每月 ' + fa(gap / Math.max(days / 30.44, 1)) + ' ›</a></div></section>';
 
     h += '<div class="kpis" style="margin-top:12px">' +
-      kpi('金融資產總市值', money(s.financial), '現金 ' + pct(s.cashTotal / fin, 0) + '・投資 ' + pct((s.investValue + s.otherTotal) / fin, 0)) +
+      kpi('金融資產總市值', money(s.financial), '現金 ' + pct(s.cashTotal / fin, 0) + '・投資 ' + pct((s.investValue + s.fundValue + s.otherTotal) / fin, 0)) +
       kpi('股票總市值' + (s.live ? ' <span class="live-dot" aria-label="即時"></span>' : ''), money(s.investValue), s.holdings.length && s.dayChange ? '今日 ' + plSpan(s.dayChange) : '未實現 ' + plPct(s.uplPct)) +
       kpi('未實現損益', plSpan(s.upl), plPct(s.uplPct)) +
       '<a class="kpi kpi-link" href="#/score" aria-label="財務評分 ' + sc.total + ' 分，查看分級"><span class="kpi-label">財務評分</span><span class="kpi-value">' + sc.total + '<small style="font-size:13px;font-weight:500"> / 100</small></span><span class="kpi-sub go">' + sc.grade + '・查看分級 ›</span></a></div>';
@@ -2235,6 +2347,7 @@ var Demo = (function () {
     s.unsettled.forEach(function (u) { alerts.push(['', (u.side === 'buy' ? '應付' : '應收') + '交割款 ' + esc(u.symbol) + ' ' + money(u.amount) + '，' + u.settleDate + ' 交割']); });
     var broker = s.cashByType.broker || 0;
     if (s.unsettledNet > broker) alerts.push(['', '交割戶餘額 ' + money(broker) + ' 不足，請補足 ' + money(s.unsettledNet - broker)]);
+    s.funds.forEach(function (f) { if (f.due) alerts.push(['info', '「' + esc(f.name) + '」定期定額 ' + f.due.date.slice(5).replace('-', '/') + ' 扣款 ' + esc(f.currency === 'TWD' ? '' : f.currency + ' ') + fa(f.due.amount) + '，<a href="#/invest">到投資頁記錄</a>']); });
     s.payRows.forEach(function (l) { if (l.due && FC.diffDays(s.date, l.due) <= 14) alerts.push(['', '「' + esc(l.name) + '」' + money(l.amount) + ' 將於 ' + l.due + ' 到期']); });
     s.recvRows.forEach(function (l) { if (l.due && FC.diffDays(s.date, l.due) <= 7) alerts.push(['info', '應收「' + esc(l.name) + '」' + money(l.amount) + '（' + l.due + '）']); });
     if (alerts.length) h += '<section class="sec">' + secHead('03 REMINDER', '交割／現金流提醒') + alerts.map(function (a) { return '<div class="alert ' + a[0] + '">' + (a[0] ? I.info : I.alert) + '<span>' + a[1] + '</span></div>'; }).join('') + '</section>';
@@ -2389,6 +2502,148 @@ var Demo = (function () {
       '<span class="stk-sub"><span>未實現 <b class="' + cls3(upl) + '">' + A((isUS ? 'US$' : '') + FC.signed(upl, isUS ? 2 : 0)) + '</b></span><span class="' + cls3(x.uplPct) + '">' + (x.uplPct > 0 ? '+' : '') + pct(x.uplPct) + '</span>' +
       (x.quote && x.quote.spark ? sparkSVG(x.quote.spark) : '') + '</span></button>';
   }
+  // ═════════ 基金 ═════════
+  var FT_ICON = { equity: ['股', 'eq'], bond: ['債', 'bd'], balanced: ['平', 'bl'], money: ['貨', 'mm'], other: ['基', 'ot'] };
+  function curAmt(v, cur, d) { return (cur && cur !== 'TWD' ? cur + ' ' : '') + fa(v, d == null ? (cur && cur !== 'TWD' ? 2 : 0) : d); }
+  function uFmt(u) { return fmt(u, 2).replace(/\.00$/, '').replace(/(\.\d)0$/, '$1'); }
+  function fundRowHTML(f) {
+    var ic = FT_ICON[f.type] || FT_ICON.other, usd = f.currency !== 'TWD';
+    var sub = [A(uFmt(f.units)) + ' 單位'].concat(f.platform ? [esc(f.platform)] : []).join('・');
+    return '<button type="button" class="stk fd-row" data-fund="' + f.id + '"><span class="stk-top"><span class="lg fd-' + ic[1] + '">' + ic[0] + '</span>' +
+      '<span class="mid"><b>' + esc(f.name) + '<em>' + f.typeLabel + '・' + esc(f.currency) + '</em></b><span>' + sub + '</span></span>' +
+      '<span class="rt"><b>' + (usd ? esc(f.currency) + ' ' : '') + (f.nav ? fmt(f.nav, f.nav < 100 ? 4 : 2).replace(/0{1,2}$/, '') : '—') + '</b><span class="muted">' + (f.navDate ? f.navDate.slice(5).replace('-', '/') + ' 淨值' + (f.verified ? ' <i class="fd-ok" title="兩個來源一致">✓</i>' : '') : (f.code ? '等待自動更新' : '尚未填淨值')) + '</span></span></span>' +
+      '<span class="stk-sub"><span><i class="k">市值 </i><b>' + (usd ? '≈ ' : '') + fa(f.valueTWD) + '</b></span><span><i class="k">未實現 </i><b class="' + cls3(f.uplTWD) + '">' + A(FC.signed(f.uplTWD)) + '</b></span><span class="' + cls3(f.uplPct) + '">' + (f.uplPct > 0 ? '+' : '') + pct(f.uplPct) + '</span></span>' +
+      (f.dca ? '<span class="fd-dca"><i>定期定額</i>每月 ' + num(f.dca.day) + ' 日・' + curAmt(f.dca.amount, f.currency) + (f.noRate ? '・<b>無匯率，暫不計入台幣</b>' : '') + '</span>' : (f.noRate ? '<span class="fd-dca"><b>無 ' + esc(f.currency) + ' 匯率，暫不計入台幣市值</b></span>' : '')) + '</button>';
+  }
+  function fundCardHTML(s) {
+    var L = s.funds, dates = L.map(function (f) { return f.navDate; }).filter(Boolean).sort(), due = L.filter(function (f) { return f.due; });
+    var h = '<section class="card mystocks fd" aria-labelledby="fdT"><div class="ms-head"><div class="mid"><h2 id="fdT">我的基金</h2><span class="tiny">' + (L.some(function (f) { return f.code; }) ? '淨值自動更新（MoneyDJ）' : '淨值手動更新') + (dates.length ? '・最近 ' + dates[dates.length - 1].slice(5).replace('-', '/') : '') + '</span></div>' +
+      (L.length ? '<button type="button" class="btn btn-sm btn-ghost" id="fdNav">更新淨值</button>' : '') + '</div>';
+    if (L.length) h += '<div class="kpis fd-kpis">' + kpi('基金總市值', fa(s.fundValue), '投入 ' + fa(s.fundCost)) + kpi('未實現損益', plSpan(s.fundUpl), plPct(s.fundUplPct)) + '</div>';
+    due.forEach(function (f) { h += '<div class="fd-due"><span class="mid"><b>' + esc(f.name) + '</b><span>定期定額 ' + f.due.date.slice(5).replace('-', '/') + ' 扣款 ' + curAmt(f.due.amount, f.currency) + '</span></span><button type="button" class="btn btn-sm" data-dca="' + f.id + '">記錄本期</button></div>'; });
+    if (!L.length) h += '<div class="empty">還沒有基金<br>按「新增基金」輸入目前持有的單位數與成本</div>';
+    h += L.map(fundRowHTML).join('');
+    h += '<div class="grid2 ms-btns"><button type="button" class="btn" id="fdTx"' + (L.length ? '' : ' disabled') + '>' + I.plus + '申購／贖回</button><button type="button" class="btn btn-ghost" id="fdAdd">' + I.plus + '新增基金</button></div></section>';
+    return h;
+  }
+  function bindFunds() {
+    if ($('#fdAdd')) $('#fdAdd').onclick = function () { fundForm(); };
+    if ($('#fdTx')) $('#fdTx').onclick = function () { fundTxForm(); };
+    if ($('#fdNav')) $('#fdNav').onclick = function () { refreshFunds(true); };
+    $$('[data-fund]').forEach(function (b) { b.onclick = function () { fundForm(find(S.data.funds, b.dataset.fund)); }; });
+    $$('[data-dca]').forEach(function (b) { b.onclick = function () { var f = find(S.data.funds, b.dataset.dca), d = FC.dcaDue(f, FC.twDay()); fundTxForm(f.id, { side: 'buy', amount: d ? d.amount : num(f.dca && f.dca.amount), date: d ? d.date : FC.twDay(), dca: true }); }; });
+  }
+  function fundForm(f) {
+    var isNew = !f; f = f || { id: FC.uid(), name: '', type: 'equity', currency: 'TWD', units: '', cost: '', nav: '', navDate: FC.twDay(), platform: '', dca: { on: false, day: 6, amount: '' } };
+    var dca = f.dca || { on: false, day: 6, amount: '' };
+    var tx = (S.data.fundTx || []).filter(function (t) { return t.fundId === f.id; }).sort(function (a, b) { return a.date < b.date ? 1 : -1; });
+    var body = '<div class="stack">' + (isNew ? '<div class="field"><span class="lbl">常用基金（點選自動帶入）</span><div class="fd-pre">' + FC.FUND_PRESETS.map(function (p, i) { return '<button type="button" class="chip" data-pre="' + i + '">' + esc(p.name.replace(/基金.*$/, '').replace('元大台灣卓越50ETF連結', '0050連結') + (/TISA/.test(p.name) ? ' TISA' : /A不配息/.test(p.name) ? ' A' : '')) + '</button>'; }).join('') + '</div></div>' : '') +
+      '<div class="field"><label for="fnName">基金名稱</label><input id="fnName" type="text" value="' + esc(f.name) + '" placeholder="例：安聯台灣科技基金"></div>' +
+      '<div class="field"><label for="fnCode">淨值代碼（自動更新用，選填）</label><div class="fd-code"><input id="fnCode" type="text" autocapitalize="characters" value="' + esc(f.code || '') + '" placeholder="MoneyDJ 代碼或網址，例 ACDD04"><button type="button" class="btn btn-ghost" id="fnQ">查詢</button></div><span class="tiny" id="fnQs">' + (f.navSrc ? esc(f.navSrc.source) + (f.navSrc.verified ? '・兩頁一致 ✓' : '') + '・' + esc(f.navSrc.at || '') : '到 MoneyDJ 基金頁，網址 a= 後面那段就是代碼') + '</span>' + (f.official ? '<a class="tiny" href="' + esc(f.official) + '" target="_blank" rel="noopener">到投信官網核對淨值 ↗</a>' : '') + '</div>' +
+      '<div class="grid2"><div class="field"><label for="fnType">類型</label><select id="fnType">' + Object.keys(FC.FUND_TYPES).map(function (k) { return '<option value="' + k + '"' + (k === f.type ? ' selected' : '') + '>' + FC.FUND_TYPES[k] + '</option>'; }).join('') + '</select></div>' +
+      '<div class="field"><label for="fnCur">幣別</label><select id="fnCur">' + curOptions(f.currency) + '</select></div></div>' +
+      '<div class="grid2"><div class="field"><label for="fnUnits">持有單位數</label><input id="fnUnits" type="number" inputmode="decimal" step="any" value="' + esc(f.units) + '"></div><div class="field"><label for="fnCost">總投入成本</label><input id="fnCost" type="number" inputmode="decimal" step="any" value="' + esc(f.cost) + '"></div></div>' +
+      '<div class="grid2"><div class="field"><label for="fnNav">最新淨值</label><input id="fnNav" type="number" inputmode="decimal" step="any" value="' + esc(f.nav) + '"></div><div class="field"><label for="fnNd">淨值日期</label><input id="fnNd" type="date" value="' + esc(f.navDate) + '"></div></div>' +
+      '<div class="field"><label for="fnPf">購買平台（選填）</label><input id="fnPf" type="text" value="' + esc(f.platform) + '" placeholder="例：國泰世華、基富通"></div>' +
+      '<div class="field"><span class="lbl">定期定額</span>' + segHTML('fnDca', [['0', '無'], ['1', '有']], dca.on ? '1' : '0') + '</div>' +
+      '<div class="grid2" id="fnDcaBox"' + (dca.on ? '' : ' hidden') + '><div class="field"><label for="fnDay">每月扣款日</label><input id="fnDay" type="number" inputmode="numeric" min="1" max="28" value="' + esc(dca.day) + '"></div><div class="field"><label for="fnAmt">每期金額</label><input id="fnAmt" type="number" inputmode="decimal" value="' + esc(dca.amount) + '"></div></div>' +
+      (tx.length ? '<div class="fd-hist"><b>申購／贖回紀錄</b>' + tx.slice(0, 12).map(function (t) { return '<button type="button" class="fd-tx" data-ftx="' + t.id + '"><span>' + t.date + '</span><span>' + (t.side === 'buy' ? '申購' : '贖回') + ' ' + uFmt(t.units) + ' 單位 @ ' + fmt(t.nav, 4) + '</span><b>' + curAmt(t.amount, f.currency) + '</b></button>'; }).join('') + '<p class="tiny" style="margin:4px 0 0">點紀錄可刪除（會還原單位數與成本）</p></div>' : '') +
+      (isNew ? '<p class="tiny" style="margin:0">輸入「目前」持有的單位數與成本即可；之後每次申購、贖回用「申購／贖回」記錄，系統會自動更新單位數與成本。</p>' : '') + '</div>';
+    openSheet(isNew ? '新增基金' : '編輯基金', body, [isNew ? { label: '取消', ghost: true, fn: closeSheet } : { label: '刪除', danger: true, fn: function () { confirmDel(f.name, function () { S.data.funds = S.data.funds.filter(function (x) { return x.id !== f.id; }); S.data.fundTx = S.data.fundTx.filter(function (x) { return x.fundId !== f.id; }); commit('已刪除'); route(); }); } },
+      { label: '儲存', fn: function () {
+        if (!val('fnName')) { toast('請輸入基金名稱'); return; }
+        var on = segVal('fnDca') === '1';
+        if (on && !(num(val('fnAmt')) > 0)) { toast('請輸入定期定額每期金額'); return; }
+        var rec = Object.assign({}, f, { name: val('fnName'), type: val('fnType'), currency: val('fnCur'), units: num(val('fnUnits')), cost: num(val('fnCost')), nav: num(val('fnNav')), navDate: val('fnNd'), platform: val('fnPf'), code: FC.fundCode(val('fnCode')), official: f.official || '',
+          dca: { on: on, day: Math.min(28, Math.max(1, num(val('fnDay')) || 1)), amount: num(val('fnAmt')) } });
+        if (on && isNew && rec.dca.day <= +FC.twDay().slice(8)) rec.dcaLast = FC.twDay().slice(0, 7); // 本月已扣款的視為已含在成本內
+        crud('funds', rec, isNew, isNew ? '已新增基金' : '已儲存');
+      } }], function () {
+      bindSeg('fnDca', function (v) { $('#fnDcaBox').hidden = v !== '1'; });
+      var query = function () {
+        var code = FC.fundCode(val('fnCode')); if (!code) { toast('請輸入代碼'); return; }
+        $('#fnQ').disabled = true; $('#fnQs').textContent = '查詢中…';
+        API.call('fundNav', { codes: [code], force: true }).then(function (r) {
+          $('#fnQ').disabled = false; var x = r && r.navs && r.navs[code];
+          if (!x || !(x.nav > 0)) { $('#fnQs').textContent = (x && x.error) || '查無淨值'; return; }
+          $('#fnCode').value = code; $('#fnNav').value = x.nav; $('#fnNd').value = x.date; if (!val('fnName') && x.name) $('#fnName').value = x.name;
+          f.navSrc = { source: x.source, verified: !!x.verified, date: x.date, at: x.at, change: x.change };
+          $('#fnQs').textContent = x.date + ' 淨值 ' + x.nav + '・' + x.source + (x.verified ? '・兩頁一致 ✓' : '');
+        }).catch(function () { $('#fnQ').disabled = false; $('#fnQs').textContent = '暫時無法連線，可手動填寫淨值'; });
+      };
+      $('#fnQ').onclick = query;
+      $$('[data-pre]').forEach(function (b) { b.onclick = function () { var p = FC.FUND_PRESETS[+b.dataset.pre]; $('#fnName').value = p.name; $('#fnType').value = p.type; $('#fnCode').value = p.code; $('#fnCur').value = 'TWD'; f.official = p.official || ''; $$('[data-pre]').forEach(function (x) { x.setAttribute('aria-pressed', x === b); }); query(); }; });
+      $$('[data-ftx]').forEach(function (b) { b.onclick = function () { var t = find(S.data.fundTx, b.dataset.ftx); confirmDel(t.date + ' ' + (t.side === 'buy' ? '申購' : '贖回') + '紀錄', function () { undoFundTx(t); commit('已刪除並還原'); closeSheet(); route(); }); }; });
+    });
+  }
+  function undoFundTx(t) {
+    var f = find(S.data.funds, t.fundId);
+    if (f) { if (t.side === 'buy') { f.units = Math.max(0, num(f.units) - num(t.units)); f.cost = Math.max(0, num(f.cost) - num(t.amount)); if (t.dca && f.dcaLast === t.date.slice(0, 7)) f.dcaLast = ''; } else { f.units = num(f.units) + num(t.units); f.cost = num(f.cost) + num(t.costOut); } }
+    S.data.fundTx = S.data.fundTx.filter(function (x) { return x.id !== t.id; });
+  }
+  function fundTxForm(fid, pre) {
+    pre = pre || {}; var F = S.data.funds; if (!F.length) return;
+    var f0 = find(F, fid) || F[0], side = pre.side || 'buy';
+    var body = '<div class="stack">' + segHTML('ftSide', [['buy', '申購'], ['sell', '贖回']], side) +
+      '<div class="field"><label for="ftFund">基金</label><select id="ftFund">' + F.map(function (f) { return '<option value="' + f.id + '"' + (f.id === f0.id ? ' selected' : '') + '>' + esc(f.name) + '</option>'; }).join('') + '</select></div>' +
+      '<div class="grid2"><div class="field"><label for="ftDate">日期</label><input id="ftDate" type="date" value="' + esc(pre.date || FC.twDay()) + '"></div><div class="field"><label for="ftNav">成交淨值</label><input id="ftNav" type="number" inputmode="decimal" step="any" value="' + esc(f0.nav || '') + '"></div></div>' +
+      '<div class="grid2"><div class="field"><label for="ftAmt" id="ftAmtL">申購金額（含手續費）</label><input id="ftAmt" type="number" inputmode="decimal" step="any" value="' + esc(pre.amount || '') + '"></div><div class="field"><label for="ftFee">手續費</label><input id="ftFee" type="number" inputmode="decimal" step="any" value="0"></div></div>' +
+      '<div class="field"><label for="ftUnits">單位數（依金額自動計算，可依對帳單修改）</label><input id="ftUnits" type="number" inputmode="decimal" step="any"></div>' +
+      '<div class="tiny" id="ftHint" style="margin:0"></div></div>';
+    openSheet('申購／贖回', body, [{ label: '取消', ghost: true, fn: closeSheet }, { label: '記錄', fn: function () {
+      var f = find(S.data.funds, val('ftFund')), sd = segVal('ftSide'), nav = num(val('ftNav')), amt = num(val('ftAmt')), fee = num(val('ftFee')), u = num(val('ftUnits')), d = val('ftDate');
+      if (!(nav > 0) || !(u > 0)) { toast('請填寫淨值與單位數'); return; }
+      var t = { id: FC.uid(), fundId: f.id, date: d, side: sd, nav: nav, fee: fee, units: u, currency: f.currency };
+      if (sd === 'buy') { if (!(amt > 0)) { toast('請填寫申購金額'); return; } t.amount = amt; f.units = num(f.units) + u; f.cost = num(f.cost) + amt; if (pre.dca || (f.dca && f.dca.on && Math.abs(amt - num(f.dca.amount)) < 1)) { t.dca = true; f.dcaLast = d.slice(0, 7); } }
+      else {
+        if (u > num(f.units) + 1e-6) { toast('贖回單位數超過持有 ' + fmt(f.units, 2)); return; }
+        var costOut = num(f.cost) * u / (num(f.units) || 1); t.amount = amt > 0 ? amt : u * nav - fee; t.costOut = costOut; t.realized = t.amount - costOut;
+        f.units = num(f.units) - u; f.cost = Math.max(0, num(f.cost) - costOut);
+      }
+      if (!f.navDate || d >= f.navDate) { f.nav = nav; f.navDate = d; }
+      S.data.fundTx.push(t); closeSheet(); commit(sd === 'buy' ? '已記錄申購' : '已記錄贖回，實現損益 ' + FC.signed(t.realized)); route();
+    } }], function () {
+      var calc = function () {
+        var sd = segVal('ftSide'), nav = num(val('ftNav')), amt = num(val('ftAmt')), fee = num(val('ftFee')), f = find(S.data.funds, val('ftFund'));
+        $('#ftAmtL').textContent = sd === 'buy' ? '申購金額（含手續費）' : '贖回入帳金額（選填）';
+        if (sd === 'buy' && nav > 0 && amt > 0) $('#ftUnits').value = Math.round((amt - fee) / nav * 10000) / 10000;
+        $('#ftHint').textContent = sd === 'sell' ? '目前持有 ' + uFmt(f.units) + ' 單位；入帳金額空白時以「單位數 × 淨值 − 手續費」計算。' : '';
+      };
+      bindSeg('ftSide', calc); ['ftNav', 'ftAmt', 'ftFee'].forEach(function (id) { $('#' + id).oninput = calc; });
+      $('#ftFund').onchange = function () { var f = find(S.data.funds, val('ftFund')); $('#ftNav').value = f.nav || ''; calc(); };
+      calc();
+    });
+  }
+  /** 自動抓基金淨值（後端 MoneyDJ），只往較新的日期更新 */
+  function refreshFunds(manual) {
+    var F = S.data.funds, withCode = F.filter(function (f) { return f.code; }), noCode = F.filter(function (f) { return !f.code; });
+    if (!withCode.length) { if (manual) navForm(); return; }
+    S.fundAt = Date.now();
+    var btn = $('#fdNav'); if (btn) { btn.disabled = true; btn.textContent = '更新中…'; }
+    return API.call('fundNav', { codes: withCode.map(function (f) { return f.code; }), force: !!manual }).then(function (r) {
+      var navs = (r && r.navs) || {}, n = 0, fails = [];
+      withCode.forEach(function (f) {
+        var x = navs[FC.fundCode(f.code)];
+        if (!x || !(x.nav > 0)) { fails.push(f.name); return; }
+        if (!f.navDate || x.date >= f.navDate) { if (x.date !== f.navDate || num(f.nav) !== x.nav) n++; f.nav = x.nav; f.navDate = x.date; f.navSrc = { source: x.source, verified: !!x.verified, date: x.date, at: x.at, change: x.change }; }
+      });
+      if (n) commit(manual ? '已自動更新 ' + n + ' 檔淨值' : null); else if (manual) toast(fails.length ? '無法取得：' + fails.join('、') : '淨值已是最新');
+      if (manual && fails.length && n) toast('已更新 ' + n + ' 檔；無法取得：' + fails.join('、'));
+      if (S.route === 'invest' || location.hash.indexOf('#/invest') === 0) { var y = window.scrollY; route(); window.scrollTo(0, y); }
+      if (manual && noCode.length) navForm(noCode);
+    }).catch(function () { if (manual) { toast('暫時無法連線，可先手動更新'); navForm(); } else { var b = $('#fdNav'); if (b) { b.disabled = false; b.textContent = '更新淨值'; } } });
+  }
+  function navForm(only) {
+    var F = only || S.data.funds;
+    var body = '<div class="stack"><div class="field"><label for="nvDate">淨值日期</label><input id="nvDate" type="date" value="' + FC.twDay() + '"></div>' +
+      F.map(function (f) { return '<div class="field"><label for="nv_' + f.id + '">' + esc(f.name) + '（' + esc(f.currency) + '）</label><input id="nv_' + f.id + '" type="number" inputmode="decimal" step="any" value="' + esc(f.nav) + '"></div>'; }).join('') +
+      '<p class="tiny" style="margin:0">可到銀行 App、基富通或投信官網查詢最新淨值。只會更新有改動的基金。</p></div>';
+    openSheet(only ? '手動更新（無代碼的基金）' : '更新淨值', body, [{ label: '取消', ghost: true, fn: closeSheet }, { label: '儲存', fn: function () {
+      var d = val('nvDate'), n = 0;
+      F.forEach(function (f) { var v = num(val('nv_' + f.id)); if (v > 0 && v !== num(f.nav)) { f.nav = v; f.navDate = d; n++; } });
+      closeSheet(); commit(n ? '已更新 ' + n + ' 檔淨值' : '淨值沒有變動'); route();
+    } }]);
+  }
   function pageInvest(v) {
     var s = sum(), tab = S.mktTab || 'TW', sort = S.stSort || 'value';
     var tw = s.holdings.filter(function (x) { return x.market !== 'US'; }), us = s.holdings.filter(function (x) { return x.market === 'US'; });
@@ -2410,6 +2665,7 @@ var Demo = (function () {
     if (list.length > 5) h += '<button type="button" class="more-btn" id="stAll">' + (S.stAll ? '收合' : '看全部 ' + list.length + ' 檔 ›') + '</button>';
     h += '<div class="grid2 ms-btns"><button class="btn" id="addTr">' + I.plus + '記錄買賣</button><button class="btn btn-ghost" id="addHold">' + I.plus + '輸入現有持股</button></div></section>';
 
+    h += fundCardHTML(s);
     h += '<nav class="tools" aria-label="股市工具">' + [['#/watch', IC.star, '自選股'], ['#/watch?t=alert', IC.bell, '價格提醒'], ['#/divs', IC.cal, '股利行事曆'], ['#/analysis', IC.pie, '組合分析']]
       .map(function (t) { return '<a href="' + t[0] + '"><i>' + t[1] + '</i><span>' + t[2] + '</span></a>'; }).join('') + '</nav>';
 
@@ -2433,6 +2689,8 @@ var Demo = (function () {
     bindRefQ();
     var keep = function () { var y = window.scrollY; route(); window.scrollTo(0, y); };
     bindSeg('mkTab', function (m) { S.mktTab = m; keep(); });
+    bindFunds();
+    if (S.data.funds.some(function (f) { return f.code; }) && Date.now() - (S.fundAt || 0) > 30 * 60000) refreshFunds(false);
     $$('[data-sort]').forEach(function (b) { b.onclick = function () { S.stSort = b.dataset.sort; if (S.stSort === 'div' && !S.divData) loadDivs().then(keep); keep(); }; });
     if ($('#stAll')) $('#stAll').onclick = function () { S.stAll = !S.stAll; keep(); };
     if ($('#trAll')) $('#trAll').onclick = function () { S.trAll = !S.trAll; keep(); };
@@ -3455,6 +3713,7 @@ var Demo = (function () {
   }
 
   // ═════════ 設定 ═════════
+  var TA_KEYS = ['core', 'satellite', 'bond', 'defensive', 'fund', 'cash'];
   function pageSettings(v) {
     var P = S.data.profile, ta = S.data.targetAllocation, st = S.data.settings, models = st.models || {};
     var h = '<section class="sec">' + secHead('PROFILE', '個人財務檔案') + '<div class="card stack">' +
@@ -3471,8 +3730,8 @@ var Demo = (function () {
 
     h += privacyHTML();
     h += '<section class="sec">' + secHead('TARGET ALLOCATION', '目標配置（%）') + '<div class="card stack">' +
-      '<div class="grid2">' + ['core', 'satellite', 'bond', 'defensive', 'cash'].map(function (k) { return '<div class="field"><label for="ta_' + k + '">' + FC.CLASSES[k].label + '</label><input id="ta_' + k + '" type="number" inputmode="numeric" min="0" max="100" value="' + esc(ta[k] || 0) + '"></div>'; }).join('') +
-      '<div class="field"><span class="lbl">合計</span><div class="input" id="taSum" style="display:flex;align-items:center;justify-content:center;background:var(--bg);font-weight:700">—</div></div></div>' +
+      '<div class="grid2">' + TA_KEYS.map(function (k) { return '<div class="field"><label for="ta_' + k + '">' + FC.CLASSES[k].label + '</label><input id="ta_' + k + '" type="number" inputmode="numeric" min="0" max="100" value="' + esc(ta[k] || 0) + '"></div>'; }).join('') +
+      '</div><div class="field"><span class="lbl">合計</span><div class="input" id="taSum" style="display:flex;align-items:center;justify-content:center;background:var(--bg);font-weight:700">—</div></div>' +
       '<button class="btn btn-block" id="taSave">儲存目標配置</button></div></section>';
 
     h += '<section class="sec">' + secHead('AI', 'AI 供應商與金鑰') + '<div class="card stack">' +
@@ -3503,11 +3762,11 @@ var Demo = (function () {
         startAmount: num(val('pfSa')), startDate: val('pfSd'), horizonYears: num(val('pfHz')), goalShort: val('pfG1'), goalMid: val('pfG2'), goalLong: val('pfG3') });
       commit('已儲存個人檔案');
     };
-    function taSum() { var t = 0; ['core', 'satellite', 'bond', 'defensive', 'cash'].forEach(function (k) { t += num(val('ta_' + k)); }); $('#taSum').textContent = t + '%'; $('#taSum').style.color = t === 100 ? 'var(--down)' : 'var(--up)'; return t; }
+    function taSum() { var t = 0; TA_KEYS.forEach(function (k) { t += num(val('ta_' + k)); }); $('#taSum').textContent = t + '%'; $('#taSum').style.color = t === 100 ? 'var(--down)' : 'var(--up)'; return t; }
     $$('[id^=ta_]').forEach(function (i) { i.oninput = taSum; }); taSum();
     $('#taSave').onclick = function () {
       if (taSum() !== 100) { toast('合計需為 100%'); return; }
-      ['core', 'satellite', 'bond', 'defensive', 'cash'].forEach(function (k) { ta[k] = num(val('ta_' + k)); });
+      TA_KEYS.forEach(function (k) { ta[k] = num(val('ta_' + k)); });
       commit('已儲存目標配置');
     };
     $('#aiSave').onclick = function () { st.aiProvider = val('aiP'); st.models = { gemini: val('mG'), openai: val('mO'), claude: val('mC') }; commit('已儲存 AI 設定'); };
