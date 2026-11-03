@@ -701,6 +701,65 @@ a.kpi-link { text-decoration: none; color: inherit; cursor: pointer; }
 .fd-code .btn { flex: 0 0 auto; height: var(--ctl); }
 .fd-ok { font-style: normal; color: var(--down); font-weight: 700; }
 
+/* ── 首頁重排、財務健檢、貸款、預算 ── */
+.hstats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 12px; position: relative; }
+.hstats > * { min-height: 56px; border-radius: 12px; background: rgba(255, 255, 255, .1); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 4px; color: #fff; text-decoration: none; min-width: 0; }
+.hstats i { font-style: normal; font-size: 11px; opacity: .78; line-height: 1.4; }
+.hstats b { font-size: 14px; font-weight: 700; line-height: 1.4; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.gh { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 40px; margin: 16px 0 8px; font-size: 15px; font-weight: 700; color: var(--navy); }
+.gh-act { font-size: 13px; font-weight: 500; color: var(--blue); background: none; border: 0; padding: 0; min-height: 40px; display: inline-flex; align-items: center; cursor: pointer; text-decoration: none; white-space: nowrap; font-family: inherit; }
+span.gh-act { color: var(--sub); }
+.todo { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 0 16px; }
+.tdr { display: flex; align-items: center; gap: 12px; min-height: 52px; border-top: 1px solid #EEF2F8; font-size: 14px; color: var(--ink); text-decoration: none; }
+.tdr:first-child { border-top: 0; }
+.td-k { width: 32px; height: 32px; flex: 0 0 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; }
+.td-k.w { background: var(--warn-bg); color: var(--warn); } .td-k.r { background: #FDECEC; color: #C62828; } .td-k.g { background: #E8F7EE; color: #15803D; } .td-k.b { background: var(--blue-soft); color: var(--navy); }
+.td-m { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.4; }
+.tdr b { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.td-go { color: var(--mute); }
+.hk { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.hk a { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); min-height: 104px; padding: 12px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-align: center; text-decoration: none; color: inherit; min-width: 0; }
+.hk i { font-style: normal; font-size: 12px; color: var(--sub); line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.hk b { font-size: clamp(17px, 5vw, 20px); font-weight: 800; color: var(--navy); line-height: 1.3; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+@media (min-width: 700px) { .hk { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.pill { display: inline-flex; align-items: center; justify-content: center; gap: 4px; height: 22px; padding: 0 8px; border-radius: 11px; font-size: 11px; font-weight: 700; white-space: nowrap; max-width: 100%; overflow: hidden; }
+.pill::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex: 0 0 6px; }
+.pill.g { background: #E8F7EE; color: #15803D; } .pill.y { background: #FFF5E5; color: #B26A00; } .pill.r { background: #FDECEC; color: #C62828; } .pill.n { background: #EEF2F7; color: var(--mute); }
+.fxline { display: flex; align-items: center; gap: 12px; min-height: 48px; margin-top: 12px; padding: 0 16px; border-radius: var(--r); background: var(--card); border: 1px solid var(--line); text-decoration: none; color: var(--ink); font-size: 13px; overflow: hidden; }
+.fxline span { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.fxline .fl-t { color: var(--sub); } .fxline em { font-style: normal; color: var(--sub); font-size: 12px; } .fxline b { font-variant-numeric: tabular-nums; }
+.fxline i { font-style: normal; font-size: 10px; } .fxline .fl-go { margin-left: auto; color: var(--mute); }
+@media (max-width: 359px) { .fxline .fl-t { display: none; } .fxline { gap: 8px; padding: 0 12px; } }
+.ind { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 0 16px; }
+.ir { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; align-items: center; padding: 12px 0; border-top: 1px solid #EEF2F8; }
+.ir:first-child { border-top: 0; }
+.ir.focus { background: linear-gradient(90deg, rgba(47, 107, 255, .06), transparent); margin: 0 -16px; padding: 12px 16px; }
+.ir .nm { font-size: 15px; font-weight: 700; color: var(--navy); line-height: 1.4; }
+.ir .vl { font-size: 17px; font-weight: 800; color: var(--navy); text-align: right; font-variant-numeric: tabular-nums; line-height: 1.4; white-space: nowrap; }
+.ir .sd { font-size: 12px; color: var(--sub); line-height: 1.55; }
+.ir .pill { justify-self: end; }
+.ir .ibar { grid-column: 1 / -1; height: 6px; border-radius: 3px; background: #EEF2F8; overflow: hidden; }
+.ir .ibar i { display: block; height: 100%; border-radius: 3px; }
+.ir .itip { grid-column: 1 / -1; display: flex; gap: 8px; align-items: baseline; font-size: 13px; color: var(--ink); line-height: 1.55; background: #F7F9FC; border-radius: 10px; padding: 8px 12px; }
+.ir .itip b { color: var(--blue); flex: 0 0 auto; font-size: 12px; }
+.fi-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; margin-bottom: 8px; }
+.fi-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 32px; }
+.fi-top b { font-size: 22px; color: var(--navy); font-variant-numeric: tabular-nums; }
+.fi-pb { height: 10px; border-radius: 5px; background: #EEF2F8; margin: 8px 0 12px; overflow: hidden; } .fi-pb i { display: block; height: 100%; background: var(--blue); border-radius: 5px; }
+.fi-kv { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.fi-kv div { background: #F7F9FC; border-radius: 12px; min-height: 64px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 4px; min-width: 0; }
+.fi-kv i { font-style: normal; font-size: 11px; color: var(--sub); line-height: 1.35; } .fi-kv b { font-size: 15px; color: var(--navy); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.fi-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; }
+.fi-foot .tiny { flex: 1; min-width: 0; }
+.card-link { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); text-decoration: none; color: inherit; }
+.bud { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 8px 16px; }
+.bdr { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; align-items: center; gap: 12px; min-height: 44px; }
+.bd-c { font-size: 14px; } .bd-b { height: 8px; border-radius: 4px; background: #EEF2F8; overflow: hidden; } .bd-b i { display: block; height: 100%; border-radius: 4px; }
+.bdr em { font-style: normal; font-size: 12px; color: var(--sub); text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.bd-foot { display: flex; justify-content: space-between; align-items: center; min-height: 40px; border-top: 1px solid #EEF2F8; font-size: 12px; color: var(--sub); }
+.item.loan .item-icon { background: #FDECEC; color: #C62828; }
+.date-head span:last-child { font-variant-numeric: tabular-nums; }
+
 </style>
 </head>
 <body>
@@ -1029,6 +1088,8 @@ var FC = (function () {
       otherAssets: [],    // {id,name,cls,value,currency}
       funds: [],          // {id,name,type,currency,units,cost,nav,navDate,platform,dca:{on,day,amount},dcaLast}
       fundTx: [],         // {id,fundId,date,side:buy|sell,amount,units,nav,fee,realized}
+      loans: [],          // {id,name,type,balance,asOf,rate(%),monthly,payDay,principal,endMonth}
+      budgets: {},        // 分類 -> 每月預算
       plans: [],          // {id,title,kind:netWorth|savings|invest|manual,target,current,deadline}
       snapshots: [],      // {date,netWorth,financial,cash,invest}
       watchlist: [],      // {symbol,name,market}
@@ -1037,7 +1098,8 @@ var FC = (function () {
         aiProvider: 'gemini',
         models: { gemini: 'gemini-3.1-flash-lite', openai: 'gpt-6.1-sol', claude: 'claude-sonnet-5-5' },
         reportEmail: '', reportHour: 20, reportMinute: 30, reportEnabled: false,
-        privacy: { hideOnOpen: false, blurOnLeave: true, autoLock: false, lockMin: 5, watermark: false }
+        privacy: { hideOnOpen: false, blurOnLeave: true, autoLock: false, lockMin: 5, watermark: false },
+        fi: { ret: 0, infl: 2, mult: 25 }   // ret=0 代表依風險屬性（保守 3%／穩健 5%／積極 7%）
       },
       learn: { done: [] },
       updatedAt: new Date().toISOString()
@@ -1055,6 +1117,8 @@ var FC = (function () {
       }
     });
     if (!d.settings.models) d.settings.models = base.settings.models;
+    if (!d.settings.fi) d.settings.fi = base.settings.fi;
+    if (!d.budgets || typeof d.budgets !== 'object' || Array.isArray(d.budgets)) d.budgets = {};
     Object.keys(base.settings.privacy).forEach(function (k) { if (d.settings.privacy[k] == null) d.settings.privacy[k] = base.settings.privacy[k]; });
     return d;
   }
@@ -1236,9 +1300,12 @@ var FC = (function () {
     h.list.forEach(function (x) { alloc[x.cls] = (alloc[x.cls] || 0) + x.valueTWD; });
     Object.keys(otherByCls).forEach(function (k) { alloc[k] = (alloc[k] || 0) + otherByCls[k]; });
 
+    var lo = computeLoans(data, today), loanTotal = 0, loanMonthly = 0, loanInt12 = 0;
+    lo.forEach(function (l) { loanTotal += l.balance; loanMonthly += l.monthly; loanInt12 += l.int12; });
+
     var financial = cashTotal + investValue + fundValue + other;   // 金融資產總市值
     var totalAssets = financial + recv;
-    var netWorth = totalAssets - pay;
+    var netWorth = totalAssets - pay - loanTotal;
     var cf = cashflow(data, 6, today);
     var last3 = cf.slice(-3);
     var avgExp = avg(last3.map(function (r) { return r.expense; }).filter(function (v) { return v > 0; })) || num(data.profile.monthlyExpense);
@@ -1255,8 +1322,176 @@ var FC = (function () {
       financial: financial, totalAssets: totalAssets, netWorth: netWorth,
       alloc: alloc, cashflow: cf, avgExpense: avgExp, avgIncome: avgInc,
       unsettled: unsettled, unsettledNet: unsettledNet,
+      loans: lo, loanTotal: loanTotal, loanMonthly: loanMonthly, loanInt12: loanInt12,
       target: num(data.profile.targetAmount) || 1000000
     };
+  }
+  // ───────── 貸款（等額本息估算） ─────────
+  var LOAN_TYPES = { mortgage: '房貸', car: '車貸', personal: '信貸', student: '學貸', card: '卡分期', other: '其他' };
+  function monthsBetween(a, b) { return (+b.slice(0, 4) - +a.slice(0, 4)) * 12 + (+b.slice(5, 7) - +a.slice(5, 7)); }
+  /** 依「餘額＋登錄日」與月付、利率，推估今天的餘額、剩餘期數、未來 12 個月利息 */
+  function loanState(l, today) {
+    var B = num(l.balance), r = num(l.rate) / 100 / 12, P = num(l.monthly), pd = Math.min(28, Math.max(1, num(l.payDay) || 1));
+    var asOf = l.asOf || today, n = 0;
+    // 登錄日之後、到今天為止經過的扣款日次數
+    var m = monthsBetween(asOf, today); n = Math.max(0, m - (+asOf.slice(8, 10) >= pd ? 1 : 0) + (+today.slice(8, 10) >= pd ? 1 : 0));
+    for (var i = 0; i < n && B > 0; i++) B = Math.max(0, B * (1 + r) - P);
+    var rem = 0, b = B, int12 = 0, warn = '';
+    if (P > 0 && B > 0) {
+      if (B * r >= P) warn = '月付金額不足以支付利息，請確認月付與利率';
+      else { while (b > 0.5 && rem < 600) { var it = b * r; if (rem < 12) int12 += it; b = Math.max(0, b + it - P); rem++; } }
+    }
+    var nextPay = today.slice(0, 8) + pad(pd); if (nextPay < today) nextPay = addDays(today.slice(0, 8) + '01', 32).slice(0, 8) + pad(pd);
+    var principal = num(l.principal);
+    return { id: l.id, name: l.name, type: l.type || 'other', typeLabel: LOAN_TYPES[l.type] || '其他', rate: num(l.rate), monthly: P, balance: B, remMonths: rem, int12: int12,
+      paidPct: principal > B ? (principal - B) / principal : null, nextPay: B > 0 ? nextPay : '', warn: warn, est: n > 0 };
+  }
+  function computeLoans(data, today) { return (data.loans || []).map(function (l) { return loanState(l, today || twDay()); }).filter(function (x) { return x.balance > 0.5 || x.monthly > 0; }); }
+
+  // ───────── 年化報酬 XIRR ─────────
+  function xirr(flows) {
+    if (flows.length < 2) return null;
+    var hasNeg = flows.some(function (f) { return f.v < 0; }), hasPos = flows.some(function (f) { return f.v > 0; });
+    if (!hasNeg || !hasPos) return null;
+    var t0 = Date.parse(flows[0].d), yrs = flows.map(function (f) { return (Date.parse(f.d) - t0) / 31557600000; });
+    if (yrs[yrs.length - 1] < 30 / 365) return null; // 期間太短不年化
+    var f = function (r) { return flows.reduce(function (s, x, i) { return s + x.v / Math.pow(1 + r, yrs[i]); }, 0); };
+    var lo = -0.99, hi = 10, flo = f(lo), fhi = f(hi);
+    if (flo * fhi > 0) return null;
+    for (var k = 0; k < 200; k++) { var mid = (lo + hi) / 2, fm = f(mid); if (Math.abs(fm) < 1e-6) return mid; if (flo * fm < 0) { hi = mid; fhi = fm; } else { lo = mid; flo = fm; } }
+    return (lo + hi) / 2;
+  }
+  /** 股票（含股利收入）與有日期紀錄的基金之年化報酬；回傳 {rate, years, note} */
+  function investXirr(data, sum, fx, today) {
+    var fl = [], rateOf = function (cur) { return cur === 'TWD' ? 1 : ((fx && fx.rates && fx.rates[cur]) || 0); }, skip = false;
+    (data.trades || []).forEach(function (t) {
+      if (t.side === 'adjust') { skip = true; return; }
+      var r = rateOf(holdingCurrency(t.market)), g = num(t.qty) * num(t.price);
+      if (t.side === 'buy') fl.push({ d: t.date, v: -(g + num(t.fee)) * r }); else if (t.side === 'sell') fl.push({ d: t.date, v: (g - num(t.fee) - num(t.tax)) * r });
+    });
+    (data.transactions || []).forEach(function (t) { if (t.type === 'income' && t.category === '股利') fl.push({ d: t.date, v: toTWD(t.amount, t.currency || 'TWD', fx) || num(t.amount) }); });
+    var fundV = 0;
+    (data.funds || []).forEach(function (f) {
+      var tx = (data.fundTx || []).filter(function (t) { return t.fundId === f.id; }), r = rateOf(f.currency || 'TWD');
+      var buys = tx.filter(function (t) { return t.side === 'buy'; }).reduce(function (a, t) { return a + num(t.amount); }, 0), outC = tx.filter(function (t) { return t.side === 'sell'; }).reduce(function (a, t) { return a + num(t.costOut); }, 0);
+      var initCost = num(f.cost) - buys + outC, since = f.since || (tx.length ? tx.map(function (t) { return t.date; }).sort()[0] : '');
+      if (initCost > 1 && !f.since) return; // 期初成本日期不明，不納入
+      if (initCost > 1) fl.push({ d: since, v: -initCost * r });
+      tx.forEach(function (t) { fl.push({ d: t.date, v: (t.side === 'buy' ? -1 : 1) * num(t.amount) * r }); });
+      fundV += num(f.units) * num(f.nav) * r;
+    });
+    if (skip || !fl.length) return { rate: null, note: skip ? '有「調整持股」紀錄，無法計算年化' : '尚無交易紀錄' };
+    fl.push({ d: today, v: sum.investValue + fundV });
+    fl.sort(function (a, b) { return a.d < b.d ? -1 : a.d > b.d ? 1 : 0; });
+    var rr = xirr(fl), yrs = (Date.parse(today) - Date.parse(fl[0].d)) / 31557600000;
+    return { rate: rr, years: yrs, note: rr == null ? (yrs < 30 / 365 ? '投資期間未滿 1 個月' : '資料不足') : '股票（含股利）' + (fundV ? '＋基金' : '') + '・XIRR' };
+  }
+
+  // ───────── 財務健檢（15 項指標） ─────────
+  var NEEDS = ['居住', '交通', '日用', '醫療', '保險', '教育', '孝親', '餐飲'];
+  function snapAt(snaps, d) { var best = null; snaps.forEach(function (x) { if (x.date <= d && (!best || x.date > best.date)) best = x; }); return best; }
+  function health(data, sum, fx, today) {
+    today = today || sum.date || twDay();
+    var P = data.profile, st = data.settings || {}, FI = st.fi || {}, items = [];
+    var add = function (g, key, label, value, lv, desc, tip, bar) { items.push({ group: g, key: key, label: label, value: value, lv: lv, desc: desc, tip: tip, bar: bar == null ? null : clamp(bar * 100) }); };
+    var LV = function (x, good, mid, higher) { return higher ? (x >= good ? 'g' : x >= mid ? 'y' : 'r') : (x <= good ? 'g' : x <= mid ? 'y' : 'r'); };
+    var inc = sum.avgIncome || 0, exp = sum.avgExpense || 0;
+    // 一、安全防守
+    var liquid = sum.cashTotal - Math.max(0, sum.unsettledNet), em = exp > 0 ? liquid / exp : null;
+    add('safe', 'emergency', '緊急預備金', em == null ? '—' : round(em, 1) + ' 個月', em == null ? 'n' : LV(em, 6, 3, true),
+      '可動用現金 ' + fmt(liquid) + ' ÷ 月支出 ' + fmt(exp) + '｜標準 ≥ 6 個月',
+      em == null ? '先記帳或在設定填月支出' : em >= 6 ? '充足，多出的現金可依配置投入' : '補足 ' + fmt(Math.max(0, exp * 6 - liquid)) + ' 元達 6 個月', em == null ? null : em / 6);
+    var dsr = inc > 0 ? sum.loanMonthly / inc : null;
+    add('safe', 'dsr', '每月還款／收入（DSR）', dsr == null ? '—' : pct(dsr, 0), dsr == null ? 'n' : LV(dsr, 0.3, 0.4),
+      (sum.loans.length ? '月還款 ' + fmt(sum.loanMonthly) : '尚無貸款') + ' ÷ 月收入 ' + fmt(inc) + '｜理想 ≤ 30%，銀行審核線 40%',
+      dsr == null ? '先記錄收入' : dsr > 0.4 ? '還款壓力大，避免再增加貸款' : dsr > 0.3 ? '接近上限，新增貸款前先試算' : '還款壓力在安全範圍', dsr == null ? null : dsr / 0.5);
+    var debt = sum.payable + sum.loanTotal, dr = sum.totalAssets > 0 ? debt / sum.totalAssets : (debt > 0 ? 1 : 0);
+    add('safe', 'debt', '負債比', pct(dr, 0), LV(dr, 0.3, 0.5),
+      '負債 ' + fmt(debt) + ' ÷ 總資產 ' + fmt(sum.totalAssets) + '｜標準 < 30%',
+      dr > 0.5 ? '負債偏高，優先償還高利率負債' : dr > 0.3 ? '接近上限；有房貸請在其他資產填房屋市值' : '負債比健康', dr / 0.6);
+    var due30 = sum.payRows.filter(function (l) { return !l.due || diffDays(today, l.due) <= 30; }).reduce(function (a, l) { return a + num(l.amount); }, 0) + sum.loanMonthly + Math.max(0, sum.unsettledNet);
+    var cov = due30 > 0 ? sum.cashTotal / due30 : null;
+    add('safe', 'short', '30 天內應付覆蓋', cov == null ? '無應付' : round(cov, 1) + ' 倍', cov == null ? 'g' : LV(cov, 2, 1, true),
+      '現金 ' + fmt(sum.cashTotal) + ' ÷ 30 天內應付＋還款＋交割 ' + fmt(due30) + '｜標準 ≥ 2 倍',
+      cov != null && cov < 1 ? '現金不足以支付近期款項，先調度資金' : '近期款項可準時支付', cov == null ? 1 : cov / 3);
+    // 二、現金流
+    var thisM = today.slice(0, 7), cf3 = sum.cashflow.filter(function (r) { return r.month !== thisM || r.income > 0; }).slice(-3).filter(function (r) { return r.income > 0 || r.expense > 0; });
+    var i3 = cf3.reduce(function (a, r) { return a + r.income; }, 0), e3 = cf3.reduce(function (a, r) { return a + r.expense; }, 0), sr = i3 > 0 ? (i3 - e3) / i3 : null;
+    add('flow', 'saving', '儲蓄率（近 3 月）', sr == null ? '—' : pct(sr, 0), sr == null ? 'n' : LV(sr, 0.2, 0.1, true),
+      '收入 ' + fmt(i3) + '、支出 ' + fmt(e3) + '｜標準 ≥ 20%，30% 更佳',
+      sr == null ? '需要至少一個月的收入紀錄' : sr < 0.2 ? '每月先存後花：發薪日自動轉存 ' + fmt(Math.max(0, i3 / cf3.length * 0.2 - (i3 - e3) / cf3.length)) + ' 元' : '維持紀律', sr == null ? null : sr / 0.3);
+    var need = 0, want = 0;
+    cf3.forEach(function (r) { Object.keys(r.cats).forEach(function (c) { if (NEEDS.indexOf(c) >= 0) need += r.cats[c]; else if (c !== '投資手續費') want += r.cats[c]; }); });
+    if (i3 > 0) {
+      var nR = need / i3, wR = want / i3, sR = 1 - nR - wR, ok = nR <= 0.5 && wR <= 0.3 && sR >= 0.2;
+      add('flow', 'rule', '支出結構 50／30／20', Math.round(nR * 100) + '／' + Math.round(wR * 100) + '／' + Math.round(sR * 100), ok ? 'g' : (sR >= 0.1 ? 'y' : 'r'),
+        '必要／想要／儲蓄（占收入）｜標準 ≤50／≤30／≥20。必要＝居住、交通、餐飲、日用、醫療、保險、教育、孝親',
+        ok ? '支出結構健康' : nR > 0.5 ? '必要支出偏高，檢視居住與保險成本' : wR > 0.3 ? '想要支出偏高，先從娛樂與購物下手' : '提高儲蓄比例', null);
+    } else add('flow', 'rule', '支出結構 50／30／20', '—', 'n', '需要收入紀錄才能計算', '記錄薪資等收入', null);
+    var B = data.budgets || {}, bk = Object.keys(B).filter(function (k) { return num(B[k]) > 0; });
+    if (bk.length) {
+      var mo = today.slice(0, 7), cur = sum.cashflow.filter(function (r) { return r.month === mo; })[0] || { cats: {} };
+      var bTot = 0, used = 0, over = [];
+      bk.forEach(function (k) { bTot += num(B[k]); used += cur.cats[k] || 0; if ((cur.cats[k] || 0) > num(B[k])) over.push(k); });
+      var day = +today.slice(8, 10), dim = new Date(+today.slice(0, 4), +today.slice(5, 7), 0).getDate(), pace = day / dim, ur = bTot ? used / bTot : 0;
+      add('flow', 'budget', '本月預算執行', pct(ur, 0), over.length || ur > 1 ? 'r' : ur > pace + 0.1 ? 'y' : 'g',
+        '已過 ' + pct(pace, 0) + ' 天數、已用 ' + fmt(used) + '／' + fmt(bTot) + (over.length ? '｜超支：' + over.join('、') : ''),
+        over.length ? '本月剩餘天數暫停「' + over[0] + '」非必要支出' : ur > pace + 0.1 ? '花費速度超前，後半月要收斂' : '在預算內', ur);
+    } else add('flow', 'budget', '本月預算執行', '未設定', 'n', '到記帳頁「設定預算」為各分類訂上限', '設定預算後可提早發現超支', null);
+    // 三、成長與目標
+    var snaps = (data.snapshots || []).slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+    var mStart = snapAt(snaps, addDays(today.slice(0, 8) + '01', -1)), y1 = snapAt(snaps, addDays(today, -365));
+    var since = !y1 && P.startDate && P.startDate <= addDays(today, -90) && num(P.startAmount) > 0;
+    var y1v = y1 ? y1.netWorth : since ? num(P.startAmount) : null;
+    var g12 = y1v > 0 ? sum.netWorth / y1v - 1 : null;
+    add('grow', 'growth', since ? '淨資產成長（' + P.startDate.slice(0, 7).replace('-', '/') + ' 起）' : '淨資產成長（近 12 月）', g12 == null ? '—' : (g12 >= 0 ? '+' : '') + pct(g12, 1), g12 == null ? 'n' : LV(g12, 0.08, 0, true),
+      (mStart ? '本月 ' + signed(sum.netWorth - mStart.netWorth) + '｜' : '') + (y1 ? '一年前 ' + fmt(y1.netWorth) : y1v != null ? '起始 ' + fmt(y1v) : '資料未滿一年') + '｜參考：每年 ≥ 8%',
+      g12 == null ? '每日報表會自動記錄淨資產，滿一年後可比較' : g12 < 0 ? '淨資產縮水，檢查是支出還是投資造成' : '持續成長', g12 == null ? null : (g12 + 0.1) / 0.3);
+    items[items.length - 1].short = since ? '起始以來' : '近 12 月';
+    var xr = investXirr(data, sum, fx, today);
+    add('grow', 'xirr', '投資年化報酬', xr.rate == null ? '—' : (xr.rate >= 0 ? '+' : '') + pct(xr.rate, 1), xr.rate == null ? 'n' : LV(xr.rate, 0.05, 0, true),
+      (xr.note || '') + (xr.years ? '・期間 ' + round(xr.years, 1) + ' 年' : '') + '｜參考：全球股市長期約 6～8%',
+      xr.rate == null ? xr.note : xr.years < 1 ? '未滿一年，年化數字波動大，僅供參考' : xr.rate < 0 ? '報酬為負，檢視是否追高或過度集中' : '持續定期投入、控制成本', xr.rate == null ? null : (xr.rate + 0.05) / 0.2);
+    var y12 = addDays(today, -365), passive = 0;
+    (data.transactions || []).forEach(function (t) { if (t.type === 'income' && (t.category === '股利' || t.category === '利息') && t.date > y12) passive += toTWD(t.amount, t.currency || 'TWD', fx) || num(t.amount); });
+    var pc = exp > 0 ? passive / 12 / exp : null;
+    add('grow', 'passive', '被動收入覆蓋', pc == null ? '—' : pct(pc, 0), pc == null ? 'n' : pc >= 1 ? 'g' : 'y',
+      '近 12 月股利＋利息 ' + fmt(passive) + '（月均 ' + fmt(passive / 12) + '）÷ 月支出｜100% 即財務自由',
+      pc == null ? '記錄股利、利息收入' : pc >= 1 ? '被動收入已能支應生活' : '長期目標；記帳時把股利、利息分到對應類別，才會被計入', pc);
+    items[items.length - 1].word = pc == null ? null : pc >= 1 ? '達成' : pc >= 0.5 ? '過半' : '起步';
+    var rr = num(FI.ret) > 0 ? num(FI.ret) / 100 : ({ '保守': 0.03, '穩健': 0.05, '積極': 0.07 }[P.riskProfile] || 0.05), infl = (FI.infl == null ? 2 : num(FI.infl)) / 100, mult = num(FI.mult) || 25;
+    var fiNum = exp * 12 * mult, fiProg = fiNum > 0 ? Math.max(0, sum.netWorth) / fiNum : null, real = (1 + rr) / (1 + infl) - 1;
+    var monthly = sr != null && i3 > 0 ? Math.max(0, (i3 - e3) / cf3.length) : 0, yrs = null;
+    if (fiNum > 0) { var v = Math.max(0, sum.netWorth), mr = Math.pow(1 + real, 1 / 12) - 1; for (var k = 0; k <= 600; k++) { if (v >= fiNum) { yrs = k / 12; break; } v = v * (1 + mr) + monthly; } }
+    var horizon = Math.max(1, num(P.horizonYears) || 20) * 12, mrr = Math.pow(1 + real, 1 / 12) - 1, fvA = mrr ? (Math.pow(1 + mrr, horizon) - 1) / mrr : horizon;
+    var needM = fiNum > 0 ? Math.max(0, (fiNum - Math.max(0, sum.netWorth) * Math.pow(1 + mrr, horizon)) / fvA) : 0;
+    add('grow', 'fi', '財務自由進度', fiProg == null ? '—' : pct(fiProg, 0), fiProg == null ? 'n' : fiProg >= 1 ? 'g' : 'y',
+      '目標 ' + fmt(fiNum) + '（年支出 × ' + mult + '）｜實質報酬 ' + pct(real, 1) + '（年化 ' + pct(rr, 0) + '、通膨 ' + pct(infl, 0) + '）',
+      fiNum <= 0 ? '需要支出紀錄' : yrs == null ? '以目前儲蓄速度 50 年內難以達成，需提高儲蓄' : '以目前每月儲蓄 ' + fmt(monthly) + '，約 ' + round(yrs, 1) + ' 年達成', fiProg);
+    items[items.length - 1].word = fiProg == null ? null : fiProg >= 1 ? '達成' : '累積中';
+    var fiInfo = { num: fiNum, prog: fiProg, years: yrs, year: yrs == null ? null : +today.slice(0, 4) + Math.ceil(yrs), monthlyNow: monthly, needMonthly: needM, horizon: horizon / 12, ret: rr, infl: infl, mult: mult };
+    // 四、風險
+    var fin = sum.financial || 0, fxv = 0;
+    sum.cashRows.forEach(function (c) { if (c.currency !== 'TWD') fxv += c.twd; });
+    sum.holdings.forEach(function (x) { if (x.currency !== 'TWD') fxv += x.valueTWD; });
+    (sum.funds || []).forEach(function (f) { if (f.currency !== 'TWD') fxv += f.valueTWD; });
+    (data.otherAssets || []).forEach(function (o) { if (o.currency && o.currency !== 'TWD') fxv += toTWD(o.value, o.currency, fx); });
+    var fxr = fin > 0 ? fxv / fin : 0;
+    add('risk', 'fx', '外幣資產占比', pct(fxr, 0), LV(fxr, 0.3, 0.5), '外幣存款＋美股＋外幣基金 ' + fmt(fxv) + ' ÷ 金融資產｜建議 ≤ 30%',
+      fxr > 0.3 ? '匯率波動對淨資產影響大，可分批換回或避險' : '匯率風險適中', fxr / 0.6);
+    var maxW = 0, maxN = '';
+    sum.holdings.forEach(function (x) { if (x.cls !== 'core' && x.cls !== 'bond') { var w = fin ? x.valueTWD / fin : 0; if (w > maxW) { maxW = w; maxN = x.name; } } });
+    add('risk', 'conc', '單一個股集中度', maxN ? pct(maxW, 0) : '—', maxN ? LV(maxW, 0.1, 0.2) : 'g', (maxN ? maxN + ' 占金融資產' : '沒有個股持股') + '｜建議 ≤ 10%（指數 ETF 不計）',
+      maxW > 0.2 ? '過度集中，新資金改投入其他類別' : maxW > 0.1 ? '略高，避免再加碼' : '分散良好', maxW / 0.3);
+    var invR = fin > 0 ? (sum.investValue + (sum.fundValue || 0)) / fin : 0, cap = { '保守': 0.4, '穩健': 0.7, '積極': 0.9 }[P.riskProfile] || 0.7;
+    add('risk', 'invr', '投資部位占比', pct(invR, 0), invR <= cap ? 'g' : invR <= cap + 0.1 ? 'y' : 'r', '股票＋基金 ÷ 金融資產｜' + (P.riskProfile || '穩健') + '型建議 ≤ ' + pct(cap, 0),
+      invR > cap ? '超過風險屬性上限，下跌時壓力大' : '與風險屬性相符', invR / (cap + 0.2));
+    var y1s = snaps.filter(function (x) { return x.date > addDays(today, -365); }).map(function (x) { return x.netWorth; }).concat([sum.netWorth]), pk = -Infinity, mdd = 0;
+    y1s.forEach(function (v) { if (v > pk) pk = v; if (pk > 0) mdd = Math.min(mdd, v / pk - 1); });
+    add('risk', 'mdd', '淨資產最大回撤（近 12 月）', y1s.length > 20 ? pct(mdd, 1) : '—', y1s.length > 20 ? LV(-mdd, 0.1, 0.2) : 'n', '距前高最大跌幅｜' + (P.riskProfile || '穩健') + '型參考 ≤ 10%～20%',
+      y1s.length <= 20 ? '每日報表累積 20 天以上資料後計算' : -mdd > 0.2 ? '波動超過多數人承受度，檢查配置' : '波動在可承受範圍', y1s.length > 20 ? -mdd / 0.3 : null);
+    var G = { safe: '安全防守', flow: '現金流', grow: '成長與目標', risk: '風險' };
+    return { items: items, groups: G, fi: fiInfo, xirr: xr, attention: items.filter(function (x) { return x.lv === 'y' || x.lv === 'r'; }).length };
   }
   function avg(a) { return a.length ? a.reduce(function (s, v) { return s + v; }, 0) / a.length : 0; }
 
@@ -1355,7 +1590,7 @@ var FC = (function () {
     // 5. 執行／交割／負債 15%
     var short = Math.max(0, sum.unsettledNet - (sum.cashByType.broker || 0) - (sum.cashByType.bank || 0));
     var overdue = sum.payRows.filter(function (l) { return l.due && l.due < sum.date; }).length;
-    var debtR = sum.totalAssets > 0 ? sum.payable / sum.totalAssets : 0;
+    var debtR = sum.totalAssets > 0 ? (sum.payable + (sum.loanTotal || 0)) / sum.totalAssets : 0;
     var sEx = clamp(100 - (short > 0 ? 50 : 0) - overdue * 15 - debtR * 100);
     out.push(mk('execution', '執行／交割／負債', 15, sEx,
       '待交割淨額 ' + fmt(sum.unsettledNet) + ' 元；逾期應付 ' + overdue + ' 筆；負債比 ' + pct(debtR),
@@ -1464,12 +1699,12 @@ var FC = (function () {
     data = normalize(data);
     var today = ctx.today || twDay();
     var sum = summarize(data, ctx.quotes || {}, ctx.fx || {}, today);
-    var sc = scores(data, sum);
+    var sc = scores(data, sum), hl = health(data, sum, ctx.fx || {}, today);
     var todayTrades = (data.trades || []).filter(function (t) { return t.date === today && !t.opening && t.side !== 'adjust'; });
     var reviews = todayTrades.map(function (t) { return tradeReview(t, (ctx.ohlc || {})[t.symbol], data, sum); });
     return {
       date: today, generatedAt: twDay() + ' ' + twTime(), name: data.profile.name,
-      summary: sum, scores: sc, fx: ctx.fx || null, reviews: reviews,
+      summary: sum, scores: sc, health: hl, fx: ctx.fx || null, reviews: reviews,
       sentiment: sentiment(ctx.indices), plans: (data.plans || []).map(function (p) { return { plan: p, prog: planProgress(p, sum, data) }; }),
       actions: actions(data, sum, sc), news: ctx.news || { tw: [], intl: [] }, ai: ctx.ai || {},
       targetAllocation: data.targetAllocation, profile: data.profile
@@ -1595,6 +1830,15 @@ var FC = (function () {
     }).join('');
     h += sec('07', '專業財務評分（100 分制）', '<div style="text-align:center;padding:8px 0"><span style="font-size:36px;font-weight:700;color:' + C.navy + '">' + r.scores.total + '</span><span style="color:' + C.sub + '"> / 100　等級 ' + r.scores.grade + '</span></div>' + scRows);
 
+    // 7-B 財務健檢
+    if (r.health) {
+      var HC = { g: ['#E8F7EE', '#15803D', '良好'], y: ['#FFF5E5', '#B26A00', '注意'], r: ['#FDECEC', '#C62828', '警示'], n: ['#EEF2F7', '#64748B', '待補資料'] };
+      var hRows = r.health.items.map(function (x) { var c = HC[x.lv]; return '<tr><td style="padding:8px 0;border-bottom:1px solid ' + C.line + ';font-size:14px"><b style="color:' + C.navy + '">' + esc(x.label) + '</b><div style="font-size:12px;color:' + C.sub + ';margin-top:2px">' + esc(x.tip) + '</div></td>' +
+        '<td style="padding:8px 0 8px 8px;border-bottom:1px solid ' + C.line + ';text-align:right;white-space:nowrap;font-size:14px;font-weight:700;color:' + C.navy + '">' + esc(x.value) + '<div><span style="display:inline-block;margin-top:4px;padding:2px 8px;border-radius:10px;font-size:11px;background:' + c[0] + ';color:' + c[1] + '">' + (x.word || c[2]) + '</span></div></td></tr>'; }).join('');
+      h += sec('07-B', '財務健檢（' + r.health.items.length + ' 項，' + r.health.attention + ' 項需注意）', '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse">' + hRows + '</table>' +
+        (r.health.fi.num > 0 ? p('財務自由數字 <b>' + fmt(r.health.fi.num) + '</b> 元，進度 ' + pct(r.health.fi.prog || 0, 0) + (r.health.fi.year ? '，依目前儲蓄約 ' + r.health.fi.year + ' 年達成' : ''), 'margin-top:12px') : ''));
+    }
+
     // 8 建議與目標
     var plans = (r.plans || []).map(function (x) {
       return '<div style="margin:8px 0"><table role="presentation" width="100%"><tr><td style="font-size:13px"><b>' + esc(x.plan.title) + '</b></td><td style="text-align:right;font-size:13px">' + pct(x.prog.ratio) + '</td></tr></table>' + bar(x.prog.ratio) +
@@ -1661,6 +1905,7 @@ var FC = (function () {
     lines.push('配置：' + Object.keys(CLASSES).map(function (k) { return CLASSES[k].label + ' ' + pct((sum.alloc[k] || 0) / fin); }).join('、') +
       '；目標配置：' + Object.keys(data.targetAllocation).map(function (k) { return CLASSES[k].label + ' ' + data.targetAllocation[k] + '%'; }).join('、'));
     lines.push('持股：' + (sum.holdings.map(function (x) { return x.symbol + ' ' + x.name + ' ' + fmt(x.qty) + '股 均價' + fmt(x.avgCost, 2) + ' 收盤' + fmt(x.price, 2) + '(' + (x.priceDate || '未取得') + ') 權重' + pct(x.valueTWD / fin); }).join('；') || '無'));
+    try { var hl = health(data, sum, {}, sum.date); lines.push('財務健檢：' + hl.items.map(function (x) { return x.label + ' ' + x.value + '（' + ({ g: '良好', y: '注意', r: '警示', n: '待補' })[x.lv] + '）'; }).join('；')); if (sum.loans && sum.loans.length) lines.push('貸款：' + sum.loans.map(function (l) { return l.name + ' 餘額' + fmt(l.balance) + ' 利率' + l.rate + '% 月付' + fmt(l.monthly); }).join('；')); } catch (e) {}
     if (sc) lines.push('財務評分 ' + sc.total + '（' + sc.items.map(function (x) { return x.label + ' ' + x.score; }).join('、') + '）');
     return lines.join('\n');
   }
@@ -1668,7 +1913,7 @@ var FC = (function () {
   return {
     twDay: twDay, twTime: twTime, twMonth: twMonth, addDays: addDays, addBizDays: addBizDays, diffDays: diffDays, dayOfWeek: dayOfWeek,
     uid: uid, num: num, round: round, clamp: clamp, fmt: fmt, money: money, signed: signed, pct: pct, esc: esc, rocToISO: rocToISO,
-    CLASSES: CLASSES, FUND_TYPES: FUND_TYPES, FUND_PRESETS: FUND_PRESETS, fundCode: fundCode, parseFundNav: parseFundNav, htmlText: htmlText, computeFunds: computeFunds, dcaDue: dcaDue, EXPENSE_CATS: EXPENSE_CATS, INCOME_CATS: INCOME_CATS, emptyData: emptyData, normalize: normalize,
+    CLASSES: CLASSES, LOAN_TYPES: LOAN_TYPES, loanState: loanState, computeLoans: computeLoans, xirr: xirr, investXirr: investXirr, health: health, FUND_TYPES: FUND_TYPES, FUND_PRESETS: FUND_PRESETS, fundCode: fundCode, parseFundNav: parseFundNav, htmlText: htmlText, computeFunds: computeFunds, dcaDue: dcaDue, EXPENSE_CATS: EXPENSE_CATS, INCOME_CATS: INCOME_CATS, emptyData: emptyData, normalize: normalize,
     toTWD: toTWD, computeHoldings: computeHoldings, guessClass: guessClass, cashflow: cashflow, summarize: summarize,
     planProgress: planProgress, scores: scores, tradeReview: tradeReview, sentiment: sentiment, actions: actions,
     buildReport: buildReport, reportHTML: reportHTML, typeLabel: typeLabel, SYSTEM_PROMPT: SYSTEM_PROMPT, contextForAI: contextForAI
@@ -1725,8 +1970,8 @@ var Demo = (function () {
     D.targetAllocation = { core: 40, satellite: 15, bond: 15, defensive: 5, fund: 10, cash: 15 };
     var lm = FC.addDays(today.slice(0, 8) + '01', -1).slice(0, 7);
     D.funds = [
-      { id: 'f1', name: '安聯台灣科技基金', code: 'ACDD04', type: 'equity', currency: 'TWD', units: 165.2, cost: 100000, nav: 760.5, navDate: d(5), platform: '示範銀行', dca: { on: true, day: 6, amount: 5000 }, dcaLast: lm },
-      { id: 'f2', name: '示範全球投資級債券基金', type: 'bond', currency: 'USD', units: 412.6, cost: 5300, nav: 13.21, navDate: d(3), platform: '示範平台', dca: { on: false, day: 6, amount: 0 } }
+      { id: 'f1', name: '安聯台灣科技基金', code: 'ACDD04', type: 'equity', currency: 'TWD', units: 165.2, cost: 100000, nav: 760.5, navDate: d(5), since: d(400), platform: '示範銀行', dca: { on: true, day: 6, amount: 5000 }, dcaLast: lm },
+      { id: 'f2', name: '示範全球投資級債券基金', type: 'bond', currency: 'USD', units: 412.6, cost: 5300, nav: 13.21, navDate: d(3), since: d(300), platform: '示範平台', dca: { on: false, day: 6, amount: 0 } }
     ];
     D.fundTx = [{ id: 'ft1', fundId: 'f1', date: lm + '-06', side: 'buy', amount: 5000, units: 51.2, nav: 97.6, fee: 0, currency: 'TWD', dca: true }];
     D.plans = [
@@ -1750,11 +1995,19 @@ var Demo = (function () {
         }
       });
     }
+    var notes = { 交通: '捷運儲值', 居住: '房租', 保險: '醫療險 月繳', 孝親: '給爸媽', 日用: '日用品', 購物: '網購', 娛樂: '電影' };
+    tx.forEach(function (t) { if (t.type === 'expense' && !t.note && notes[t.category]) t.note = notes[t.category]; });
+    [[100, '股利', 4800, '0050 配息'], [190, '股利', 3200, '006208 配息'], [40, '股利', 1150, '00679B 配息'], [10, '利息', 420, '活存利息'], [70, '利息', 400, '活存利息']].forEach(function (x, k) { tx.push({ id: 'pi' + k, date: d(x[0]), type: 'income', category: x[1], amount: x[2], note: x[3] }); });
     D.transactions = tx.filter(function (t) { return t.date <= today && t.date.slice(5, 7) !== '00'; });
+    D.loans = [
+      { id: 'ln1', name: '信用貸款', type: 'personal', balance: 164000, rate: 2.9, monthly: 6900, payDay: 15, principal: 300000, asOf: today },
+      { id: 'ln2', name: '車貸', type: 'car', balance: 132000, rate: 3.5, monthly: 5500, payDay: 6, principal: 480000, asOf: today }
+    ];
+    D.budgets = { 餐飲: 10000, 居住: 12000, 娛樂: 3000, 購物: 4000, 交通: 3000 };
     // 淨值快照
     D.snapshots = [];
     for (var i = 120; i >= 1; i -= 3) {
-      var nw = 560000 + (120 - i) * 1300 + Math.sin(i / 7) * 12000;
+      var nw = 600000 + (120 - i) * 1250 + Math.sin(i / 7) * 12000;
       D.snapshots.push({ date: d(i), netWorth: Math.round(nw), financial: Math.round(nw - 15000), score: 70 + Math.round((120 - i) / 12) });
     }
     D.watchlist = [
@@ -2280,10 +2533,10 @@ var Demo = (function () {
     more: { t: '更多功能', f: pageMore }, assets: { t: '資產與帳戶', f: pageAssets, back: 1 }, goals: { t: '年度計畫', f: pageGoals, back: 1 },
     news: { t: '財經新聞', f: pageNews, back: 1 }, report: { t: '每日報表', f: pageReport, back: 1 }, learn: { t: '理財教室', f: pageLearn, back: 1 },
     settings: { t: '設定', f: pageSettings, back: 1 },
-    score: { t: '財務評分', f: pageScore, back: '#/home' }, stock: { t: '個股', f: pageStock, back: '#/invest' }, watch: { t: '自選股與提醒', f: pageWatch, back: '#/invest' },
+    score: { t: '財務評分', f: pageScore, back: '#/health' }, health: { t: '財務健檢', f: pageHealth, back: '#/home' }, stock: { t: '個股', f: pageStock, back: '#/invest' }, watch: { t: '自選股與提醒', f: pageWatch, back: '#/invest' },
     divs: { t: '股利行事曆', f: pageDivs, back: '#/invest' }, analysis: { t: '組合分析', f: pageAnalysis, back: '#/invest' }
   };
-  var TAB_OF = { assets: 'more', goals: 'more', news: 'more', report: 'more', learn: 'more', settings: 'more', score: 'home', stock: 'invest', watch: 'invest', divs: 'invest', analysis: 'invest' };
+  var TAB_OF = { assets: 'more', goals: 'more', news: 'more', report: 'more', learn: 'more', settings: 'more', score: 'home', health: 'home', stock: 'invest', watch: 'invest', divs: 'invest', analysis: 'invest' };
   function currentRoute() { var r = (location.hash || '').replace(/^#\/?/, '').split('?')[0]; return ROUTES[r] ? r : 'home'; }
   function route() {
     if (!S.data || S.locked) return;
@@ -2323,56 +2576,63 @@ var Demo = (function () {
     var prog = s.netWorth / s.target;
     var days = FC.diffDays(s.date, P.targetDate || FC.addDays(s.date, 730));
     var gap = Math.max(0, s.target - s.netWorth);
-    var cfm = s.cashflow[s.cashflow.length - 1];
+    var cfm = s.cashflow[s.cashflow.length - 1], cfPrev = false;
+    if (+s.date.slice(8, 10) <= 7 && !cfm.income && s.cashflow.length > 1) { cfm = s.cashflow[s.cashflow.length - 2]; cfPrev = true; }
     var fin = s.financial || 1, ta = S.data.targetAllocation, tsum = 0;
     Object.keys(ta).forEach(function (k) { tsum += num(ta[k]); });
     var allocKeys = Object.keys(FC.CLASSES).filter(function (k) { return (s.alloc[k] || 0) > 0 || num(ta[k]) > 0; });
     var h = '';
     var WM = '<svg class="wm" viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="40" fill="none" stroke="#fff" stroke-width="3"/><path d="M48 48 72 24 62 48Z" fill="#fff"/><path d="M48 48 24 72 34 48Z" fill="#fff" opacity=".5"/></svg>';
+    var HL = FC.health(S.data, s, S.fx || {}), HI = {}; HL.items.forEach(function (x) { HI[x.key] = x; });
+    var snaps = (S.data.snapshots || []).slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; }), lastM = null, mEnd = FC.addDays(s.date.slice(0, 8) + '01', -1);
+    snaps.forEach(function (x) { if (x.date <= mEnd) lastM = x; });
+    var mChg = lastM ? s.netWorth - lastM.netWorth : null, g12 = HI.growth;
     h += '<section class="hero-card" aria-label="淨資產">' + WM +
       '<div class="hl"><span>淨資產（新台幣）</span><span>' + greet() + (P.name ? '，' + esc(P.name) : '') + '</span></div>' +
       '<div class="hv-row"><div class="hv">NT$' + fa(s.netWorth) + '</div><button type="button" class="eyebtn" id="hideBtn" aria-pressed="' + !!S.hide + '" aria-label="' + (S.hide ? '顯示金額' : '隱藏金額') + '">' + (S.hide ? EYE_OFF : EYE) + '</button></div>' +
-      '<div class="hbar" role="progressbar" aria-label="目標達成率" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + Math.round(prog * 100) + '"><i style="width:' + FC.clamp(prog * 100) + '%"></i></div>' +
-      '<div class="chips"><span class="hchip">目標 ' + shortMoney(s.target).replace(' ', '') + '・達成 ' + pct(prog) + '</span><span class="hchip">尚差 ' + fa(gap) + '</span><a class="hchip" href="#/goals">剩 ' + Math.max(0, days) + ' 天・每月 ' + fa(gap / Math.max(days / 30.44, 1)) + ' ›</a></div></section>';
+      '<div class="hstats"><div><i>本月變化</i><b>' + (mChg == null ? '—' : A(FC.signed(mChg))) + '</b></div><div><i>' + esc(g12.short || '近 12 月') + '</i><b>' + esc(g12.value) + '</b></div>' +
+      '<a href="#/goals"><i>目標 ' + shortMoney(s.target).replace(' ', '') + '</i><b>達成 ' + pct(prog, 0) + '</b></a></div></section>';
 
+    // 待辦提醒（合併、依日期排序）
+    var todo = [], DUE = function (d) { return d ? d.slice(5).replace('-', '/') : ''; };
+    s.unsettled.forEach(function (u) { todo.push({ k: '交', c: 'w', d: u.settleDate, t: esc(u.symbol) + ' ' + (u.side === 'buy' ? '交割款' : '賣出入帳') + '・' + DUE(u.settleDate), a: u.amount }); });
+    var broker = s.cashByType.broker || 0;
+    if (s.unsettledNet > broker) todo.push({ k: '!', c: 'r', d: s.date, t: '交割戶不足，請補足', a: s.unsettledNet - broker });
+    s.payRows.forEach(function (l) { if (l.due && FC.diffDays(s.date, l.due) <= 14) todo.push({ k: '付', c: l.due < s.date ? 'r' : 'w', d: l.due, t: esc(l.name) + '・' + DUE(l.due) + (l.due < s.date ? ' 已逾期' : ' 到期'), a: l.amount }); });
+    s.recvRows.forEach(function (l) { if (l.due && FC.diffDays(s.date, l.due) <= 7) todo.push({ k: '收', c: 'g', d: l.due, t: '應收 ' + esc(l.name) + '・' + DUE(l.due), a: l.amount }); });
+    s.loans.forEach(function (l) { if (l.nextPay && FC.diffDays(s.date, l.nextPay) <= 5) todo.push({ k: '貸', c: 'w', d: l.nextPay, t: esc(l.name) + ' 扣款・' + DUE(l.nextPay), a: l.monthly }); });
+    s.funds.forEach(function (f) { if (f.due) todo.push({ k: '基', c: 'b', d: f.due.date, t: esc(f.name) + ' 定期定額・' + DUE(f.due.date), a: f.due.amount, href: '#/invest' }); });
+    if (HI.budget && HI.budget.lv === 'r') todo.push({ k: '預', c: 'r', d: s.date, t: '本月預算超支：' + esc((HI.budget.desc.split('超支：')[1] || '').split('、').slice(0, 2).join('、') || '總額'), a: null, href: '#/ledger' });
+    todo.sort(function (a, b) { return a.d < b.d ? -1 : a.d > b.d ? 1 : 0; });
+    if (todo.length) {
+      var shownT = S.todoAll ? todo : todo.slice(0, 3);
+      h += '<div class="gh"><span>待辦提醒</span>' + (todo.length > 3 ? '<button type="button" class="gh-act" id="todoAll">' + todo.length + ' 項・' + (S.todoAll ? '收合' : '全部 ›') + '</button>' : '<span class="gh-act">' + todo.length + ' 項</span>') + '</div><div class="todo">' +
+        shownT.map(function (x) { return '<' + (x.href ? 'a href="' + x.href + '"' : 'div') + ' class="tdr"><span class="td-k ' + x.c + '">' + x.k + '</span><span class="td-m">' + x.t + '</span>' + (x.a != null ? '<b>' + fa(x.a) + '</b>' : '<span class="td-go">›</span>') + '</' + (x.href ? 'a' : 'div') + '>'; }).join('') + '</div>';
+    }
+    // 財務健康 6 大指標
+    var SIX = [['emergency', '≥6 個月'], ['saving', '≥20%'], ['debt', '<30%'], ['dsr', '<30%'], ['passive', '目標 100%'], ['fi', HL.fi.num > 0 ? '需 ' + shortMoney(HL.fi.num).replace(' ', '') : '']];
+    h += '<div class="gh"><span>財務健康 6 大指標</span><a class="gh-act" href="#/health">完整健檢' + (HL.attention ? '・' + HL.attention + ' 項需注意' : '') + ' ›</a></div><div class="hk">' +
+      SIX.map(function (z) { var x = HI[z[0]]; return '<a href="#/health?k=' + z[0] + '"><i>' + x.label.replace('（DSR）', '').replace('每月還款／收入', '每月還款／收入') + '</i><b>' + (/個月|%|倍/.test(x.value) || x.value === '—' ? esc(x.value) : esc(x.value)) + '</b><span class="pill ' + x.lv + '">' + (x.word || LVW[x.lv]) + (z[1] && x.lv !== 'n' ? ' ' + z[1] : '') + '</span></a>'; }).join('') + '</div>';
+    var xr = HL.xirr;
     h += '<div class="kpis" style="margin-top:12px">' +
       kpi('金融資產總市值', money(s.financial), '現金 ' + pct(s.cashTotal / fin, 0) + '・投資 ' + pct((s.investValue + s.fundValue + s.otherTotal) / fin, 0)) +
-      kpi('股票總市值' + (s.live ? ' <span class="live-dot" aria-label="即時"></span>' : ''), money(s.investValue), s.holdings.length && s.dayChange ? '今日 ' + plSpan(s.dayChange) : '未實現 ' + plPct(s.uplPct)) +
-      kpi('未實現損益', plSpan(s.upl), plPct(s.uplPct)) +
-      '<a class="kpi kpi-link" href="#/score" aria-label="財務評分 ' + sc.total + ' 分，查看分級"><span class="kpi-label">財務評分</span><span class="kpi-value">' + sc.total + '<small style="font-size:13px;font-weight:500"> / 100</small></span><span class="kpi-sub go">' + sc.grade + '・查看分級 ›</span></a></div>';
-
-    h += fxSectionHTML();
-
-    var alerts = [];
-    s.unsettled.forEach(function (u) { alerts.push(['', (u.side === 'buy' ? '應付' : '應收') + '交割款 ' + esc(u.symbol) + ' ' + money(u.amount) + '，' + u.settleDate + ' 交割']); });
-    var broker = s.cashByType.broker || 0;
-    if (s.unsettledNet > broker) alerts.push(['', '交割戶餘額 ' + money(broker) + ' 不足，請補足 ' + money(s.unsettledNet - broker)]);
-    s.funds.forEach(function (f) { if (f.due) alerts.push(['info', '「' + esc(f.name) + '」定期定額 ' + f.due.date.slice(5).replace('-', '/') + ' 扣款 ' + esc(f.currency === 'TWD' ? '' : f.currency + ' ') + fa(f.due.amount) + '，<a href="#/invest">到投資頁記錄</a>']); });
-    s.payRows.forEach(function (l) { if (l.due && FC.diffDays(s.date, l.due) <= 14) alerts.push(['', '「' + esc(l.name) + '」' + money(l.amount) + ' 將於 ' + l.due + ' 到期']); });
-    s.recvRows.forEach(function (l) { if (l.due && FC.diffDays(s.date, l.due) <= 7) alerts.push(['info', '應收「' + esc(l.name) + '」' + money(l.amount) + '（' + l.due + '）']); });
-    if (alerts.length) h += '<section class="sec">' + secHead('03 REMINDER', '交割／現金流提醒') + alerts.map(function (a) { return '<div class="alert ' + a[0] + '">' + (a[0] ? I.info : I.alert) + '<span>' + a[1] + '</span></div>'; }).join('') + '</section>';
+      '<a class="kpi kpi-link" href="#/health?k=xirr"><span class="kpi-label">投資年化報酬</span><span class="kpi-value ' + (xr.rate > 0 ? 'up' : xr.rate < 0 ? 'down' : '') + '">' + (xr.rate == null ? '—' : (xr.rate >= 0 ? '+' : '') + pct(xr.rate, 1)) + '</span><span class="kpi-sub">' + esc(xr.rate == null ? xr.note : '含股利・XIRR') + '</span></a></div>';
+    h += fxLineHTML();
 
     h += '<section class="sec">' + secHead('04 ALLOCATION', '資產配置', '<a class="btn btn-ghost btn-sm" href="#/settings">目標配置</a>') + '<div class="card"><div class="donut-wrap"><div class="chart-box sm" id="allocChart" aria-label="資產配置圓環圖"></div><div class="legend">' +
       allocKeys.map(function (k) { return '<div class="legend-row"><i style="background:' + FC.CLASSES[k].color + '"></i><span>' + FC.CLASSES[k].label + '</span><span class="v">' + pct((s.alloc[k] || 0) / fin) + '</span><span class="t">目標 ' + pct(num(ta[k]) / (tsum || 100), 0) + '</span></div>'; }).join('') +
       '</div></div></div></section>';
 
-    h += '<section class="sec">' + secHead('05 CASH FLOW', '本月收支', '<a class="btn btn-ghost btn-sm" href="#/ledger">記一筆</a>') + '<div class="trio">' +
+    h += '<section class="sec">' + secHead('05 CASH FLOW', cfPrev ? '上月收支（' + parseInt(cfm.month.slice(5), 10) + ' 月）' : '本月收支', '<a class="btn btn-ghost btn-sm" href="#/ledger">記一筆</a>') + '<div class="trio">' +
       kpi('收入', fa(cfm.income)) + kpi('支出', fa(cfm.expense)) + kpi('儲蓄率', cfm.income ? pct(cfm.rate, 0) : '—') + '</div>' +
       '<div class="card" style="margin-top:8px"><div class="chart-box sm" id="cfChart" aria-label="近六個月收支長條圖"></div></div></section>';
 
-    h += '<section class="sec">' + secHead('06 SCORE', '專業財務評分', '<a class="btn btn-ghost btn-sm" href="#/score">分級說明</a>') + '<div class="card"><div class="score-hero">' + ring(sc.total) +
-      '<div><div class="muted">整體等級</div><div style="font-size:32px;font-weight:700;color:var(--navy);line-height:1.2">' + sc.grade + '</div><div class="tiny">流動性 20%・現金流 20%・成長 20%・分散 25%・執行 15%</div></div></div>' +
-      sc.items.map(function (x) {
-        return '<details class="score-row"><summary style="list-style:none;cursor:pointer"><div class="flex between"><span>' + x.label + ' <span class="tiny">' + x.weight + '%</span></span><b class="num">' + x.score + '</b></div><div class="prog"><i style="width:' + x.score + '%"></i></div></summary>' +
-          '<div class="score-detail"><div><b>依據</b>' + esc(x.basis) + '</div><div><b>優勢</b>' + esc(x.strength) + '</div><div><b>風險</b>' + esc(x.risk) + '</div><div><b>改善（優先 ' + x.priority + '）</b>' + esc(x.improve) + '</div></div></details>';
-      }).join('') + '<p class="tiny center" style="margin:8px 0 0">點各項目展開依據與改善建議</p></div></section>';
+    if ((S.data.snapshots || []).length > 1) h += '<section class="sec">' + secHead('06 TREND', '淨資產趨勢') + '<div class="card"><div class="chart-box sm" id="nwChart" aria-label="淨資產趨勢折線圖"></div></div></section>';
 
-    if ((S.data.snapshots || []).length > 1) h += '<section class="sec">' + secHead('07 TREND', '淨資產趨勢') + '<div class="card"><div class="chart-box sm" id="nwChart" aria-label="淨資產趨勢折線圖"></div></div></section>';
+    h += '<section class="sec">' + secHead('07 NEWS', '今日財經重點', '<a class="btn btn-ghost btn-sm" href="#/news">全部</a>') + '<div class="list" id="homeNews"><div class="empty">新聞載入中…</div></div></section>';
 
-    h += '<section class="sec">' + secHead('08 NEWS', '今日財經重點', '<a class="btn btn-ghost btn-sm" href="#/news">全部</a>') + '<div class="list" id="homeNews"><div class="empty">新聞載入中…</div></div></section>';
-
-    h += '<section class="sec">' + secHead('09 SHORTCUTS', '快速功能') + '<div class="quick">' +
-      [['#/assets', I.wallet, '資產帳戶'], ['#/goals', I.target, '年度計畫'], ['#/news', I.news, '財經新聞'], ['#/report', I.report, '每日報表'], ['#/learn', I.learn, '理財教室'], ['#/settings', I.gear, '設定']]
+    h += '<section class="sec">' + secHead('08 SHORTCUTS', '快速功能') + '<div class="quick">' +
+      [['#/health', I.target, '財務健檢'], ['#/assets', I.wallet, '資產與貸款'], ['#/goals', I.target, '年度計畫'], ['#/report', I.report, '每日報表'], ['#/learn', I.learn, '理財教室'], ['#/settings', I.gear, '設定']]
         .map(function (q) { return '<a href="' + q[0] + '">' + q[1] + '<span>' + q[2] + '</span></a>'; }).join('') + '</div></section>';
     h += '<p class="tiny center" style="margin-top:24px">報價基準：' + (Object.keys(S.quotes).length ? uniqDates() : '尚未取得') + (S.fx ? '｜匯率：' + esc(S.fx.source) : '') + '</p>';
     v.innerHTML = h;
@@ -2385,6 +2645,7 @@ var Demo = (function () {
       { label: '支出', color: '#C68A16', data: cf.map(function (r) { return r.expense; }) }], function (v) { return 'NT$' + fa(v); });
     if (S.hide) $$('#cfChart, #nwChart').forEach(function (el) { el.innerHTML = '<div class="empty hidden-chart">金額已隱藏</div>'; });
     if ($('#hideBtn')) $('#hideBtn').onclick = toggleHide;
+    if ($('#todoAll')) $('#todoAll').onclick = function () { S.todoAll = !S.todoAll; var y = window.scrollY; route(); window.scrollTo(0, y); };
     if ($('#nwChart') && !S.hide) { var sn = S.data.snapshots; SC.line($('#nwChart'), sn.map(function (x) { return x.date.slice(5).replace('-', '/'); }), sn.map(function (x) { return x.netWorth; }), function (v) { return '淨資產 NT$' + fmt(v); }); }
     loadNews().then(function () {
       var el = $('#homeNews'); if (!el) return;
@@ -2392,6 +2653,57 @@ var Demo = (function () {
       el.innerHTML = items.length ? items.map(newsItemHTML).join('') : '<div class="empty">暫無新聞</div>';
       bindNewsActs(el, items);
     });
+  }
+  var LVW = { g: '良好', y: '注意', r: '警示', n: '待補資料' };
+  function mt(t) { t = esc(t); return S.hide ? t.replace(/\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d{4,}/g, '••••') : t; }
+  function fxLineHTML() {
+    var fx = S.fx; if (!fx || !fx.rates || !Object.keys(fx.rates).length) return '';
+    return '<a class="fxline" href="#/assets"><span class="fl-t">匯率</span>' + ['USD', 'JPY', 'EUR'].map(function (c) {
+      var r = fx.rates[c], pv = fx.prev && fx.prev[c], d = pv ? r - pv : 0, dp = c === 'JPY' ? 4 : 3;
+      return r ? '<span><em>' + c + '</em><b>' + fmt(r, dp) + '</b><i class="' + (d > 0 ? 'up' : d < 0 ? 'down' : '') + '">' + (d > 0 ? '▲' : d < 0 ? '▼' : '') + '</i></span>' : '';
+    }).join('') + '<span class="fl-go">›</span></a>';
+  }
+  function pageHealth(v) {
+    var s = sum(), H = FC.health(S.data, s, S.fx || {}), f = S.hFilter || 'all', focus = qp('k');
+    var list = H.items.filter(function (x) { return f === 'all' || x.lv === 'y' || x.lv === 'r'; });
+    var BARC = { g: '#16A34A', y: '#F59E0B', r: '#DC2626', n: '#CBD4E0' };
+    var h = segHTML('hSeg', [['all', '全部 ' + H.items.length], ['att', '需注意 ' + H.attention]], f);
+    var row = function (x) {
+      return '<div class="ir' + (focus === x.key ? ' focus' : '') + '" id="h-' + x.key + '"><span class="nm">' + esc(x.label) + '</span><span class="vl">' + mt(x.value) + '</span>' +
+        '<span class="sd">' + mt(x.desc) + '</span><span class="pill ' + x.lv + '">' + (x.word || LVW[x.lv]) + '</span>' +
+        (x.bar != null ? '<span class="ibar"><i style="width:' + x.bar + '%;background:' + BARC[x.lv] + '"></i></span>' : '') +
+        '<span class="itip"><b>建議</b>' + mt(x.tip) + '</span></div>';
+    };
+    Object.keys(H.groups).forEach(function (g, gi) {
+      var L = list.filter(function (x) { return x.group === g; });
+      if (!L.length && !(g === 'grow' && f === 'all')) return;
+      h += '<div class="gh"><span>' + ['一', '二', '三', '四'][gi] + '、' + H.groups[g] + '</span><span class="gh-act">' + L.length + ' 項</span></div>';
+      if (g === 'grow' && f === 'all') {
+        var F = H.fi;
+        h += '<div class="fi-card"><div class="fi-top"><span class="tiny">財務自由數字（年支出 × ' + F.mult + '）</span><b>' + (F.num > 0 ? fa(F.num) : '—') + '</b></div>' +
+          '<div class="fi-pb"><i style="width:' + FC.clamp((F.prog || 0) * 100) + '%"></i></div>' +
+          '<div class="fi-kv"><div><i>目前進度</i><b>' + (F.prog == null ? '—' : pct(F.prog, 0)) + '</b></div><div><i>' + F.horizon + ' 年內達成需每月</i><b>' + (F.num > 0 ? fa(F.needMonthly) : '—') + '</b></div><div><i>依目前儲蓄</i><b>' + (F.year ? F.year + ' 年' : F.num > 0 ? '50 年以上' : '—') + '</b></div></div>' +
+          '<div class="fi-foot"><span class="tiny">假設年化 ' + pct(F.ret, 0) + '、通膨 ' + pct(F.infl, 0) + '；目前每月儲蓄 ' + fa(F.monthlyNow) + '</span><button type="button" class="btn btn-sm btn-ghost" id="fiSet">調整假設</button></div></div>';
+      }
+      if (L.length) h += '<div class="ind">' + L.map(row).join('') + '</div>';
+    });
+    if (!list.length) h += '<div class="card empty" style="margin-top:16px">目前沒有需要注意的項目</div>';
+    h += '<a class="item card-link" href="#/score" style="margin-top:16px"><span class="item-main"><span class="item-title">五大面向財務評分</span><span class="item-sub">流動性、現金流、成長、分散、執行的加權分數與改善建議</span></span><span class="item-right tiny">›</span></a>';
+    h += '<p class="tiny" style="margin:12px 4px 0">標準為一般個人理財常用的參考值，不是投資建議；請依自身狀況判斷。「待補資料」的項目，補上對應紀錄後就會自動計算。</p>';
+    v.innerHTML = h;
+    bindSeg('hSeg', function (x) { S.hFilter = x; route(); });
+    if ($('#fiSet')) $('#fiSet').onclick = fiForm;
+    if (focus && $('#h-' + focus)) setTimeout(function () { var el = $('#h-' + focus); if (el) el.scrollIntoView({ block: 'center' }); }, 60);
+  }
+  function fiForm() {
+    var F = S.data.settings.fi || {};
+    var body = '<div class="stack"><div class="grid2"><div class="field"><label for="fiRet">預期年化報酬 %</label><input id="fiRet" type="number" inputmode="decimal" step="0.5" value="' + esc(F.ret || '') + '" placeholder="依風險屬性"></div>' +
+      '<div class="field"><label for="fiInf">通膨 %</label><input id="fiInf" type="number" inputmode="decimal" step="0.5" value="' + esc(F.infl == null ? 2 : F.infl) + '"></div></div>' +
+      '<div class="field"><label for="fiMul">財務自由倍數（年支出 ×）</label><input id="fiMul" type="number" inputmode="numeric" value="' + esc(F.mult || 25) + '"></div>' +
+      '<p class="tiny" style="margin:0">25 倍對應「每年提領 4%」。報酬留空時：保守 3%、穩健 5%、積極 7%。達成年限沿用個人檔案的「投資期限」。</p></div>';
+    openSheet('財務自由試算假設', body, [{ label: '取消', ghost: true, fn: closeSheet }, { label: '儲存', fn: function () {
+      S.data.settings.fi = { ret: num(val('fiRet')), infl: num(val('fiInf')), mult: Math.max(5, num(val('fiMul')) || 25) }; closeSheet(); commit('已更新假設'); route();
+    } }]);
   }
   function fxSectionHTML() {
     var fx = S.fx, cur = ['USD', 'JPY', 'EUR'];
@@ -2414,13 +2726,25 @@ var Demo = (function () {
     var h = '<div class="flex between" style="margin-bottom:16px"><button class="btn btn-ghost btn-sm" id="mPrev" aria-label="上個月">‹</button><b style="font-size:17px;color:var(--navy)">' + y + ' 年 ' + mm + ' 月</b><button class="btn btn-ghost btn-sm" id="mNext" aria-label="下個月">›</button></div>';
     h += '<div class="trio">' + kpi('收入', fa(inc)) + kpi('支出', fa(exp)) + kpi('結餘', plSpan(inc - exp), inc ? '儲蓄率 ' + pct((inc - exp) / inc, 0) : '') + '</div>';
     var catKeys = Object.keys(cats).sort(function (a, b) { return cats[b] - cats[a]; });
+    var BG = S.data.budgets || {}, bk = Object.keys(BG).filter(function (k) { return num(BG[k]) > 0; }).sort(function (a, b) { return (cats[b] || 0) / num(BG[b]) - (cats[a] || 0) / num(BG[a]); });
+    var tdy = FC.twDay(), dim = new Date(y, mm, 0).getDate(), pace = m < tdy.slice(0, 7) ? 1 : m > tdy.slice(0, 7) ? 0 : +tdy.slice(8, 10) / dim;
+    h += '<section class="sec">' + secHead('BUDGET', '本月預算', '<button class="btn btn-sm btn-ghost" id="budSet">' + (bk.length ? '調整預算' : '設定預算') + '</button>') + '<div class="bud">';
+    if (!bk.length) h += '<div class="empty">為餐飲、娛樂、購物等分類設定每月上限<br>超支時首頁會提醒</div>';
+    else {
+      var bT = 0, uT = 0;
+      bk.forEach(function (k) { var b = num(BG[k]), u = cats[k] || 0, r = u / b; bT += b; uT += u;
+        h += '<div class="bdr"><span class="bd-c">' + esc(k) + '</span><span class="bd-b"><i style="width:' + FC.clamp(r * 100) + '%;background:' + (r > 1 ? '#DC2626' : r > pace + 0.1 ? '#F59E0B' : '#16A34A') + '"></i></span><em>' + A(fmt(u)) + '／' + A(fmt(b)) + '</em></div>'; });
+      h += '<div class="bd-foot"><span>合計 ' + A(fmt(uT)) + '／' + A(fmt(bT)) + '（' + pct(bT ? uT / bT : 0, 0) + '）</span><span>' + (m === tdy.slice(0, 7) ? '本月已過 ' + pct(pace, 0) : '') + '</span></div>';
+    }
+    h += '</div></section>';
     if (catKeys.length) h += '<section class="sec">' + secHead('CATEGORY', '支出分類') + '<div class="card"><div id="catChart" class="stack-sm" aria-label="支出分類"></div></div></section>';
     h += '<section class="sec">' + secHead('RECORDS', '明細', '<button class="btn btn-sm" id="addTx">' + I.plus + '記一筆</button>') + '<div class="list">';
     if (!tx.length) h += '<div class="empty">本月尚無紀錄<button class="btn btn-ghost btn-sm" id="addTx2">新增第一筆</button></div>';
-    var lastD = '';
+    var lastD = '', dayNet = {};
+    tx.forEach(function (t) { dayNet[t.date] = (dayNet[t.date] || 0) + (t.type === 'income' ? 1 : -1) * num(t.amount); });
     tx.forEach(function (t) {
-      if (t.date !== lastD) { lastD = t.date; var dd = t.date; h += '<div class="date-head"><span>' + dd.slice(5).replace('-', '/') + '（' + WD[FC.dayOfWeek(dd)] + '）</span></div>'; }
-      h += '<button class="item" data-tx="' + t.id + '"><span class="item-icon">' + esc((t.category || '其他').slice(0, 2)) + '</span><span class="item-main"><span class="item-title">' + esc(t.category) + '</span><span class="item-sub">' + esc(t.note || '—') + '</span></span>' +
+      if (t.date !== lastD) { lastD = t.date; var dd = t.date; h += '<div class="date-head"><span>' + dd.slice(5).replace('-', '/') + '（' + WD[FC.dayOfWeek(dd)] + '）</span><span class="' + (dayNet[dd] > 0 ? 'up' : '') + '">' + (dayNet[dd] > 0 ? '+' : '') + A(fmt(dayNet[dd])) + '</span></div>'; }
+      h += '<button class="item" data-tx="' + t.id + '"><span class="item-icon">' + esc((t.category || '其他').slice(0, 2)) + '</span><span class="item-main"><span class="item-title">' + esc(t.note || t.category) + '</span><span class="item-sub">' + esc(t.note ? t.category : (t.type === 'income' ? '收入' : '支出')) + '</span></span>' +
         '<span class="item-right"><span class="item-amt ' + (t.type === 'income' ? 'up' : '') + '">' + (t.type === 'income' ? '+' : '-') + fa(t.amount) + '</span></span></button>';
     });
     h += '</div></section>';
@@ -2428,8 +2752,18 @@ var Demo = (function () {
     $('#mPrev').onclick = function () { S.month = FC.addDays(m + '-01', -1).slice(0, 7); route(); };
     $('#mNext').onclick = function () { S.month = FC.addDays(m + '-28', 5).slice(0, 7); route(); };
     ['addTx', 'addTx2', 'fabTx'].forEach(function (id) { var b = $('#' + id); if (b) b.onclick = function () { txForm(); }; });
+    $('#budSet').onclick = budgetForm;
     $$('[data-tx]').forEach(function (b) { b.onclick = function () { txForm(S.data.transactions.filter(function (t) { return t.id === b.dataset.tx; })[0]); }; });
     if (catKeys.length) SC.hbars($('#catChart'), catKeys.map(function (k) { return { label: esc(k), value: cats[k] }; }), function (v) { return A(fmt(v)) + '（' + pct(v / exp, 0) + '）'; });
+  }
+  function budgetForm() {
+    var BG = S.data.budgets || {}, avgC = {}, cf = sum().cashflow.slice(-4, -1);
+    cf.forEach(function (r) { Object.keys(r.cats).forEach(function (c) { avgC[c] = (avgC[c] || 0) + r.cats[c] / Math.max(1, cf.length); }); });
+    var body = '<div class="stack"><p class="tiny" style="margin:0">填 0 或留空代表不設預算。提示數字是近 3 個月平均支出。</p><div class="grid2">' + FC.EXPENSE_CATS.map(function (c, i) {
+      return '<div class="field"><label for="bg' + i + '">' + esc(c) + (avgC[c] ? '<span class="tiny">（均 ' + fmt(avgC[c]) + '）</span>' : '') + '</label><input id="bg' + i + '" type="number" inputmode="numeric" value="' + esc(BG[c] || '') + '" placeholder="' + (avgC[c] ? Math.round(avgC[c] / 100) * 100 : '') + '"></div>'; }).join('') + '</div></div>';
+    openSheet('每月預算', body, [{ label: '取消', ghost: true, fn: closeSheet }, { label: '儲存', fn: function () {
+      var o = {}; FC.EXPENSE_CATS.forEach(function (c, i) { var x = num(val('bg' + i)); if (x > 0) o[c] = x; }); S.data.budgets = o; closeSheet(); commit('已儲存預算'); route();
+    } }]);
   }
   function txForm(t) {
     var isNew = !t; t = t || { type: 'expense', category: '餐飲', date: FC.twDay(), amount: '', note: '' };
@@ -3451,7 +3785,7 @@ var Demo = (function () {
 
   // ═════════ 更多 ═════════
   function pageMore(v) {
-    var items = [['#/assets', I.wallet, '資產與帳戶', '現金、應收應付、外幣換算'], ['#/goals', I.target, '年度計畫', '存錢任務與進度條'], ['#/news', I.news, '財經新聞', '台灣與國際重點、分享'],
+    var items = [['#/health', I.target, '財務健檢', '15 項指標：安全、現金流、成長、風險'], ['#/assets', I.wallet, '資產與帳戶', '現金、貸款、應收應付、匯率'], ['#/goals', I.target, '年度計畫', '存錢任務與進度條'], ['#/news', I.news, '財經新聞', '台灣與國際重點、分享'],
       ['#/report', I.report, '每日報表', '預覽、立即寄送、排程設定'], ['#/learn', I.learn, '理財教室', '系統化提升理財知識'], ['#/settings', I.gear, '設定', '個人檔案、目標配置、AI、帳號']];
     v.innerHTML = '<div class="list">' + items.map(function (x) {
       return '<a class="item" href="' + x[0] + '" style="text-decoration:none;color:inherit"><span class="item-icon">' + x[1].replace('<svg', '<svg width="22" height="22"') + '</span><span class="item-main"><span class="item-title">' + x[2] + '</span><span class="item-sub">' + x[3] + '</span></span><span class="item-right tiny">›</span></a>';
@@ -3462,7 +3796,7 @@ var Demo = (function () {
   // ═════════ 資產與帳戶 ═════════
   function pageAssets(v) {
     var s = sum();
-    var h = '<div class="kpis">' + kpi('現金總和', money(s.cashTotal)) + kpi('金融資產總市值', money(s.financial)) + kpi('應收款', money(s.receivable)) + kpi('應付款', money(s.payable)) + '</div>';
+    var h = '<div class="kpis">' + kpi('現金總和', money(s.cashTotal)) + kpi('金融資產總市值', money(s.financial)) + kpi('應收款', money(s.receivable)) + kpi('負債（貸款＋應付）', money(s.payable + s.loanTotal)) + '</div>';
     h += '<section class="sec">' + secHead('CASH', '現金帳戶', '<button class="btn btn-sm" id="addAcc">' + I.plus + '新增</button>') + '<div class="list">';
     if (!S.data.accounts.length) h += '<div class="empty">新增銀行、證券交割戶、電子支付或現金</div>';
     S.data.accounts.forEach(function (a) {
@@ -3486,6 +3820,17 @@ var Demo = (function () {
     });
     h += '</div></section>';
 
+    h += '<section class="sec">' + secHead('LOANS', '貸款與負債', '<button class="btn btn-sm" id="addLoan">' + I.plus + '新增</button>') + '<div class="list">';
+    if (!s.loans.length) h += '<div class="empty">房貸、車貸、信貸、學貸、卡分期<br>記錄後會計算負債比與每月還款壓力</div>';
+    s.loans.forEach(function (l) {
+      var rem = l.remMonths ? (l.remMonths >= 12 ? Math.floor(l.remMonths / 12) + ' 年' + (l.remMonths % 12 ? ' ' + (l.remMonths % 12) + ' 月' : '') : l.remMonths + ' 月') : '';
+      h += '<button class="item loan" data-loan="' + l.id + '"><span class="item-icon">' + l.typeLabel.slice(0, 2) + '</span><span class="item-main"><span class="item-title">' + esc(l.name) + '</span><span class="item-sub">利率 ' + fmt(l.rate, 3).replace(/0+$/, '').replace(/\.$/, '') + '%・月付 ' + fa(l.monthly) + (rem ? '・剩 ' + rem : '') + '</span></span>' +
+        '<span class="item-right"><span class="item-amt">' + fa(l.balance) + '</span><span class="item-sub">' + (l.warn ? '<span class="up">請確認月付</span>' : l.paidPct != null ? '已還 ' + pct(l.paidPct, 0) : l.est ? '依月付推估' : '') + '</span></span></button>';
+    });
+    h += '</div>';
+    if (s.loans.length || s.payable) h += '<div class="card" style="margin-top:8px"><dl class="kv"><dt>總負債（含應付）</dt><dd><b>' + fa(s.loanTotal + s.payable) + '</b></dd><dt>每月還款</dt><dd>' + fa(s.loanMonthly) + '</dd><dt>未來 12 月利息估計</dt><dd>' + fa(s.loanInt12) + '</dd></dl></div>';
+    h += '<p class="tiny" style="margin:8px 4px 0">餘額會依月付與利率每月自動推估；有房貸時，可在「其他資產」填房屋市值，負債比才不會失真。</p></section>';
+
     h += '<section class="sec">' + secHead('OTHER', '其他資產', '<button class="btn btn-sm" id="addOth">' + I.plus + '新增</button>') + '<div class="list">';
     if (!S.data.otherAssets.length) h += '<div class="empty">債券、儲蓄險解約金、黃金、加密資產等</div>';
     S.data.otherAssets.forEach(function (o) {
@@ -3495,6 +3840,7 @@ var Demo = (function () {
 
     var rates = S.fx && S.fx.rates || {};
     var curs = ['USD', 'JPY', 'EUR', 'CNY', 'HKD', 'GBP', 'AUD'].filter(function (c) { return rates[c]; });
+    h += fxSectionHTML();
     h += '<section class="sec">' + secHead('FX', '外幣換算') + '<div class="card"><div class="grid2"><div class="field"><label for="fxAmt">金額</label><input id="fxAmt" type="number" inputmode="decimal" value="1000"></div>' +
       '<div class="field"><label for="fxCur">幣別</label><select id="fxCur">' + curs.map(function (c) { return '<option>' + c + '</option>'; }).join('') + '</select></div></div>' +
       '<div class="center" style="margin-top:16px;min-height:48px;display:flex;align-items:center;justify-content:center"><b id="fxOut" style="font-size:22px;color:var(--navy)" class="num">—</b></div>' +
@@ -3506,6 +3852,8 @@ var Demo = (function () {
     $('#addAcc').onclick = function () { accForm(); };
     $('#addLed').onclick = function () { ledForm(); };
     $('#addOth').onclick = function () { othForm(); };
+    $('#addLoan').onclick = function () { loanForm(); };
+    $$('[data-loan]').forEach(function (b) { b.onclick = function () { loanForm(find(S.data.loans, b.dataset.loan)); }; });
     $$('[data-acc]').forEach(function (b) { b.onclick = function () { accForm(find(S.data.accounts, b.dataset.acc)); }; });
     $$('[data-led]').forEach(function (b) { b.onclick = function () { ledForm(find(S.data.ledger, b.dataset.led)); }; });
     $$('[data-oth]').forEach(function (b) { b.onclick = function () { othForm(find(S.data.otherAssets, b.dataset.oth)); }; });
@@ -3538,6 +3886,25 @@ var Demo = (function () {
       if (!val('ldName') || num(val('ldAmt')) <= 0) { toast('請填寫項目與金額'); return; }
       crud('ledger', { id: l.id, type: segVal('ldType'), name: val('ldName'), amount: num(val('ldAmt')), currency: 'TWD', due: val('ldDue'), done: $('#ldDone').checked }, isNew);
     } }], function () { bindSeg('ldType'); });
+  }
+  function loanForm(l) {
+    var isNew = !l; l = l || { id: FC.uid(), name: '', type: 'mortgage', balance: '', rate: '', monthly: '', payDay: 10, principal: '', asOf: FC.twDay() };
+    var st = isNew ? null : FC.loanState(l, FC.twDay());
+    var body = '<div class="stack"><div class="grid2"><div class="field"><label for="lnName">名稱</label><input id="lnName" type="text" value="' + esc(l.name) + '" placeholder="例：自住房貸"></div>' +
+      '<div class="field"><label for="lnType">類型</label><select id="lnType">' + Object.keys(FC.LOAN_TYPES).map(function (k) { return '<option value="' + k + '"' + (k === l.type ? ' selected' : '') + '>' + FC.LOAN_TYPES[k] + '</option>'; }).join('') + '</select></div></div>' +
+      '<div class="grid2"><div class="field"><label for="lnBal">目前餘額</label><input id="lnBal" type="number" inputmode="decimal" value="' + esc(st ? Math.round(st.balance) : l.balance) + '"></div><div class="field"><label for="lnRate">年利率 %</label><input id="lnRate" type="number" inputmode="decimal" step="0.001" value="' + esc(l.rate) + '"></div></div>' +
+      '<div class="grid2"><div class="field"><label for="lnMon">每月還款</label><input id="lnMon" type="number" inputmode="decimal" value="' + esc(l.monthly) + '"></div><div class="field"><label for="lnDay">每月扣款日</label><input id="lnDay" type="number" inputmode="numeric" min="1" max="28" value="' + esc(l.payDay) + '"></div></div>' +
+      '<div class="field"><label for="lnPri">原始貸款金額（選填，用來算已還比例）</label><input id="lnPri" type="number" inputmode="decimal" value="' + esc(l.principal) + '"></div>' +
+      '<div class="tiny" id="lnHint" style="margin:0"></div></div>';
+    openSheet(isNew ? '新增貸款' : '編輯貸款', body, [isNew ? { label: '取消', ghost: true, fn: closeSheet } : delBtn('loans', l, l.name), { label: '儲存', fn: function () {
+      if (!val('lnName') || !(num(val('lnBal')) >= 0)) { toast('請填寫名稱與餘額'); return; }
+      if (!(num(val('lnMon')) > 0)) { toast('請填寫每月還款'); return; }
+      crud('loans', { id: l.id, name: val('lnName'), type: val('lnType'), balance: num(val('lnBal')), rate: num(val('lnRate')), monthly: num(val('lnMon')), payDay: Math.min(28, Math.max(1, num(val('lnDay')) || 1)), principal: num(val('lnPri')), asOf: FC.twDay() }, isNew, isNew ? '已新增貸款' : '已儲存');
+    } }], function () {
+      var calc = function () { var x = FC.loanState({ balance: num(val('lnBal')), rate: num(val('lnRate')), monthly: num(val('lnMon')), payDay: num(val('lnDay')), asOf: FC.twDay() }, FC.twDay());
+        $('#lnHint').textContent = x.warn || (x.remMonths ? '預估還需 ' + (x.remMonths >= 12 ? Math.floor(x.remMonths / 12) + ' 年 ' : '') + (x.remMonths % 12) + ' 個月還清；未來 12 個月利息約 ' + fmt(x.int12) + ' 元' : ''); };
+      ['lnBal', 'lnRate', 'lnMon'].forEach(function (id) { $('#' + id).oninput = calc; }); calc();
+    });
   }
   function othForm(o) {
     var isNew = !o; o = o || { id: FC.uid(), name: '', cls: 'bond', value: '', currency: 'TWD' };
