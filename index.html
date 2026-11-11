@@ -760,6 +760,53 @@ span.gh-act { color: var(--sub); }
 .item.loan .item-icon { background: #FDECEC; color: #C62828; }
 .date-head span:last-child { font-variant-numeric: tabular-nums; }
 
+/* ── 圖表重做、新手引導、快速新增、自動儲存 ── */
+.chart-box svg { touch-action: pan-y; }
+.al-cap { display: flex; align-items: center; justify-content: space-between; min-height: 24px; margin-bottom: 4px; font-size: 12px; color: var(--sub); }
+.al-cap i { display: inline-block; vertical-align: -1px; margin-right: 4px; }
+.al-k1 { width: 16px; height: 8px; border-radius: 4px; background: #234E99; } .al-k2 { width: 2px; height: 12px; background: var(--navy); border-radius: 1px; margin-left: 6px; }
+.al { display: grid; grid-template-columns: 64px minmax(0, 1fr) 84px; align-items: center; gap: 10px; min-height: 40px; font-size: 13px; }
+.al-n { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.al-bar { height: 10px; border-radius: 5px; background: #EEF2F8; position: relative; display: block; }
+.al-bar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 5px; min-width: 4px; max-width: 100%; }
+.al-bar u { position: absolute; top: -4px; bottom: -4px; width: 2px; margin-left: -1px; background: var(--navy); border-radius: 1px; }
+.al-v { display: flex; align-items: center; justify-content: flex-end; gap: 6px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.al-v b { font-size: 13px; color: var(--navy); }
+.al-v em { font-style: normal; font-size: 11px; font-weight: 700; min-width: 40px; height: 20px; padding: 0 6px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; }
+.al-v em.o { background: #FFF5E5; color: #B26A00; } .al-v em.u { background: var(--blue-soft); color: #1F4FD1; } .al-v em.k { background: #E8F7EE; color: #15803D; }
+.al-hint { display: flex; align-items: center; min-height: 44px; margin-top: 8px; padding: 8px 12px; border-radius: 12px; background: var(--blue-soft); color: var(--navy); font-size: 13px; line-height: 1.5; }
+.lg2 { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: center; min-height: 28px; margin-top: 4px; font-size: 12px; color: var(--sub); }
+.lg2 i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 4px; vertical-align: -1px; }
+.lg2 .lg-r { margin-left: auto; color: var(--navy); font-weight: 700; }
+.rng { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; height: 36px; width: 184px; border-radius: 12px; background: #E9EEF6; padding: 3px; }
+.rng button { border: 0; background: none; border-radius: 9px; font: inherit; font-size: 12px; color: var(--sub); display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; }
+.rng button[aria-pressed=true] { background: #fff; color: var(--navy); font-weight: 700; box-shadow: 0 1px 3px rgba(11, 37, 69, .12); }
+.nw-sum { display: flex; align-items: baseline; gap: 8px; min-height: 32px; flex-wrap: wrap; }
+.nw-sum b { font-size: 20px; font-variant-numeric: tabular-nums; } .nw-sum span { font-size: 13px; }
+.ob { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; }
+.ob-h { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 32px; } .ob-h b { font-size: 16px; color: var(--navy); line-height: 1.4; } .ob-h span { font-size: 13px; color: var(--sub); white-space: nowrap; }
+.ob-pb { height: 8px; border-radius: 4px; background: #EEF2F8; margin: 8px 0 4px; overflow: hidden; } .ob-pb i { display: block; height: 100%; background: var(--blue); border-radius: 4px; }
+.ob-r { display: flex; align-items: center; gap: 12px; min-height: 60px; border-top: 1px solid #EEF2F8; }
+.ob-pb + .ob-r { border-top: 0; }
+.ob-n { width: 32px; height: 32px; flex: 0 0 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; background: var(--blue-soft); color: var(--navy); }
+.ob-r.d .ob-n { background: #E8F7EE; color: #15803D; }
+.ob-m { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; } .ob-m b { font-size: 15px; color: var(--navy); line-height: 1.4; } .ob-m span { font-size: 12px; color: var(--sub); line-height: 1.4; }
+.ob-r.d .ob-m b { color: var(--mute); text-decoration: line-through; }
+.ob-r .btn { flex: 0 0 auto; min-width: 64px; }
+.fab { background: var(--blue); box-shadow: 0 6px 18px rgba(47, 107, 255, .38); }
+.qa { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.qa button { min-height: 104px; border: 0; border-radius: 16px; background: #F7F9FC; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-align: center; font: inherit; cursor: pointer; color: inherit; padding: 8px; }
+.qa button:active { background: var(--blue-soft); }
+.qa i { font-style: normal; width: 36px; height: 36px; border-radius: 12px; background: var(--blue-soft); color: var(--navy); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px; }
+.qa b { font-size: 15px; color: var(--navy); line-height: 1.4; } .qa span { font-size: 12px; color: var(--sub); line-height: 1.4; }
+.bal { display: grid; grid-template-columns: minmax(0, 1fr) 140px; gap: 12px; align-items: center; min-height: 64px; border-top: 1px solid #EEF2F8; }
+.bal:first-child { border-top: 0; }
+.bal label { display: flex; flex-direction: column; justify-content: center; min-width: 0; } .bal b { font-size: 15px; color: var(--navy); line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .bal span { font-size: 12px; color: var(--sub); line-height: 1.4; }
+.bal input { text-align: right; }
+.saved { display: flex; align-items: center; justify-content: center; text-align: center; min-height: 44px; padding: 4px 12px; border-radius: 12px; background: var(--bg); color: var(--sub); font-size: 13px; line-height: 1.4; }
+.saved.ok { background: #E8F7EE; color: #15803D; font-weight: 700; } .saved.warn { background: var(--warn-bg); color: #7A4B00; font-weight: 700; }
+.nw-sum .nw-gap { margin-left: auto; font-size: 12px; color: var(--sub); white-space: nowrap; } .nw-sum .nw-gap.ok { color: #15803D; font-weight: 700; }
+
 </style>
 </head>
 <body>
@@ -930,38 +977,49 @@ var SC = (function () {
   }
 
   /** 分組長條圖：series [{label,color,data[]}] */
-  function bars(box, labels, series, fmtFn) {
-    box.innerHTML = '';
+  function bars(box, labels, series, fmtFn, opt) {
+    box.innerHTML = ''; opt = opt || {};
     var maxV = niceMax(Math.max.apply(null, series.map(function (s) { return Math.max.apply(null, s.data.concat([0])); })));
     var f = frame(box, maxV, labels), svg = f.svg, n = labels.length, slot = f.cw / n, bw = Math.min(24, slot * 0.6 / series.length - 2);
-    legend(svg, f.W, series);
+    if (!opt.noLegend) legend(svg, f.W, series);
     var T = tip(box);
     labels.forEach(function (lb, i) {
       var x0 = f.pl + slot * i + (slot - (bw + 2) * series.length) / 2;
       var hit = el('rect', { x: f.pl + slot * i, y: f.pt, width: slot, height: f.ch, fill: 'transparent', tabindex: 0 }, svg);
       series.forEach(function (s, k) {
-        var v = Math.max(0, s.data[i] || 0), h = v / maxV * f.ch;
+        var v = Math.max(0, s.data[i] || 0), h = v / maxV * f.ch, part = opt.partialLast && i === n - 1;
         if (h > 0) {
           var r = Math.min(4, bw / 2, h);
           var x = x0 + k * (bw + 2), y = f.pt + f.ch - h;
-          el('path', { d: 'M' + x + ' ' + (y + h) + 'V' + (y + r) + 'Q' + x + ' ' + y + ' ' + (x + r) + ' ' + y + 'H' + (x + bw - r) + 'Q' + (x + bw) + ' ' + y + ' ' + (x + bw) + ' ' + (y + r) + 'V' + (y + h) + 'Z', fill: s.color, 'pointer-events': 'none' }, svg);
+          el('path', { d: 'M' + x + ' ' + (y + h) + 'V' + (y + r) + 'Q' + x + ' ' + y + ' ' + (x + r) + ' ' + y + 'H' + (x + bw - r) + 'Q' + (x + bw) + ' ' + y + ' ' + (x + bw) + ' ' + (y + r) + 'V' + (y + h) + 'Z', fill: part ? (k ? 'none' : s.color) : s.color, 'fill-opacity': part && !k ? .35 : 1, stroke: part && k ? s.color : 'none', 'stroke-dasharray': part && k ? '3 2' : 'none', 'pointer-events': 'none' }, svg);
         }
       });
-      var t = el('text', { x: f.pl + slot * i + slot / 2, y: f.H - 8, 'text-anchor': 'middle', 'font-size': 11, fill: INK }, svg); t.textContent = lb;
-      var on = function () { hit.setAttribute('fill', 'rgba(19,49,92,.05)'); T.show('<b>' + lb + '</b><br>' + series.map(function (s) { return s.label + ' ' + fmtFn(s.data[i] || 0); }).join('<br>'), f.pl + slot * i + slot / 2, f.pt + 24); };
+      var t = el('text', { x: f.pl + slot * i + slot / 2, y: f.H - (opt.partialLast ? 16 : 8), 'text-anchor': 'middle', 'font-size': 11, fill: INK }, svg); t.textContent = lb;
+      if (opt.partialLast && i === n - 1) { var t2 = el('text', { x: f.pl + slot * i + slot / 2, y: f.H - 4, 'text-anchor': 'middle', 'font-size': 9, fill: '#8A97A8' }, svg); t2.textContent = '進行中'; }
+      var on = function () { hit.setAttribute('fill', 'rgba(19,49,92,.05)'); T.show('<b>' + lb + (opt.partialLast && i === n - 1 ? '（進行中）' : '') + '</b><br>' + series.map(function (s) { return s.label + ' ' + fmtFn(s.data[i] || 0); }).join('<br>') + (opt.rate && opt.rate[i] != null ? '<br>' + (opt.rateLabel || '比率') + ' ' + Math.round(opt.rate[i] * 100) + '%' : ''), f.pl + slot * i + slot / 2, f.pt + 24); };
       var off = function () { hit.setAttribute('fill', 'transparent'); T.hide(); };
       hit.addEventListener('pointerenter', on); hit.addEventListener('pointerleave', off); hit.addEventListener('focus', on); hit.addEventListener('blur', off);
     });
+    if (opt.rate) {   // 疊上比率折線（0～100% 對應整個圖高）
+      var RC = opt.rateColor || '#16A34A', pts = [];
+      opt.rate.forEach(function (rv, i) { if (rv == null || (opt.partialLast && i === n - 1)) return; var cl = Math.max(0, Math.min(1, rv)); pts.push([f.pl + slot * i + slot / 2, f.pt + f.ch - cl * f.ch, rv]); });
+      if (pts.length > 1) el('path', { d: pts.map(function (q, i) { return (i ? 'L' : 'M') + q[0].toFixed(1) + ' ' + q[1].toFixed(1); }).join(''), fill: 'none', stroke: RC, 'stroke-width': 2, 'stroke-linejoin': 'round', 'pointer-events': 'none' }, svg);
+      pts.forEach(function (q) {
+        el('circle', { cx: q[0], cy: q[1], r: 3.5, fill: RC, stroke: '#fff', 'stroke-width': 1.5, 'pointer-events': 'none' }, svg);
+        var tx = el('text', { x: q[0], y: Math.max(11, q[1] - 7), 'text-anchor': 'middle', 'font-size': 10, 'font-weight': 700, fill: RC, stroke: '#fff', 'stroke-width': 3, 'paint-order': 'stroke', 'pointer-events': 'none' }, svg); tx.textContent = Math.round(q[2] * 100) + '%';
+      });
+    }
   }
 
   /** 折線面積圖＋十字準線 */
-  function line(box, labels, data, fmtFn, color) {
-    box.innerHTML = '';
+  function line(box, labels, data, fmtFn, color, opt) {
+    box.innerHTML = ''; opt = opt || {};
     color = color || '#13315C';
     var lo = Math.min.apply(null, data), hi = Math.max.apply(null, data);
     var pad = (hi - lo) * 0.15 || hi * 0.05 || 1;
     var minV = Math.max(0, lo - pad), maxV = hi + pad;
-    var W = box.clientWidth || 320, H = box.clientHeight || 200, pl = 44, pr = 12, pt = 12, pb = 28, cw = W - pl - pr, ch = H - pt - pb;
+    var showT = opt.target > 0 && opt.target >= lo && opt.target <= Math.max(hi * 1.12, hi + (hi - lo) * 0.8); if (showT && opt.target > maxV - pad * 0.5) maxV = opt.target + pad;
+    var W = box.clientWidth || 320, H = box.clientHeight || 200, pl = 44, pr = opt.endLabel ? 52 : 12, pt = 12, pb = 28, cw = W - pl - pr, ch = H - pt - pb;
     var svg = el('svg', { width: '100%', height: '100%', viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': box.getAttribute('aria-label') || '折線圖' }, box);
     for (var i = 0; i <= 4; i++) {
       var y = pt + ch - ch * i / 4;
@@ -970,12 +1028,14 @@ var SC = (function () {
     }
     var X = function (i) { return pl + (data.length > 1 ? cw * i / (data.length - 1) : cw / 2); };
     var Y = function (v) { return pt + ch - (v - minV) / (maxV - minV) * ch; };
+    if (showT) { el('line', { x1: pl, x2: W - pr, y1: Y(opt.target), y2: Y(opt.target), stroke: '#F59E0B', 'stroke-width': 1.5, 'stroke-dasharray': '5 4' }, svg); var tg = el('text', { x: W - pr, y: Y(opt.target) - 6, 'text-anchor': 'end', 'font-size': 10, fill: '#B26A00', 'font-weight': 700 }, svg); tg.textContent = '目標 ' + short(opt.target); }
     var d = data.map(function (v, i) { return (i ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(v).toFixed(1); }).join('');
     el('path', { d: d + 'L' + X(data.length - 1) + ' ' + (pt + ch) + 'L' + X(0) + ' ' + (pt + ch) + 'Z', fill: color, 'fill-opacity': .08 }, svg);
     el('path', { d: d, fill: 'none', stroke: color, 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, svg);
-    var step = Math.max(1, Math.ceil(labels.length / 5));
+    var step = Math.max(1, Math.ceil(labels.length / Math.max(2, Math.min(5, Math.floor(cw / 64)))));
     labels.forEach(function (lb, i) { var lastI = labels.length - 1; if ((i % step && i !== lastI) || (i !== lastI && lastI - i < step * 0.8)) return; var t = el('text', { x: X(i), y: H - 8, 'text-anchor': i === 0 ? 'start' : i === labels.length - 1 ? 'end' : 'middle', 'font-size': 11, fill: INK }, svg); t.textContent = lb; });
     var last = el('circle', { cx: X(data.length - 1), cy: Y(data[data.length - 1]), r: 4, fill: color, stroke: '#fff', 'stroke-width': 2 }, svg);
+    if (opt.endLabel) { var eL = el('text', { x: X(data.length - 1) + 8, y: Y(data[data.length - 1]) + 4, 'font-size': 11, 'font-weight': 700, fill: color }, svg); eL.textContent = opt.endLabel; }
     var cross = el('line', { y1: pt, y2: pt + ch, stroke: '#8A97A8', 'stroke-dasharray': '3 3', opacity: 0 }, svg);
     var dot = el('circle', { r: 5, fill: color, stroke: '#fff', 'stroke-width': 2, opacity: 0 }, svg);
     var hit = el('rect', { x: pl, y: pt, width: cw, height: ch, fill: 'transparent' }, svg);
@@ -1025,8 +1085,9 @@ var FC = (function () {
   function twTime(d) { var t = twDate(d); return pad(t.getUTCHours()) + ':' + pad(t.getUTCMinutes()); }
   function twMonth(d) { return twDay(d).slice(0, 7); }
   function dayOfWeek(ymd) { return new Date(ymd + 'T00:00:00Z').getUTCDay(); }
-  function addDays(ymd, n) { var t = new Date(ymd + 'T00:00:00Z'); t.setUTCDate(t.getUTCDate() + n); return t.toISOString().slice(0, 10); }
-  function diffDays(a, b) { return Math.round((new Date(b + 'T00:00:00Z') - new Date(a + 'T00:00:00Z')) / 86400000); }
+  function isYMD(x) { return /^\d{4}-\d{2}-\d{2}$/.test(String(x || '')); }
+  function addDays(ymd, n) { var t = new Date(ymd + 'T00:00:00Z'); if (isNaN(t)) return String(ymd || ''); t.setUTCDate(t.getUTCDate() + n); return t.toISOString().slice(0, 10); }
+  function diffDays(a, b) { if (!isYMD(a) || !isYMD(b)) return 0; return Math.round((new Date(b + 'T00:00:00Z') - new Date(a + 'T00:00:00Z')) / 86400000); }
   /** 加 n 個營業日（略過週六日；國定假日請以券商通知為準） */
   function addBizDays(ymd, n) {
     var d = ymd, c = 0;
@@ -1116,6 +1177,8 @@ var FC = (function () {
         Object.keys(base[k]).forEach(function (kk) { if (d[k][kk] == null) d[k][kk] = base[k][kk]; });
       }
     });
+    Object.keys(base).forEach(function (k) { if (Array.isArray(base[k]) && !Array.isArray(d[k])) d[k] = []; else if (base[k] && typeof base[k] === 'object' && !Array.isArray(base[k]) && (typeof d[k] !== 'object' || Array.isArray(d[k]))) d[k] = base[k]; });
+    ['accounts', 'ledger', 'transactions', 'trades', 'otherAssets', 'funds', 'fundTx', 'loans', 'plans', 'snapshots', 'watchlist', 'alerts'].forEach(function (k) { d[k] = d[k].filter(function (x) { return x && typeof x === 'object'; }); });
     if (!d.settings.models) d.settings.models = base.settings.models;
     if (!d.settings.fi) d.settings.fi = base.settings.fi;
     if (!d.budgets || typeof d.budgets !== 'object' || Array.isArray(d.budgets)) d.budgets = {};
@@ -1137,7 +1200,7 @@ var FC = (function () {
 
   function computeHoldings(data, quotes, fx) {
     var pos = {};
-    var realized = 0;
+    var realized = 0, rateOf = function (m) { var c = holdingCurrency(m); return c === 'TWD' ? 1 : ((fx && fx.rates && fx.rates[c]) || 0); };
     var trades = (data.trades || []).slice().sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
     trades.forEach(function (t) {
       var s = t.symbol;
@@ -1149,7 +1212,7 @@ var FC = (function () {
         var avg = p.qty > 0 ? p.cost / p.qty : 0;
         var sellQ = Math.min(q, p.qty);
         var proceeds = sellQ * px - fee - tax;
-        realized += proceeds - avg * sellQ;
+        realized += (proceeds - avg * sellQ) * rateOf(p.market);
         p.cost -= avg * sellQ; p.qty -= sellQ;
       }
     });
@@ -1166,7 +1229,7 @@ var FC = (function () {
       var prevC = q && q.prevClose ? q.prevClose : null;
       list.push({
         prevClose: prevC, dayChange: prevC ? (price - prevC) * p.qty * rate : 0, changePct: q && q.changePct != null ? q.changePct : null, live: !!(q && q.live), quoteTime: q && q.time || '',
-        symbol: s, name: sec.name || p.name, market: p.market, cls: sec.cls || guessClass(s, sec.name || p.name),
+        symbol: s, name: sec.name || p.name, market: p.market, cls: CLASSES[sec.cls] ? sec.cls : guessClass(s, sec.name || p.name),
         currency: cur, qty: p.qty, avgCost: p.cost / p.qty, cost: p.cost, price: price,
         value: value, valueTWD: value * rate, costTWD: p.cost * rate,
         upl: value - p.cost, uplTWD: (value - p.cost) * rate, uplPct: p.cost ? (value - p.cost) / p.cost : 0,
@@ -1181,9 +1244,9 @@ var FC = (function () {
   /** 依代號粗略推定分類（使用者可在投資頁覆寫） */
   function guessClass(symbol, name) {
     var s = String(symbol), n = String(name || '');
-    if (/債|B$/.test(s) || /債/.test(n) || /^(BND|AGG|TLT|IEF|SHY|BNDX|VGIT|VCIT)$/i.test(s)) return 'bond';
+    if (/^\d{5}B$/i.test(s) || /債/.test(n) || /^(BND|AGG|TLT|IEF|SHY|BNDX|VGIT|VCIT)$/i.test(s)) return 'bond';
     if (/^00(50|51|52|56|57|61|62|646|662|692|713|850|878|881|919|929|940)$/.test(s) || /^(VT|VTI|VOO|SPY|IVV|QQQ|VXUS|VEA|VWO)$/i.test(s)) return 'core';
-    if (/^GLD|IAU|00635U$/i.test(s) || /金/.test(n)) return 'defensive';
+    if (/^(GLD|GLDM|IAU|00635U)$/i.test(s) || /黃金/.test(n)) return 'defensive';
     if (/^00/.test(s)) return 'core';
     return 'satellite';
   }
@@ -1211,14 +1274,14 @@ var FC = (function () {
   function parseFundNav(html, today) {
     var t = htmlText(html), tdy = today || twDay(), n = function (x) { return parseFloat(String(x).replace(/,/g, '')); };
     var iso = function (y, m, d) { return y + '-' + pad(+m) + '-' + pad(+d); };
-    var RE = /(20\d{2})[\/\-.](\d{1,2})[\/\-.](\d{1,2})\s*([\d,]+\.\d+)(?:\s+([+\-]?[\d,]*\.?\d+)(?!\s*%))?/g;
+    var RE = /(20\d{2})[\/\-.](\d{1,2})[\/\-.](\d{1,2})\s*([\d,]+\.\d+)(?:\s+([+\-]?[\d,]*\.?\d+)(?![\d.,]*\s*%))?/g;
     var pick = function (from, to) { RE.lastIndex = from; var m, out = null; while ((m = RE.exec(t)) && m.index < to) { var d = iso(m[1], m[2], m[3]), v = n(m[4]); if (v > 0 && d <= tdy) { out = { date: d, nav: v, change: m[5] != null ? n(m[5]) : null }; break; } } return out; };
     var name = ((t.match(/[\u4e00-\u9fffA-Za-z0-9（）()\-－&＆]{2,40}基金[\u4e00-\u9fffA-Za-z0-9（）()\-－]{0,24}/g) || []).filter(function (x) { return x.length >= 5 && !/^(首頁|境內|境外|基金|淨值|我的|熱門)/.test(x) && !/基金(淨值|資料|列表|公司|經理)/.test(x); })[0]) || '';
     var res = null, k = t.search(/最新淨值|淨值日期/);
     if (k >= 0) { res = pick(k, k + 400); if (res) res.how = 'label'; }
     if (!res) { // 手機版：「淨值 471.96 … 2026/10/19」
       var lab = t.match(/(?:最新)?淨值\s*[:：]?\s*(?:\(?[A-Z]{3}\)?\s*)?([\d,]+\.\d+)/), dm = t.match(/(20\d{2})[\/\-.](\d{1,2})[\/\-.](\d{1,2})/);
-      if (lab && dm && n(lab[1]) > 0 && iso(dm[1], dm[2], dm[3]) <= tdy) { var ch = t.slice(lab.index + lab[0].length, lab.index + lab[0].length + 40).match(/^\s*(?:漲跌\s*[:：]?\s*)?([+\-]?[\d,]*\.\d+)(?!\s*%)/); res = { date: iso(dm[1], dm[2], dm[3]), nav: n(lab[1]), change: ch ? n(ch[1]) : null, how: 'mobile' }; }
+      if (lab && dm && n(lab[1]) > 0 && iso(dm[1], dm[2], dm[3]) <= tdy) { var ch = t.slice(lab.index + lab[0].length, lab.index + lab[0].length + 40).match(/^\s*(?:漲跌\s*[:：]?\s*)?([+\-]?[\d,]*\.\d+)(?![\d.,]*\s*%)/); res = { date: iso(dm[1], dm[2], dm[3]), nav: n(lab[1]), change: ch ? n(ch[1]) : null, how: 'mobile' }; }
     }
     if (!res) { var m, best = null; RE.lastIndex = 0; while ((m = RE.exec(t))) { var d = iso(m[1], m[2], m[3]), v = n(m[4]); if (v > 0 && d <= tdy && (!best || d > best.date)) best = { date: d, nav: v, change: m[5] != null ? n(m[5]) : null, how: 'scan' }; } res = best; }
     if (res) res.name = name;
@@ -1227,16 +1290,19 @@ var FC = (function () {
   function dcaDue(f, today) {
     if (!f.dca || !f.dca.on || !(num(f.dca.amount) > 0)) return null;
     var m = today.slice(0, 7), day = Math.min(28, Math.max(1, num(f.dca.day) || 1)), d = m + '-' + pad(day);
+    var pm = addDays(m + '-01', -1).slice(0, 7);
+    if (f.dcaLast && f.dcaLast < pm && (!f.dcaFrom || f.dcaFrom <= pm)) return { date: pm + '-' + pad(day), amount: num(f.dca.amount), late: true };
     if (f.dcaLast === m || today < d) return null;
     return { date: d, amount: num(f.dca.amount) };
   }
   function computeFunds(data, fx, today) {
     today = today || twDay();
     var realized = 0;
-    (data.fundTx || []).forEach(function (t) { realized += num(t.realized) * (t.currency && t.currency !== 'TWD' ? ((fx && fx.rates && fx.rates[t.currency]) || 0) : 1); });
+    var fcur = {}; (data.funds || []).forEach(function (f) { fcur[f.id] = f.currency || 'TWD'; });
+    (data.fundTx || []).forEach(function (t) { var c = t.currency || fcur[t.fundId] || 'TWD'; realized += num(t.realized) * (c !== 'TWD' ? ((fx && fx.rates && fx.rates[c]) || 0) : 1); });
     var list = (data.funds || []).map(function (f) {
       var cur = f.currency || 'TWD', rate = cur === 'TWD' ? 1 : ((fx && fx.rates && fx.rates[cur]) || 0);
-      var units = num(f.units), nav = num(f.nav), cost = num(f.cost), value = units * nav;
+      var units = num(f.units), nav = num(f.nav), cost = num(f.cost), value = nav > 0 ? units * nav : cost;
       return { id: f.id, name: f.name, type: f.type || 'other', typeLabel: FUND_TYPES[f.type] || '其他', currency: cur, units: units, nav: nav, navDate: f.navDate || '', platform: f.platform || '', code: f.code || '', official: f.official || '', verified: !!(f.navSrc && f.navSrc.verified && f.navSrc.date === f.navDate),
         cost: cost, value: value, valueTWD: value * rate, costTWD: cost * rate, upl: value - cost, uplTWD: (value - cost) * rate, uplPct: cost ? (value - cost) / cost : 0,
         dca: f.dca && f.dca.on ? f.dca : null, due: dcaDue(f, today), noRate: cur !== 'TWD' && !rate };
@@ -1282,7 +1348,8 @@ var FC = (function () {
     (data.ledger || []).forEach(function (l) {
       if (l.done) return;
       var v = toTWD(l.amount, l.currency, fx);
-      if (l.type === 'receivable') { recv += v; recvRows.push(l); } else { pay += v; payRows.push(l); }
+      var row = {}; Object.keys(l).forEach(function (k) { row[k] = l[k]; }); row.twd = v;
+      if (l.type === 'receivable') { recv += v; recvRows.push(row); } else { pay += v; payRows.push(row); }
     });
     var other = 0, otherByCls = {};
     (data.otherAssets || []).forEach(function (o) { var v = toTWD(o.value, o.currency, fx); other += v; otherByCls[o.cls || 'other'] = (otherByCls[o.cls || 'other'] || 0) + v; });
@@ -1305,9 +1372,10 @@ var FC = (function () {
 
     var financial = cashTotal + investValue + fundValue + other;   // 金融資產總市值
     var totalAssets = financial + recv;
-    var netWorth = totalAssets - pay - loanTotal;
+    var netWorth = totalAssets - pay - loanTotal - unsettledNet;   // 未交割款視為應付（負值＝應收）
     var cf = cashflow(data, 6, today);
-    var last3 = cf.slice(-3);
+    var done = cf.filter(function (r) { return r.month < today.slice(0, 7) && (r.income > 0 || r.expense > 0); });
+    var last3 = done.length ? done.slice(-3) : cf.slice(-3);
     var avgExp = avg(last3.map(function (r) { return r.expense; }).filter(function (v) { return v > 0; })) || num(data.profile.monthlyExpense);
     var avgInc = avg(last3.map(function (r) { return r.income; }).filter(function (v) { return v > 0; })) || num(data.profile.monthlyIncome);
 
@@ -1322,9 +1390,16 @@ var FC = (function () {
       financial: financial, totalAssets: totalAssets, netWorth: netWorth,
       alloc: alloc, cashflow: cf, avgExpense: avgExp, avgIncome: avgInc,
       unsettled: unsettled, unsettledNet: unsettledNet,
-      loans: lo, loanTotal: loanTotal, loanMonthly: loanMonthly, loanInt12: loanInt12,
+      loans: lo, loanTotal: loanTotal, loanMonthly: loanMonthly, loanInt12: loanInt12, fxMissing: fxMissingOf(data, fx),
       target: num(data.profile.targetAmount) || 1000000
     };
+  }
+  /** 有外幣資產卻沒有對應匯率（此時外幣會以 0 計，淨資產失真） */
+  function fxMissingOf(data, fx) {
+    var need = {}, r = (fx && fx.rates) || {};
+    (data.accounts || []).concat(data.otherAssets || [], data.funds || [], data.ledger || []).forEach(function (x) { if (x.currency && x.currency !== 'TWD') need[x.currency] = 1; });
+    if ((data.trades || []).some(function (t) { return t.market === 'US'; })) need.USD = 1;
+    return Object.keys(need).filter(function (c) { return !r[c]; });
   }
   // ───────── 貸款（等額本息估算） ─────────
   var LOAN_TYPES = { mortgage: '房貸', car: '車貸', personal: '信貸', student: '學貸', card: '卡分期', other: '其他' };
@@ -1338,15 +1413,15 @@ var FC = (function () {
     for (var i = 0; i < n && B > 0; i++) B = Math.max(0, B * (1 + r) - P);
     var rem = 0, b = B, int12 = 0, warn = '';
     if (P > 0 && B > 0) {
-      if (B * r >= P) warn = '月付金額不足以支付利息，請確認月付與利率';
+      if (B * r >= P) { warn = '月付金額不足以支付利息，請確認月付與利率'; int12 = B * r * 12; }
       else { while (b > 0.5 && rem < 600) { var it = b * r; if (rem < 12) int12 += it; b = Math.max(0, b + it - P); rem++; } }
     }
     var nextPay = today.slice(0, 8) + pad(pd); if (nextPay < today) nextPay = addDays(today.slice(0, 8) + '01', 32).slice(0, 8) + pad(pd);
     var principal = num(l.principal);
-    return { id: l.id, name: l.name, type: l.type || 'other', typeLabel: LOAN_TYPES[l.type] || '其他', rate: num(l.rate), monthly: P, balance: B, remMonths: rem, int12: int12,
+    return { id: l.id, name: l.name, type: l.type || 'other', typeLabel: LOAN_TYPES[l.type] || '其他', rate: num(l.rate), monthly: B > 0.5 ? P : 0, balance: B, remMonths: rem, int12: int12,
       paidPct: principal > B ? (principal - B) / principal : null, nextPay: B > 0 ? nextPay : '', warn: warn, est: n > 0 };
   }
-  function computeLoans(data, today) { return (data.loans || []).map(function (l) { return loanState(l, today || twDay()); }).filter(function (x) { return x.balance > 0.5 || x.monthly > 0; }); }
+  function computeLoans(data, today) { return (data.loans || []).map(function (l) { return loanState(l, today || twDay()); }).filter(function (x) { return x.balance > 0.5; }); }
 
   // ───────── 年化報酬 XIRR ─────────
   function xirr(flows) {
@@ -1409,7 +1484,7 @@ var FC = (function () {
     add('safe', 'debt', '負債比', pct(dr, 0), LV(dr, 0.3, 0.5),
       '負債 ' + fmt(debt) + ' ÷ 總資產 ' + fmt(sum.totalAssets) + '｜標準 < 30%',
       dr > 0.5 ? '負債偏高，優先償還高利率負債' : dr > 0.3 ? '接近上限；有房貸請在其他資產填房屋市值' : '負債比健康', dr / 0.6);
-    var due30 = sum.payRows.filter(function (l) { return !l.due || diffDays(today, l.due) <= 30; }).reduce(function (a, l) { return a + num(l.amount); }, 0) + sum.loanMonthly + Math.max(0, sum.unsettledNet);
+    var due30 = sum.payRows.filter(function (l) { return !l.due || diffDays(today, l.due) <= 30; }).reduce(function (a, l) { return a + (l.twd != null ? l.twd : num(l.amount)); }, 0) + sum.loanMonthly + Math.max(0, sum.unsettledNet);
     var cov = due30 > 0 ? sum.cashTotal / due30 : null;
     add('safe', 'short', '30 天內應付覆蓋', cov == null ? '無應付' : round(cov, 1) + ' 倍', cov == null ? 'g' : LV(cov, 2, 1, true),
       '現金 ' + fmt(sum.cashTotal) + ' ÷ 30 天內應付＋還款＋交割 ' + fmt(due30) + '｜標準 ≥ 2 倍',
@@ -1498,12 +1573,12 @@ var FC = (function () {
   function unsettledTrades(data, today, fx) {
     var out = [];
     (data.trades || []).forEach(function (t) {
-      if (t.settled || t.opening || t.side === 'adjust') return;
+      if (t.settled || t.opening || t.side === 'adjust' || !isYMD(t.date)) return;
       var sd = addBizDays(t.date, 2);
       if (sd < today) return; // 已過交割日視為完成
       var gross = num(t.qty) * num(t.price);
       var amt = t.side === 'buy' ? gross + num(t.fee) : gross - num(t.fee) - num(t.tax);
-      out.push({ id: t.id, symbol: t.symbol, name: t.name, side: t.side, date: t.date, settleDate: sd, amount: amt, currency: holdingCurrency(t.market), amountTWD: toTWD(amt, holdingCurrency(t.market), fx) || amt });
+      out.push({ id: t.id, symbol: t.symbol, name: t.name, side: t.side, date: t.date, settleDate: sd, amount: amt, currency: holdingCurrency(t.market), amountTWD: toTWD(amt, holdingCurrency(t.market), fx) });
     });
     return out;
   }
@@ -1515,15 +1590,15 @@ var FC = (function () {
     else if (plan.kind === 'invest') cur = sum.investValue + (sum.fundValue || 0);
     else if (plan.kind === 'financial') cur = sum.financial;
     else if (plan.kind === 'savings') {
-      var y = (plan.deadline || twDay()).slice(0, 4);
+      var y = (sum.date || twDay()).slice(0, 4);
       cur = 0;
       (data.transactions || []).forEach(function (t) { if (String(t.date).slice(0, 4) === y) cur += t.type === 'income' ? num(t.amount) : -num(t.amount); });
     }
     var target = num(plan.target) || 1;
-    var today = twDay();
-    var daysLeft = plan.deadline ? diffDays(today, plan.deadline) : null;
+    var today = sum.date || twDay();
+    var daysLeft = isYMD(plan.deadline) ? diffDays(today, plan.deadline) : null;
     var gap = Math.max(0, target - cur);
-    var monthsLeft = daysLeft != null ? Math.max(daysLeft / 30.44, 0.5) : null;
+    var monthsLeft = daysLeft != null && daysLeft >= 0 ? Math.max(daysLeft / 30.44, 1) : null;
     return { current: cur, target: target, ratio: clamp(cur / target, 0, 1), gap: gap, daysLeft: daysLeft, perMonth: monthsLeft ? gap / monthsLeft : null };
   }
 
@@ -1533,7 +1608,7 @@ var FC = (function () {
     // 1. 流動性 20%
     var liquid = sum.cashTotal - Math.max(0, sum.unsettledNet);
     var months = sum.avgExpense > 0 ? liquid / sum.avgExpense : (liquid > 0 ? 6 : 0);
-    var due30 = sum.payRows.filter(function (l) { return !l.due || diffDays(sum.date, l.due) <= 30; }).reduce(function (s, l) { return s + num(l.amount); }, 0);
+    var due30 = sum.payRows.filter(function (l) { return !l.due || diffDays(sum.date, l.due) <= 30; }).reduce(function (s, l) { return s + (l.twd != null ? l.twd : num(l.amount)); }, 0);
     var sLiq = clamp(months / 6 * 100) - (due30 > liquid ? 30 : 0);
     out.push(mk('liquidity', '流動性', 20, clamp(sLiq),
       '可動用現金（扣除待交割）約 ' + fmt(liquid) + ' 元，可支應 ' + round(months, 1) + ' 個月支出（基準：6 個月）',
@@ -1542,7 +1617,7 @@ var FC = (function () {
       months < 6 ? '優先補足 ' + fmt(Math.max(0, sum.avgExpense * 6 - liquid)) + ' 元至 6 個月預備金' : '維持現狀，多餘現金可依配置投入核心'));
     out[out.length - 1].m = { months: months };
     // 2. 現金流／儲蓄紀律 20%
-    var cf3 = sum.cashflow.slice(-3).filter(function (r) { return r.income > 0 || r.expense > 0; });
+    var thisM0 = sum.date.slice(0, 7), cf3 = sum.cashflow.filter(function (r) { return r.month !== thisM0 || r.income > 0; }).slice(-3).filter(function (r) { return r.income > 0 || r.expense > 0; });
     var inc = cf3.reduce(function (s, r) { return s + r.income; }, 0), exp = cf3.reduce(function (s, r) { return s + r.expense; }, 0);
     var rate = inc > 0 ? (inc - exp) / inc : 0;
     var posM = cf3.filter(function (r) { return r.net > 0; }).length;
@@ -1577,7 +1652,8 @@ var FC = (function () {
       sum.holdings.forEach(function (x) { if (x.cls !== 'core' && x.cls !== 'bond') { var w = x.valueTWD / fin; if (w > maxW) { maxW = w; maxN = x.name; } } });
       var ta = data.targetAllocation || {}, dev = 0, tsum = 0;
       Object.keys(ta).forEach(function (k) { tsum += num(ta[k]); });
-      Object.keys(ta).forEach(function (k) { dev += Math.abs((sum.alloc[k] || 0) / fin - num(ta[k]) / (tsum || 100)); });
+      var keysU = {}; Object.keys(ta).concat(Object.keys(sum.alloc)).forEach(function (k) { keysU[k] = 1; });
+      Object.keys(keysU).forEach(function (k) { dev += Math.abs((sum.alloc[k] || 0) / fin - num(ta[k]) / (tsum || 100)); });
       dev = dev / 2;
       sDiv = clamp(100 - Math.max(0, maxW - 0.10) * 250 - dev * 120);
       basisD = '單一個股最大權重 ' + (maxN ? maxN + ' ' : '') + pct(maxW) + '（警戒 10%）；與目標配置偏離 ' + pct(dev);
@@ -1631,8 +1707,8 @@ var FC = (function () {
     r.cls = cls; r.clsActual = actual; r.clsTarget = tgt; r.weight = w;
     var allocScore = 70, notes = [];
     if (t.side === 'buy') {
-      if (actual > tgt + 0.05) { allocScore -= 30; notes.push(CLASSES[cls].label + '已高於目標 ' + pct(actual - tgt) + '，此筆加深偏離'); }
-      else if (actual < tgt) { allocScore += 20; notes.push('補足' + CLASSES[cls].label + '配置缺口'); }
+      if (actual > tgt + 0.05) { allocScore -= 30; notes.push((CLASSES[cls] || CLASSES.other).label + '已高於目標 ' + pct(actual - tgt) + '，此筆加深偏離'); }
+      else if (actual < tgt) { allocScore += 20; notes.push('補足' + (CLASSES[cls] || CLASSES.other).label + '配置缺口'); }
       if (cls === 'satellite' && w > 0.1) { allocScore -= 25; notes.push('單一個股權重 ' + pct(w) + ' 超過 10%'); }
       if (h && px < h.avgCost * 0.97) notes.push('低於成本加碼：請確認是依計畫分批，而非自動攤平');
     } else {
@@ -1792,7 +1868,7 @@ var FC = (function () {
         if (o) lines.push('當日 開 ' + fmt(o.open, 2) + '／高 ' + fmt(o.high, 2) + '／低 ' + fmt(o.low, 2) + '／收 ' + fmt(o.close, 2) + (o.vwap ? '／VWAP ' + fmt(o.vwap, 2) : '') + '（' + esc(o.source || '') + '）');
         if (x.position != null) lines.push('成交位置：當日區間 ' + round(x.position * 100, 0) + '% 處' + (x.vsVwap != null ? '，相對 VWAP ' + signed(x.vsVwap * 100, 2) + '%' : '') + ' → <b>' + x.priceVerdict + '</b>');
         else lines.push('價格品質：' + x.priceVerdict);
-        lines.push('配置：' + CLASSES[x.cls].label + ' 現 ' + pct(x.clsActual) + '／目標 ' + pct(x.clsTarget) + '；' + (x.allocNotes.join('；') || '符合配置'));
+        lines.push('配置：' + (CLASSES[x.cls] || CLASSES.other).label + ' 現 ' + pct(x.clsActual) + '／目標 ' + pct(x.clsTarget) + '；' + (x.allocNotes.join('；') || '符合配置'));
         lines.push('交易品質分數：<b style="font-size:16px;color:' + C.navy + '">' + x.score + '（' + x.grade + '）</b>　價格 ' + round(x.priceScore) + '／配置 ' + x.allocScore + '／風險 ' + x.riskScore);
         return '<div style="padding:12px;border:1px solid ' + C.line + ';margin-bottom:8px">' + lines.map(function (l) { return p(l, 'margin:4px 0'); }).join('') + '</div>';
       }).join('');
@@ -1808,7 +1884,7 @@ var FC = (function () {
     }
 
     // 5 金融資產
-    h += sec('05', '金融資產總市值', table(['項目', '金額（台幣）'], [['現金', fmt(s.cashTotal)], ['股票／ETF', fmt(s.investValue)]].concat(s.fundValue ? [['基金', fmt(s.fundValue)]] : []).concat([['其他金融資產', fmt(s.otherTotal)], ['<b>金融資產總市值</b>', '<b>' + fmt(s.financial) + '</b>'], ['應收', fmt(s.receivable)], ['應付', '-' + fmt(s.payable)], ['<b>淨資產</b>', '<b>' + fmt(s.netWorth) + '</b>']]), true));
+    h += sec('05', '金融資產總市值', table(['項目', '金額（台幣）'], [['現金', fmt(s.cashTotal)], ['股票／ETF', fmt(s.investValue)]].concat(s.fundValue ? [['基金', fmt(s.fundValue)]] : []).concat([['其他金融資產', fmt(s.otherTotal)], ['<b>金融資產總市值</b>', '<b>' + fmt(s.financial) + '</b>'], ['應收', fmt(s.receivable)], ['應付', '-' + fmt(s.payable)]]).concat(s.loanTotal ? [['貸款', '-' + fmt(s.loanTotal)]] : []).concat(s.unsettledNet ? [['未交割款', (s.unsettledNet > 0 ? '-' : '+') + fmt(Math.abs(s.unsettledNet))]] : []).concat([['<b>淨資產</b>', '<b>' + fmt(s.netWorth) + '</b>']]), true));
 
     // 6 配置圖
     var fin = s.financial || 1, ta = r.targetAllocation || {}, tsum = 0;
@@ -1892,7 +1968,7 @@ var FC = (function () {
   ].join('\n');
 
   /** 提供給 AI 的財務摘要（不含帳號等敏感識別資訊） */
-  function contextForAI(data, sum, sc) {
+  function contextForAI(data, sum, sc, fx) {
     var p = data.profile;
     var lines = [];
     lines.push('日期：' + sum.date + '（台灣）');
@@ -1903,9 +1979,9 @@ var FC = (function () {
     lines.push('應收 ' + fmt(sum.receivable) + '；應付 ' + fmt(sum.payable) + '；近 3 月平均月收入 ' + fmt(sum.avgIncome) + '、月支出 ' + fmt(sum.avgExpense));
     var fin = sum.financial || 1;
     lines.push('配置：' + Object.keys(CLASSES).map(function (k) { return CLASSES[k].label + ' ' + pct((sum.alloc[k] || 0) / fin); }).join('、') +
-      '；目標配置：' + Object.keys(data.targetAllocation).map(function (k) { return CLASSES[k].label + ' ' + data.targetAllocation[k] + '%'; }).join('、'));
+      '；目標配置：' + Object.keys(data.targetAllocation).filter(function (k) { return CLASSES[k]; }).map(function (k) { return CLASSES[k].label + ' ' + data.targetAllocation[k] + '%'; }).join('、'));
     lines.push('持股：' + (sum.holdings.map(function (x) { return x.symbol + ' ' + x.name + ' ' + fmt(x.qty) + '股 均價' + fmt(x.avgCost, 2) + ' 收盤' + fmt(x.price, 2) + '(' + (x.priceDate || '未取得') + ') 權重' + pct(x.valueTWD / fin); }).join('；') || '無'));
-    try { var hl = health(data, sum, {}, sum.date); lines.push('財務健檢：' + hl.items.map(function (x) { return x.label + ' ' + x.value + '（' + ({ g: '良好', y: '注意', r: '警示', n: '待補' })[x.lv] + '）'; }).join('；')); if (sum.loans && sum.loans.length) lines.push('貸款：' + sum.loans.map(function (l) { return l.name + ' 餘額' + fmt(l.balance) + ' 利率' + l.rate + '% 月付' + fmt(l.monthly); }).join('；')); } catch (e) {}
+    try { var hl = health(data, sum, fx || {}, sum.date); lines.push('財務健檢：' + hl.items.map(function (x) { return x.label + ' ' + x.value + '（' + ({ g: '良好', y: '注意', r: '警示', n: '待補' })[x.lv] + '）'; }).join('；')); if (sum.loans && sum.loans.length) lines.push('貸款：' + sum.loans.map(function (l) { return l.name + ' 餘額' + fmt(l.balance) + ' 利率' + l.rate + '% 月付' + fmt(l.monthly); }).join('；')); } catch (e) {}
     if (sc) lines.push('財務評分 ' + sc.total + '（' + sc.items.map(function (x) { return x.label + ' ' + x.score; }).join('、') + '）');
     return lines.join('\n');
   }
@@ -2244,7 +2320,8 @@ var Demo = (function () {
   // ── 儲存佇列：一次只送一筆、失敗自動重試，未同步的修改先存在本機，重新登入會自動補送 ──
   var saveTimer = null, retryTimer = null, saving = false, dirty = false;
   function pendingKey() { return 'fc_pending'; }
-  function keepPending() { if (S.demo || !S.data) return; LS.set(pendingKey(), JSON.stringify({ base: S.data.updatedAt || '', at: new Date().toISOString(), data: S.data })); }
+  var pendingHold = false;
+  function keepPending() { if (S.demo || !S.data || pendingHold) return; LS.set(pendingKey(), JSON.stringify({ base: S.data.updatedAt || '', at: new Date().toISOString(), data: S.data })); }
   function commit(msg) {
     if (!S.data) return;
     dirty = true; keepPending();
@@ -2274,7 +2351,7 @@ var Demo = (function () {
         openSheet('資料衝突', '<p>雲端資料已在其他裝置更新。要使用哪一份？</p><p class="muted">「以此裝置為準」會用這台裝置目前的內容覆蓋雲端。</p>', [
           { label: '載入雲端版本', ghost: true, fn: function () { S.data = FC.normalize(r.data); dirty = false; LS.del(pendingKey()); closeSheet(); route(); setSync('ok'); } },
           { label: '以此裝置為準', fn: function () { closeSheet(); doSave(true); } }
-        ]);
+        ], null, { sticky: true });
       } else if (r.error !== 'AUTH') {
         S.saveFails = (S.saveFails || 0) + 1;
         if (S.saveFails === 1 || S.saveFails % 5 === 0) toast('尚未同步（' + (r.message || r.error) + '），修改已暫存在本機，會自動重試');
@@ -2286,20 +2363,34 @@ var Demo = (function () {
   /** 離開頁面、切到背景、登出前，立刻把未送出的修改送出 */
   function flushSave() { if (S.data && !S.demo && (dirty || saveTimer && dirty)) return doSave(false, true); return S.savingP || Promise.resolve(); }
   document.addEventListener('visibilitychange', function () { if (document.hidden && dirty) flushSave(); });
+  // 回到前景：沒有未存修改時，悄悄比對雲端是否有其他裝置的新版本
+  var lastSyncChk = 0;
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden || !S.data || S.demo || dirty || saving || S.locked || $('#layer').innerHTML || Date.now() - lastSyncChk < 120000) return;
+    lastSyncChk = Date.now();
+    API.call('load').then(function (r) {
+      if (!r.ok || !S.data || dirty || saving || $('#layer').innerHTML) return;
+      var d = FC.normalize(r.data);
+      if (d.updatedAt !== S.data.updatedAt || (d.snapshots || []).length !== (S.data.snapshots || []).length) { S.data = d; var y = window.scrollY; route(); window.scrollTo(0, y); }
+    });
+  });
   window.addEventListener('pagehide', function () { if (dirty) flushSave(); });
   /** 登入後檢查本機是否有上次沒送出的修改 */
   function restorePending() {
     if (S.demo) return;
     var p; try { p = JSON.parse(LS.get(pendingKey()) || 'null'); } catch (e) { p = null; }
     if (!p || !p.data) return;
+    var strip = function (d) { var c = JSON.parse(JSON.stringify(FC.normalize(d))); delete c.updatedAt; delete c.snapshots; (c.funds || []).forEach(function (f) { delete f.nav; delete f.navDate; delete f.navSrc; }); return JSON.stringify(c); };
+    try { if (strip(p.data) === strip(S.data)) { LS.del(pendingKey()); return; } } catch (e) {}   // 上次其實已存成功
     if (p.base === S.data.updatedAt) {
       S.data = FC.normalize(p.data); S.data.updatedAt = p.base; dirty = true; doSave();
       toast('已補上次尚未同步的修改');
     } else {
       openSheet('發現未同步的修改', '<p>這台裝置在 ' + esc((p.at || '').slice(0, 16).replace('T', ' ')) + ' 有一份尚未同步到雲端的修改，但雲端資料之後也有更新。</p><p class="muted">要使用哪一份？</p>', [
-        { label: '使用雲端版本', ghost: true, fn: function () { LS.del(pendingKey()); closeSheet(); } },
-        { label: '使用本機版本', fn: function () { var up = S.data.updatedAt; S.data = FC.normalize(p.data); S.data.updatedAt = up; closeSheet(); dirty = true; doSave(true); route(); } }
-      ]);
+        { label: '使用雲端版本', ghost: true, fn: function () { pendingHold = false; LS.del(pendingKey()); closeSheet(); } },
+        { label: '使用本機版本', fn: function () { pendingHold = false; var up = S.data.updatedAt; S.data = FC.normalize(p.data); S.data.updatedAt = up; closeSheet(); dirty = true; doSave(true); route(); } }
+      ], null, { sticky: true });
+      pendingHold = true;
     }
   }
   function setSync(s) { var b = $('#syncBtn'); if (b) { b.dataset.s = s; b.setAttribute('aria-label', { ok: '已同步', saving: '同步中', error: '同步失敗，點擊重試', demo: '示範模式' }[s]); } }
@@ -2310,20 +2401,34 @@ var Demo = (function () {
   }
 
   // ═════════ 底部表單 ═════════
-  function openSheet(title, body, buttons, onMount) {
+  var sheetDirty = false, sheetSticky = false, sheetHist = false, skipPop = false;
+  function openSheet(title, body, buttons, onMount, opt) {
+    sheetDirty = false; sheetSticky = !!(opt && opt.sticky);
+    if (!sheetHist && !GAS) { try { history.pushState({ sheet: 1 }, ''); sheetHist = true; } catch (e) {} }
     var foot = (buttons || []).map(function (b, i) { return '<button type="button" class="btn ' + (b.ghost ? 'btn-ghost' : b.danger ? 'btn-danger' : '') + '" data-b="' + i + '">' + b.label + '</button>'; }).join('');
     $('#layer').innerHTML = '<div class="sheet-bg" id="sheetBg"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetT">' +
       '<div class="sheet-grip"></div><div class="sheet-head"><h2 id="sheetT">' + title + '</h2><button class="icon-btn" id="sheetX" aria-label="關閉">' + I.close + '</button></div>' +
       '<div id="sheetBody">' + body + '</div>' + (foot ? '<div class="sheet-foot' + (buttons.length === 1 ? ' one' : '') + '">' + foot + '</div>' : '') + '</div></div>';
-    $('#sheetX').onclick = closeSheet;
-    $('#sheetBg').addEventListener('click', function (e) { if (e.target.id === 'sheetBg') closeSheet(); });
+    $('#sheetX').onclick = closeSheet; $('#sheetX').hidden = sheetSticky;
+    $('#sheetBg').addEventListener('click', function (e) { if (e.target.id !== 'sheetBg' || sheetSticky) return; if (sheetDirty) { toast('已填寫內容：請按「取消」或右上角 ✕ 關閉'); return; } closeSheet(); });
+    $('#sheetBody').addEventListener('input', function () { sheetDirty = true; });
     $$('[data-b]', $('#layer')).forEach(function (el) { el.onclick = function () { buttons[+el.dataset.b].fn(); }; });
     document.addEventListener('keydown', escClose);
     if (onMount) onMount($('#sheetBody'));
     var f = $('#sheetBody input, #sheetBody select, #sheetBody textarea'); if (f && window.innerWidth > 600) f.focus();
   }
-  function escClose(e) { if (e.key === 'Escape') closeSheet(); }
-  function closeSheet() { $('#layer').innerHTML = ''; document.removeEventListener('keydown', escClose); }
+  function escClose(e) { if (e.key === 'Escape' && !sheetSticky && !sheetDirty) closeSheet(); }
+  /** nav=true：因為換頁而關閉，不動瀏覽紀錄 */
+  function closeSheet(nav) {
+    var had = !!$('#layer').innerHTML;
+    $('#layer').innerHTML = ''; document.removeEventListener('keydown', escClose); sheetDirty = false; sheetSticky = false;
+    if (sheetHist) { sheetHist = false; if (nav !== true && had) { skipPop = true; try { history.back(); } catch (e) { skipPop = false; } } }
+  }
+  // 手機「返回」鍵：表單開著時只關表單，不離開頁面
+  window.addEventListener('popstate', function () {
+    if (skipPop) { skipPop = false; return; }
+    if (sheetHist && $('#layer').innerHTML) { if (sheetSticky) { try { history.pushState({ sheet: 1 }, ''); } catch (e) {} return; } sheetHist = false; $('#layer').innerHTML = ''; document.removeEventListener('keydown', escClose); sheetDirty = false; }
+  });
   var EYE = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
   var EYE_OFF = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l18 18M10.6 5.1A10 10 0 0112 5c6.5 0 10 7 10 7a17 17 0 01-3.2 4.1M6.1 6.1A17 17 0 002 12s3.5 7 10 7a9.7 9.7 0 004.1-.9"/><path d="M9.9 9.9a3 3 0 004.2 4.2"/></svg>';
   /** 在密碼欄右側加上「顯示／隱藏」眼睛 */
@@ -2337,7 +2442,11 @@ var Demo = (function () {
   }
   function val(id) { var el = $('#' + id); return el ? el.value.trim() : ''; }
   function confirmDel(what, fn) {
-    openSheet('確認刪除', '<p>確定要刪除「' + esc(what) + '」嗎？此動作無法復原。</p>', [{ label: '取消', ghost: true, fn: closeSheet }, { label: '刪除', danger: true, fn: function () { fn(); closeSheet(); } }]);
+    var layer = $('#layer'), prev = layer.firstElementChild, wasDirty = sheetDirty;
+    if (prev) layer.removeChild(prev);   // 保留原本的編輯表單，按「取消」可以回去
+    openSheet('確認刪除', '<p>確定要刪除「' + esc(what) + '」嗎？此動作無法復原。</p>', [{ label: '取消', ghost: true, fn: function () {
+      if (prev) { layer.innerHTML = ''; layer.appendChild(prev); sheetDirty = wasDirty; } else closeSheet();
+    } }, { label: '刪除', danger: true, fn: function () { fn(); closeSheet(); } }]);
   }
   function segHTML(id, opts, cur) { return '<div class="seg" role="group" id="' + id + '">' + opts.map(function (o) { return '<button type="button" data-v="' + o[0] + '" aria-pressed="' + (o[0] === cur) + '">' + o[1] + '</button>'; }).join('') + '</div>'; }
   function bindSeg(id, cb) { $$('#' + id + ' button').forEach(function (b) { b.onclick = function () { $$('#' + id + ' button').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); }); b.setAttribute('aria-pressed', 'true'); if (cb) cb(b.dataset.v); }; }); }
@@ -2372,7 +2481,8 @@ var Demo = (function () {
       toast('同步中，請稍候…');
       return flushSave().then(function () { logout(dirty ? '有修改尚未同步，已暫存在本機，下次登入會自動補上' : ''); });
     }
-    clearTimeout(saveTimer); clearTimeout(retryTimer);
+    closeSheet(); clearTimeout(saveTimer); clearTimeout(retryTimer);
+    S.reportHtml = ''; S.quotes = {}; S.alertsFired = {}; S.localFired = {}; S.news = null; S.fundAt = 0; navStack = []; var vw = $('#view'); if (vw) vw.innerHTML = '';
     LS.del('fc_token'); MEM.token = ''; S.data = null; S.demo = false; dirty = false; saving = false;
     S.locked = false; S.stk = {}; S.divData = null; S.ana = null; S.senti = null; S.chat = [];
     ['#lock', '#shield', '#wm'].forEach(function (k) { var e = $(k); if (e) e.hidden = true; });
@@ -2463,15 +2573,16 @@ var Demo = (function () {
     $('#view').innerHTML = '<div class="empty" style="min-height:50vh"><div class="sprite" style="width:72px;height:72px">' + sprite() + '</div>資料載入中…</div>';
     var p = S.demo ? Promise.resolve({ ok: true, data: Demo.data() }) : API.call('load');
     p.then(function (r) {
-      if (!r.ok) { if (r.error !== 'AUTH') { setSync('error'); $('#view').innerHTML = '<div class="empty">' + esc(r.error || '載入失敗') + '<button class="btn" id="retry">重試</button></div>'; $('#retry').onclick = startApp; } return; }
+      if (!r.ok) { if (r.error !== 'AUTH') { setSync('error'); $('#view').innerHTML = '<div class="empty">' + esc(r.error || '載入失敗') + '<button class="btn" id="retry">重試</button><button class="btn btn-ghost" id="errOut">登出</button></div>'; $('#retry').onclick = startApp; $('#errOut').onclick = function () { logout(''); }; } return; }
       S.data = FC.normalize(r.data);
       S.hide = priv().hideOnOpen ? true : LS.get('fc_hide') === '1';
       S.locked = false; lastAct = Date.now(); applyWatermark();
       setSync(S.demo ? 'demo' : 'ok');
+      navStack = [location.hash && location.hash !== '#' ? location.hash : '#/home'];
+      if (!location.hash || location.hash === '#') { try { history.replaceState(null, '', '#/home'); } catch (e) { location.hash = '#/home'; } }
+      route();
       restorePending();
-      if (!location.hash || location.hash === '#') location.hash = '#/home'; else route();
       refreshMarket();
-      if (!S.data.profile.name && !S.demo) setTimeout(function () { toast('歡迎！建議先到「更多 › 設定」填寫個人財務檔案'); }, 800);
     });
   }
   function marketItems() {
@@ -2506,7 +2617,7 @@ var Demo = (function () {
       S.lastMk = Date.now();
       if (force) toast(S.quoteErr || S.fxErr ? '部分更新失敗：' + (S.quoteErr || S.fxErr) : '報價與匯率已更新');
       var r = currentRoute();
-      if (['home', 'invest', 'assets', 'watch'].indexOf(r) >= 0 && !$('#layer').innerHTML && !(document.activeElement && document.activeElement.tagName === 'SELECT')) { var y = window.scrollY; route(); window.scrollTo(0, y); }
+      if (['home', 'invest', 'assets', 'watch'].indexOf(r) >= 0 && !$('#layer').innerHTML && !(document.activeElement && /^(SELECT|INPUT|TEXTAREA)$/.test(document.activeElement.tagName)) && !(r === 'invest' && $('#tvBox iframe'))) { var y = window.scrollY; route(); window.scrollTo(0, y); }
     });
   }
   // 自動更新：盤中每 60 秒，其餘時間每 10 分鐘；只在頁面可見、停在首頁／投資／資產時
@@ -2547,9 +2658,17 @@ var Demo = (function () {
     $$('.tabbar a').forEach(function (a) { if (a.dataset.tab === tab) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
     var v = $('#view');
     v.innerHTML = ''; R.f(v);
+    if (['home', 'ledger', 'invest', 'assets'].indexOf(r) >= 0) { var fb = document.createElement('button'); fb.type = 'button'; fb.className = 'fab'; fb.id = 'fabAdd'; fb.setAttribute('aria-label', r === 'ledger' ? '記一筆' : '快速新增'); fb.innerHTML = I.plus; fb.onclick = function () { if (r === 'ledger') txForm(); else quickAdd(); }; v.appendChild(fb); }
     document.title = R.t + '｜資產羅盤';
   }
-  window.addEventListener('hashchange', function () { closeSheet(); route(); window.scrollTo(0, 0); });
+  var navStack = [];
+  window.addEventListener('hashchange', function () {
+    closeSheet(true);
+    var h = location.hash;
+    if (navStack.length > 1 && navStack[navStack.length - 2] === h) navStack.pop(); else if (navStack[navStack.length - 1] !== h) navStack.push(h);
+    if (navStack.length > 30) navStack.shift();
+    route(); window.scrollTo(0, 0);
+  });
 
   function secHead(no, title, act) {
     return '<div class="sec-head"><div><span class="sec-no">' + no + '</span><h2 class="sec-title">' + title + '</h2></div>' + (act ? '<div class="act">' + act + '</div>' : '') + '</div>';
@@ -2609,9 +2728,22 @@ var Demo = (function () {
       h += '<div class="gh"><span>待辦提醒</span>' + (todo.length > 3 ? '<button type="button" class="gh-act" id="todoAll">' + todo.length + ' 項・' + (S.todoAll ? '收合' : '全部 ›') + '</button>' : '<span class="gh-act">' + todo.length + ' 項</span>') + '</div><div class="todo">' +
         shownT.map(function (x) { return '<' + (x.href ? 'a href="' + x.href + '"' : 'div') + ' class="tdr"><span class="td-k ' + x.c + '">' + x.k + '</span><span class="td-m">' + x.t + '</span>' + (x.a != null ? '<b>' + fa(x.a) + '</b>' : '<span class="td-go">›</span>') + '</' + (x.href ? 'a' : 'div') + '>'; }).join('') + '</div>';
     }
+    // 新手引導
+    var ST0 = S.data.settings, obSteps = [
+      ['新增帳戶與餘額', '銀行、證券交割戶、現金', S.data.accounts.length > 0, 'acc'],
+      ['輸入現有持股或基金', '代號＋股數＋成本，報價自動更新', S.data.trades.length > 0 || S.data.funds.length > 0, 'hold'],
+      ['填月收入與月支出', '用來算儲蓄率、緊急預備金', (num(P.monthlyIncome) > 0 && num(P.monthlyExpense) > 0) || S.data.transactions.some(function (t) { return t.type === 'income'; }), 'inc'],
+      ['設定資產目標', '目標金額與日期', !!ST0.obGoal || !!P.name || (S.data.snapshots || []).length > 0, 'goal']];
+    var obDone = obSteps.filter(function (x) { return x[2]; }).length, obShow = !S.demo && !ST0.obHide && obDone < obSteps.length, obNext = true;
+    if (obShow) {
+      h += '<div class="gh"><span>開始使用</span><button type="button" class="gh-act" id="obHide">先略過</button></div><div class="ob"><div class="ob-h"><b>4 個步驟建立你的財務全貌</b><span>' + obDone + ' / ' + obSteps.length + '</span></div><div class="ob-pb"><i style="width:' + (obDone / obSteps.length * 100) + '%"></i></div>' +
+        obSteps.map(function (x, i) { var btn = x[2] ? '' : '<button type="button" class="btn btn-sm' + (obNext ? '' : ' btn-ghost') + '" data-ob="' + x[3] + '">' + (obNext ? '開始' : '填寫') + '</button>'; if (!x[2]) obNext = false;
+          return '<div class="ob-r' + (x[2] ? ' d' : '') + '"><span class="ob-n">' + (x[2] ? '✓' : i + 1) + '</span><span class="ob-m"><b>' + x[0] + '</b><span>' + x[1] + '</span></span>' + btn + '</div>'; }).join('') + '</div>';
+    }
     // 財務健康 6 大指標
-    var SIX = [['emergency', '≥6 個月'], ['saving', '≥20%'], ['debt', '<30%'], ['dsr', '<30%'], ['passive', '目標 100%'], ['fi', HL.fi.num > 0 ? '需 ' + shortMoney(HL.fi.num).replace(' ', '') : '']];
-    h += '<div class="gh"><span>財務健康 6 大指標</span><a class="gh-act" href="#/health">完整健檢' + (HL.attention ? '・' + HL.attention + ' 項需注意' : '') + ' ›</a></div><div class="hk">' +
+    var SIX0 = [['emergency', '≥6 個月'], ['saving', '≥20%'], ['debt', '<30%'], ['dsr', '<30%'], ['passive', '目標 100%'], ['fi', HL.fi.num > 0 ? '需 ' + shortMoney(HL.fi.num).replace(' ', '') : '']];
+    var SIX = obShow ? SIX0.filter(function (z) { return HI[z[0]].lv !== 'n'; }) : SIX0;
+    if (SIX.length >= (obShow ? 3 : 1)) h += '<div class="gh"><span>財務健康' + (SIX.length === 6 ? ' 6 大' : '') + '指標</span><a class="gh-act" href="#/health">完整健檢' + (HL.attention ? '・' + HL.attention + ' 項需注意' : '') + ' ›</a></div><div class="hk">' +
       SIX.map(function (z) { var x = HI[z[0]]; return '<a href="#/health?k=' + z[0] + '"><i>' + x.label.replace('（DSR）', '').replace('每月還款／收入', '每月還款／收入') + '</i><b>' + (/個月|%|倍/.test(x.value) || x.value === '—' ? esc(x.value) : esc(x.value)) + '</b><span class="pill ' + x.lv + '">' + (x.word || LVW[x.lv]) + (z[1] && x.lv !== 'n' ? ' ' + z[1] : '') + '</span></a>'; }).join('') + '</div>';
     var xr = HL.xirr;
     h += '<div class="kpis" style="margin-top:12px">' +
@@ -2619,15 +2751,26 @@ var Demo = (function () {
       '<a class="kpi kpi-link" href="#/health?k=xirr"><span class="kpi-label">投資年化報酬</span><span class="kpi-value ' + (xr.rate > 0 ? 'up' : xr.rate < 0 ? 'down' : '') + '">' + (xr.rate == null ? '—' : (xr.rate >= 0 ? '+' : '') + pct(xr.rate, 1)) + '</span><span class="kpi-sub">' + esc(xr.rate == null ? xr.note : '含股利・XIRR') + '</span></a></div>';
     h += fxLineHTML();
 
-    h += '<section class="sec">' + secHead('04 ALLOCATION', '資產配置', '<a class="btn btn-ghost btn-sm" href="#/settings">目標配置</a>') + '<div class="card"><div class="donut-wrap"><div class="chart-box sm" id="allocChart" aria-label="資產配置圓環圖"></div><div class="legend">' +
-      allocKeys.map(function (k) { return '<div class="legend-row"><i style="background:' + FC.CLASSES[k].color + '"></i><span>' + FC.CLASSES[k].label + '</span><span class="v">' + pct((s.alloc[k] || 0) / fin) + '</span><span class="t">目標 ' + pct(num(ta[k]) / (tsum || 100), 0) + '</span></div>'; }).join('') +
-      '</div></div></div></section>';
+    // 資產配置：色條＝目前、黑線＝目標
+    var arows = allocKeys.map(function (k) { var a = (s.alloc[k] || 0) / fin, t = num(ta[k]) / (tsum || 100); return { k: k, a: a, t: t, d: a - t }; });
+    var aMax = Math.max(0.3, Math.max.apply(null, arows.map(function (r) { return Math.max(r.a, r.t); }).concat([0])) * 1.08);
+    var under = arows.filter(function (r) { return r.d < -0.05 && r.k !== 'cash'; }).sort(function (a, b) { return a.d - b.d; }), over = arows.filter(function (r) { return r.d > 0.05; }).sort(function (a, b) { return b.d - a.d; });
+    var nm = function (L) { return L.slice(0, 2).map(function (r) { return FC.CLASSES[r.k].label; }).join('、'); };
+    var aHint = !s.financial ? '' : !under.length && !over.length ? '目前配置與目標接近（差距都在 5% 內），維持即可。' : (under.length ? '下一筆資金優先補「' + nm(under) + '」' : '') + (under.length && over.length ? '；' : '') + (over.length ? '「' + nm(over) + '」暫停加碼' : '') + '。';
+    h += '<section class="sec">' + secHead('04 ALLOCATION', '資產配置', '<a class="btn btn-ghost btn-sm" href="#/settings">目標配置</a>') + '<div class="card">' +
+      (s.financial ? '<div class="al-cap"><span>共 ' + shortMoney(s.financial) + '</span><span><i class="al-k1"></i>目前　<i class="al-k2"></i>目標</span></div>' +
+        arows.map(function (r) { return '<div class="al"><span class="al-n">' + FC.CLASSES[r.k].label + '</span><span class="al-bar" role="img" aria-label="' + FC.CLASSES[r.k].label + ' 目前 ' + pct(r.a, 0) + '，目標 ' + pct(r.t, 0) + '"><i style="width:' + (r.a / aMax * 100).toFixed(1) + '%;background:' + FC.CLASSES[r.k].color + '"></i>' + (r.t > 0 ? '<u style="left:' + (r.t / aMax * 100).toFixed(1) + '%"></u>' : '') + '</span><span class="al-v"><b>' + pct(r.a, 0) + '</b><em class="' + (Math.abs(r.d) <= 0.05 ? 'k' : r.d > 0 ? 'o' : 'u') + '">' + (Math.abs(r.d) < 0.005 ? '±0' : (r.d > 0 ? '+' : '−') + Math.round(Math.abs(r.d) * 100)) + '%</em></span></div>'; }).join('') +
+        '<div class="al-hint">' + aHint + '</div>'
+        : '<div class="empty">新增帳戶或持股後，這裡會顯示你的資產配置</div>') + '</div></section>';
 
-    h += '<section class="sec">' + secHead('05 CASH FLOW', cfPrev ? '上月收支（' + parseInt(cfm.month.slice(5), 10) + ' 月）' : '本月收支', '<a class="btn btn-ghost btn-sm" href="#/ledger">記一筆</a>') + '<div class="trio">' +
+    var cfDone = s.cashflow.filter(function (r) { return r.month < s.date.slice(0, 7) && r.income > 0; }), cfAvg = cfDone.length ? cfDone.reduce(function (a, r) { return a + r.rate; }, 0) / cfDone.length : null;
+    h += '<section class="sec">' + secHead('05 CASH FLOW', cfPrev ? '上月收支（' + parseInt(cfm.month.slice(5), 10) + ' 月）' : '本月收支', '<a class="btn btn-ghost btn-sm" href="#/ledger">明細</a>') + '<div class="trio">' +
       kpi('收入', fa(cfm.income)) + kpi('支出', fa(cfm.expense)) + kpi('儲蓄率', cfm.income ? pct(cfm.rate, 0) : '—') + '</div>' +
-      '<div class="card" style="margin-top:8px"><div class="chart-box sm" id="cfChart" aria-label="近六個月收支長條圖"></div></div></section>';
+      '<div class="card" style="margin-top:8px"><div class="chart-box sm" id="cfChart" aria-label="近六個月收支與儲蓄率"></div>' +
+      '<div class="lg2"><span><i style="background:#234E99"></i>收入</span><span><i style="background:#C68A16"></i>支出</span><span><i style="background:#16A34A"></i>儲蓄率</span><span class="lg-r">' + (cfAvg == null ? '點長條看明細' : '平均儲蓄率 ' + pct(cfAvg, 0)) + '</span></div></div></section>';
 
-    if ((S.data.snapshots || []).length > 1) h += '<section class="sec">' + secHead('06 TREND', '淨資產趨勢') + '<div class="card"><div class="chart-box sm" id="nwChart" aria-label="淨資產趨勢折線圖"></div></div></section>';
+    if ((S.data.snapshots || []).length > 1) h += '<section class="sec">' + secHead('06 TREND', '淨資產趨勢', '<div class="rng" id="nwRng" role="group" aria-label="期間">' + [['1m', '1月'], ['3m', '3月'], ['1y', '1年'], ['all', '全部']].map(function (o) { return '<button type="button" data-r="' + o[0] + '" aria-pressed="' + ((S.nwRange || '3m') === o[0]) + '">' + o[1] + '</button>'; }).join('') + '</div>') +
+      '<div class="card"><div class="nw-sum" id="nwSum"></div><div class="chart-box sm" id="nwChart" aria-label="淨資產趨勢折線圖"></div><p class="tiny" style="margin:4px 0 0">手指滑過可看任一天的數字；接近目標時會出現黃色目標線。</p></div></section>';
 
     h += '<section class="sec">' + secHead('07 NEWS', '今日財經重點', '<a class="btn btn-ghost btn-sm" href="#/news">全部</a>') + '<div class="list" id="homeNews"><div class="empty">新聞載入中…</div></div></section>';
 
@@ -2637,16 +2780,31 @@ var Demo = (function () {
     h += '<p class="tiny center" style="margin-top:24px">報價基準：' + (Object.keys(S.quotes).length ? uniqDates() : '尚未取得') + (S.fx ? '｜匯率：' + esc(S.fx.source) : '') + '</p>';
     v.innerHTML = h;
 
-    var fmtA = function (v, t) { return (S.hide ? '' : 'NT$' + fmt(v)) + '（' + pct(v / t) + '）'; };
-    SC.donut($('#allocChart'), allocKeys.map(function (k) { return { label: FC.CLASSES[k].label, value: Math.max(0, s.alloc[k] || 0), color: FC.CLASSES[k].color }; }), fmtA, ['金融資產', shortMoney(s.financial)]);
     var cf = s.cashflow;
     SC.bars($('#cfChart'), cf.map(function (r) { return parseInt(r.month.slice(5), 10) + '月'; }), [
       { label: '收入', color: '#234E99', data: cf.map(function (r) { return r.income; }) },
-      { label: '支出', color: '#C68A16', data: cf.map(function (r) { return r.expense; }) }], function (v) { return 'NT$' + fa(v); });
-    if (S.hide) $$('#cfChart, #nwChart').forEach(function (el) { el.innerHTML = '<div class="empty hidden-chart">金額已隱藏</div>'; });
+      { label: '支出', color: '#C68A16', data: cf.map(function (r) { return r.expense; }) }], function (v) { return 'NT$' + fa(v); },
+      { noLegend: true, partialLast: cf.length && cf[cf.length - 1].month === s.date.slice(0, 7), rate: cf.map(function (r) { return r.income > 0 ? r.rate : null; }), rateLabel: '儲蓄率' });
+    if (S.hide) $$('#cfChart').forEach(function (el) { el.innerHTML = '<div class="empty hidden-chart">金額已隱藏</div>'; });
     if ($('#hideBtn')) $('#hideBtn').onclick = toggleHide;
+    if ($('#obHide')) $('#obHide').onclick = function () { S.data.settings.obHide = true; commit('已略過，可從右下角「＋」新增資料'); route(); };
+    $$('[data-ob]').forEach(function (b) { b.onclick = function () { ({ acc: function () { accForm(); }, hold: obHoldPick, inc: obIncomeForm, goal: obGoalForm })[b.dataset.ob](); }; });
     if ($('#todoAll')) $('#todoAll').onclick = function () { S.todoAll = !S.todoAll; var y = window.scrollY; route(); window.scrollTo(0, y); };
-    if ($('#nwChart') && !S.hide) { var sn = S.data.snapshots; SC.line($('#nwChart'), sn.map(function (x) { return x.date.slice(5).replace('-', '/'); }), sn.map(function (x) { return x.netWorth; }), function (v) { return '淨資產 NT$' + fmt(v); }); }
+    var drawNW = function () {
+      var box = $('#nwChart'); if (!box) return;
+      var rg = S.nwRange || '3m', from = rg === 'all' ? '' : FC.addDays(s.date, -({ '1m': 31, '3m': 92, '1y': 366 })[rg]);
+      var sn = (S.data.snapshots || []).filter(function (x) { return x && x.date && x.date >= from && x.date < s.date; }).sort(function (a, b) { return a.date < b.date ? -1 : 1; }).map(function (x) { return { d: x.date, v: x.netWorth }; });
+      sn.push({ d: s.date, v: Math.round(s.netWorth) });
+      $$('#nwRng button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.r === rg); });
+      if (S.hide) { $('#nwSum').innerHTML = ''; box.innerHTML = '<div class="empty hidden-chart">金額已隱藏</div>'; return; }
+      if (sn.length < 2) { $('#nwSum').innerHTML = ''; box.innerHTML = '<div class="empty">這段期間還沒有足夠的紀錄</div>'; return; }
+      var d0 = sn[0].v, chg = s.netWorth - d0, days = FC.diffDays(sn[0].d, s.date);
+      $('#nwSum').innerHTML = '<b class="' + cls3(chg) + '">' + FC.signed(chg) + '</b><span class="' + cls3(chg) + '">' + (d0 > 0 ? (chg >= 0 ? '+' : '') + pct(chg / d0, 1) : '') + '</span><span class="muted">' + (days >= 60 ? '近 ' + Math.round(days / 30.44) + ' 個月' : '近 ' + days + ' 天') + '</span>' + (s.target > s.netWorth ? '<span class="nw-gap">距目標 ' + shortMoney(s.target).replace(' ', '') + ' 還差 ' + shortMoney(s.target - s.netWorth).replace(' ', '') + '</span>' : '<span class="nw-gap ok">已達成目標</span>');
+      SC.line(box, sn.map(function (x) { return x.d.slice(5).replace('-', '/'); }), sn.map(function (x) { return x.v; }), function (v) { return '淨資產 NT$' + fmt(v); }, null, { target: s.target, endLabel: shortMoney(s.netWorth).replace(' ', '') });
+    };
+    drawNW();
+    $$('#nwRng button').forEach(function (b) { b.onclick = function () { S.nwRange = b.dataset.r; drawNW(); }; });
+
     loadNews().then(function () {
       var el = $('#homeNews'); if (!el) return;
       var items = (S.news.tw || []).slice(0, 2).concat((S.news.intl || []).slice(0, 1));
@@ -2705,6 +2863,35 @@ var Demo = (function () {
       S.data.settings.fi = { ret: num(val('fiRet')), infl: num(val('fiInf')), mult: Math.max(5, num(val('fiMul')) || 25) }; closeSheet(); commit('已更新假設'); route();
     } }]);
   }
+  function pickSheet(title, items) {
+    openSheet(title, '<div class="qa">' + items.map(function (x, i) { return '<button type="button" data-qa="' + i + '"><i>' + x[0] + '</i><b>' + x[1] + '</b><span>' + x[2] + '</span></button>'; }).join('') + '</div>', [{ label: '取消', ghost: true, fn: closeSheet }], function (b) {
+      $$('[data-qa]', b).forEach(function (el) { el.onclick = function () { var fn = items[+el.dataset.qa][3]; fn(); }; });
+    });
+  }
+  function obHoldPick() { pickSheet('要輸入哪一種？', [['股', '股票／ETF', '台股、美股', function () { holdingForm(); }], ['基', '基金', '含定期定額', function () { fundForm(); }]]); }
+  function quickAdd() {
+    pickSheet('快速新增', [['記', '記一筆收支', '花費或收入', function () { txForm(); }], ['股', '買賣股票', '台股、美股', function () { tradeForm(); }],
+      ['基', '基金申購／贖回', '含定期定額', function () { if (S.data.funds.length) fundTxForm(); else fundForm(); }], ['餘', '更新帳戶餘額', '一次改所有帳戶', function () { if (S.data.accounts.length) balancesForm(); else accForm(); }]]);
+  }
+  function balancesForm() {
+    var A0 = S.data.accounts;
+    var body = '<div class="bal-list">' + A0.map(function (a, i) { return '<div class="bal"><label for="bl' + i + '"><b>' + esc(a.name) + '</b><span>' + FC.typeLabel(a.type) + '・' + esc(a.currency || 'TWD') + '</span></label><input id="bl' + i + '" type="' + (S.hide ? 'password' : 'number') + '" inputmode="decimal" step="any" value="' + esc(a.balance) + '"></div>'; }).join('') + '</div><p class="tiny" style="margin:12px 0 0">只會更新有改動的帳戶；要新增或刪除帳戶請到「更多 › 資產與帳戶」。</p>';
+    openSheet('更新帳戶餘額', body, [{ label: '取消', ghost: true, fn: closeSheet }, { label: '儲存', fn: function () {
+      var n = 0, bad = false; A0.forEach(function (a, i) { var raw = val('bl' + i), x = num(raw); if (raw === '' || !isFinite(x)) { bad = true; return; } if (x !== num(a.balance)) { a.balance = x; n++; } });
+      if (bad) { toast('餘額不可留空'); return; }
+      closeSheet(); if (n) commit('已更新 ' + n + ' 個帳戶餘額'); else toast('餘額沒有變動'); route();
+    } }]);
+  }
+  function obIncomeForm() {
+    var P = S.data.profile;
+    openSheet('月收入與月支出', '<div class="stack"><div class="grid2"><div class="field"><label for="obInc">每月收入</label><input id="obInc" type="number" inputmode="decimal" value="' + esc(P.monthlyIncome || '') + '" placeholder="例 60000"></div><div class="field"><label for="obExp">每月支出（大約）</label><input id="obExp" type="number" inputmode="decimal" value="' + esc(P.monthlyExpense || '') + '" placeholder="例 30000"></div></div><p class="tiny" style="margin:0">先填大概的數字就好；之後有記帳，系統會改用實際的收支。</p></div>',
+      [{ label: '取消', ghost: true, fn: closeSheet }, { label: '儲存', fn: function () { var a = num(val('obInc')), b = num(val('obExp')); if (!(a > 0) || !(b > 0)) { toast('請填寫收入與支出'); return; } P.monthlyIncome = a; P.monthlyExpense = b; closeSheet(); commit('已儲存'); route(); } }]);
+  }
+  function obGoalForm() {
+    var P = S.data.profile;
+    openSheet('資產目標', '<div class="stack"><div class="grid2"><div class="field"><label for="obTgt">目標金額</label><input id="obTgt" type="number" inputmode="decimal" value="' + esc(P.targetAmount) + '"></div><div class="field"><label for="obTd">目標日</label><input id="obTd" type="date" value="' + esc(P.targetDate) + '"></div></div><p class="tiny" style="margin:0">首頁的達成率、趨勢圖的黃色目標線都以這個為準，之後可在設定調整。</p></div>',
+      [{ label: '取消', ghost: true, fn: closeSheet }, { label: '儲存', fn: function () { var a = num(val('obTgt')); if (!(a > 0) || !val('obTd')) { toast('請填寫目標金額與日期'); return; } P.targetAmount = a; P.targetDate = val('obTd'); if (!num(P.startAmount)) { P.startAmount = Math.round(sum().netWorth); P.startDate = FC.twDay(); } S.data.settings.obGoal = true; closeSheet(); commit('已設定目標'); route(); } }]);
+  }
   function fxSectionHTML() {
     var fx = S.fx, cur = ['USD', 'JPY', 'EUR'];
     var head = secHead('FX', '即時匯率', '<span class="tiny">' + (fx ? esc((fx.source || '').replace(/（.*）/, '')) + '・' + esc((fx.date || '').slice(11, 16)) : '') + '</span>');
@@ -2738,7 +2925,7 @@ var Demo = (function () {
     }
     h += '</div></section>';
     if (catKeys.length) h += '<section class="sec">' + secHead('CATEGORY', '支出分類') + '<div class="card"><div id="catChart" class="stack-sm" aria-label="支出分類"></div></div></section>';
-    h += '<section class="sec">' + secHead('RECORDS', '明細', '<button class="btn btn-sm" id="addTx">' + I.plus + '記一筆</button>') + '<div class="list">';
+    h += '<section class="sec">' + secHead('RECORDS', '明細', '<span class="tiny">' + tx.length + ' 筆</span>') + '<div class="list">';
     if (!tx.length) h += '<div class="empty">本月尚無紀錄<button class="btn btn-ghost btn-sm" id="addTx2">新增第一筆</button></div>';
     var lastD = '', dayNet = {};
     tx.forEach(function (t) { dayNet[t.date] = (dayNet[t.date] || 0) + (t.type === 'income' ? 1 : -1) * num(t.amount); });
@@ -2748,7 +2935,7 @@ var Demo = (function () {
         '<span class="item-right"><span class="item-amt ' + (t.type === 'income' ? 'up' : '') + '">' + (t.type === 'income' ? '+' : '-') + fa(t.amount) + '</span></span></button>';
     });
     h += '</div></section>';
-    v.innerHTML = h + '<button class="fab" id="fabTx" aria-label="記一筆">' + I.plus + '</button>';
+    v.innerHTML = h;
     $('#mPrev').onclick = function () { S.month = FC.addDays(m + '-01', -1).slice(0, 7); route(); };
     $('#mNext').onclick = function () { S.month = FC.addDays(m + '-28', 5).slice(0, 7); route(); };
     ['addTx', 'addTx2', 'fabTx'].forEach(function (id) { var b = $('#' + id); if (b) b.onclick = function () { txForm(); }; });
@@ -2779,7 +2966,7 @@ var Demo = (function () {
       $$('#txCats .chip').forEach(function (b) { b.onclick = function () { cat = b.textContent; $$('#txCats .chip').forEach(function (x) { x.setAttribute('aria-pressed', x === b); }); }; });
     }
     var btns = [];
-    if (!isNew) btns.push({ label: '刪除', danger: true, fn: function () { confirmDel(t.category + ' ' + fmt(t.amount), function () { S.data.transactions = S.data.transactions.filter(function (x) { return x.id !== t.id; }); commit('已刪除'); route(); }); } });
+    if (!isNew) btns.push({ label: '刪除', danger: true, fn: function () { confirmDel(t.category + (S.hide ? '' : ' ' + fmt(t.amount)), function () { S.data.transactions = S.data.transactions.filter(function (x) { return x.id !== t.id; }); commit('已刪除'); route(); }); } });
     else btns.push({ label: '取消', ghost: true, fn: closeSheet });
     btns.push({ label: '儲存', fn: function () {
       var amt = num(val('txAmt'));
@@ -2886,6 +3073,7 @@ var Demo = (function () {
     openSheet(isNew ? '新增基金' : '編輯基金', body, [isNew ? { label: '取消', ghost: true, fn: closeSheet } : { label: '刪除', danger: true, fn: function () { confirmDel(f.name, function () { S.data.funds = S.data.funds.filter(function (x) { return x.id !== f.id; }); S.data.fundTx = S.data.fundTx.filter(function (x) { return x.fundId !== f.id; }); commit('已刪除'); route(); }); } },
       { label: '儲存', fn: function () {
         if (!val('fnName')) { toast('請輸入基金名稱'); return; }
+        if (num(val('fnUnits')) < 0 || num(val('fnCost')) < 0 || num(val('fnNav')) < 0) { toast('單位數、成本、淨值不可為負數'); return; }
         var on = segVal('fnDca') === '1';
         if (on && !(num(val('fnAmt')) > 0)) { toast('請輸入定期定額每期金額'); return; }
         var rec = Object.assign({}, f, { name: val('fnName'), type: val('fnType'), currency: val('fnCur'), units: num(val('fnUnits')), cost: num(val('fnCost')), nav: num(val('fnNav')), navDate: val('fnNd'), platform: val('fnPf'), code: FC.fundCode(val('fnCode')), official: f.official || '',
@@ -2927,6 +3115,8 @@ var Demo = (function () {
     openSheet('申購／贖回', body, [{ label: '取消', ghost: true, fn: closeSheet }, { label: '記錄', fn: function () {
       var f = find(S.data.funds, val('ftFund')), sd = segVal('ftSide'), nav = num(val('ftNav')), amt = num(val('ftAmt')), fee = num(val('ftFee')), u = num(val('ftUnits')), d = val('ftDate');
       if (!(nav > 0) || !(u > 0)) { toast('請填寫淨值與單位數'); return; }
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(d)) { toast('請選擇日期'); return; }
+      if (fee < 0) { toast('手續費不可為負數'); return; }
       var t = { id: FC.uid(), fundId: f.id, date: d, side: sd, nav: nav, fee: fee, units: u, currency: f.currency };
       if (sd === 'buy') { if (!(amt > 0)) { toast('請填寫申購金額'); return; } t.amount = amt; f.units = num(f.units) + u; f.cost = num(f.cost) + amt; if (pre.dca || (f.dca && f.dca.on && Math.abs(amt - num(f.dca.amount)) < 1)) { t.dca = true; f.dcaLast = d.slice(0, 7); } }
       else {
@@ -2935,7 +3125,7 @@ var Demo = (function () {
         f.units = num(f.units) - u; f.cost = Math.max(0, num(f.cost) - costOut);
       }
       if (!f.navDate || d >= f.navDate) { f.nav = nav; f.navDate = d; }
-      S.data.fundTx.push(t); closeSheet(); commit(sd === 'buy' ? '已記錄申購' : '已記錄贖回，實現損益 ' + FC.signed(t.realized)); route();
+      S.data.fundTx.push(t); closeSheet(); commit(sd === 'buy' ? '已記錄申購' : '已記錄贖回' + (S.hide ? '' : '，實現損益 ' + FC.signed(t.realized))); route();
     } }], function () {
       var calc = function () {
         var sd = segVal('ftSide'), nav = num(val('ftNav')), amt = num(val('ftAmt')), fee = num(val('ftFee')), f = find(S.data.funds, val('ftFund'));
@@ -3126,7 +3316,7 @@ var Demo = (function () {
       if (h0) {
         var be = breakEven(h0);
         h += '<section class="card"><div class="ct">我的部位<button type="button" class="link-btn" id="stEdit">編輯股數／成本 ›</button></div><div class="g3">' +
-          g3('持有', A(fmt(h0.qty)) + ' 股') + g3('均價', fmt(h0.avgCost, 2)) + g3('損益兩平', fmt(be, 2)) +
+          g3('持有', A(fmt(h0.qty)) + ' 股') + g3('均價', A(fmt(h0.avgCost, 2))) + g3('損益兩平', A(fmt(be, 2))) +
           g3('市值', (isUS ? 'US$' + fa(h0.value, 0) : fa(h0.valueTWD))) + g3('未實現', '<span class="' + cls3(h0.upl) + '">' + A(FC.signed(isUS ? h0.upl : h0.uplTWD, isUS ? 2 : 0)) + '</span>') + g3('報酬率', plPct(h0.uplPct)) + '</div>' +
           '<p class="tiny" style="margin:8px 0 0">損益兩平已含賣出手續費 0.1425% 與證交稅（股票 0.3%／ETF 0.1%）。</p></section>';
       }
@@ -3276,7 +3466,7 @@ var Demo = (function () {
     btns.push({ label: '儲存提醒', fn: function () {
       var sym = val('alSym').toUpperCase(), p = num(val('alPx'));
       if (!sym || p <= 0) { toast('請填寫代號與價格'); return; }
-      var rec = { id: a.id, symbol: sym, name: val('alName') || sym, market: val('alMkt'), op: segVal('alOp'), price: p, on: true, note: val('alNote') };
+      var rec = { id: a.id, symbol: sym, name: val('alName') || sym, market: val('alMkt'), op: segVal('alOp'), price: p, on: a.on !== false, note: val('alNote') };
       S.data.alerts = S.data.alerts || [];
       if (isNew) S.data.alerts.push(rec); else S.data.alerts = S.data.alerts.map(function (x) { return x.id === a.id ? rec : x; });
       if (S.localFired) delete S.localFired[a.id];
@@ -3318,7 +3508,8 @@ var Demo = (function () {
     var items = divItems();
     if (!items.length) { S.divData = {}; return Promise.resolve(); }
     if (S.divData && !force && Date.now() - (S.divAt || 0) < 3600000 && items.every(function (i) { return S.divData[i.symbol]; })) return Promise.resolve();
-    return API.call('dividends', { items: items }).then(function (r) { if (r.ok) { S.divData = r.dividends; S.divAt = Date.now(); } else S.divErr = r.error; });
+    if (S.divFailAt && !force && Date.now() - S.divFailAt < 120000) return Promise.resolve();
+    return API.call('dividends', { items: items }).then(function (r) { if (r.ok) { S.divData = r.dividends; S.divAt = Date.now(); S.divErr = ''; S.divFailAt = 0; } else { S.divErr = r.error || '股利資料載入失敗'; S.divFailAt = Date.now(); S.divData = S.divData || {}; } });
   }
   /** 某日（除息日前一天收盤）時持有的股數 */
   function qtyAt(sym, date) {
@@ -3437,10 +3628,10 @@ var Demo = (function () {
     h += '<p class="grp-t">五大面向（最需改善排最前）</p>';
     sc.items.slice().sort(function (a, b) { return a.priority - b.priority; }).forEach(function (x) {
       var idx = ['D', 'C', 'B', 'A', 'A+'].indexOf(x.grade);
-      h += '<section class="card dimcard"><div class="dimrow"><span class="gr" style="background:' + GCOL[x.grade] + '">' + x.grade + '</span><span class="mid"><b>' + esc(x.label) + '</b><span>權重 ' + x.weight + '%・' + esc(x.basis) + '</span></span><span class="sc">' + x.score + '</span></div>' +
+      h += '<section class="card dimcard"><div class="dimrow"><span class="gr" style="background:' + GCOL[x.grade] + '">' + x.grade + '</span><span class="mid"><b>' + esc(x.label) + '</b><span>權重 ' + x.weight + '%・' + mt(x.basis) + '</span></span><span class="sc">' + x.score + '</span></div>' +
         '<p class="tiny ladder-t">' + LADDER_T[x.key] + '分級參考</p><div class="ladder">' + ['D', 'C', 'B', 'A', 'A+'].map(function (g, i) { return '<span' + (i === idx ? ' class="on" aria-current="true"' : '') + '><b>' + g + '</b>' + LADDER[x.key][i] + '</span>'; }).join('') + '</div>' +
-        (x.score < 90 ? '<div class="tip">改善：' + esc(x.improve) + '</div>' : '<div class="tip ok">' + esc(x.strength) + '</div>') +
-        '<details class="dim-more"><summary>優勢與風險</summary><div class="score-detail"><div><b>優勢</b>' + esc(x.strength) + '</div><div><b>風險</b>' + esc(x.risk) + '</div></div></details></section>';
+        (x.score < 90 ? '<div class="tip">改善：' + mt(x.improve) + '</div>' : '<div class="tip ok">' + mt(x.strength) + '</div>') +
+        '<details class="dim-more"><summary>優勢與風險</summary><div class="score-detail"><div><b>優勢</b>' + mt(x.strength) + '</div><div><b>風險</b>' + mt(x.risk) + '</div></div></details></section>';
     });
     h += '<p class="tiny" style="margin-top:8px">總分＝流動性 20%＋現金流 20%＋成長 20%＋分散 25%＋執行 15%。目前等級以各面向分數判定，分級參考為對應的關鍵指標。</p>';
     h += '<button class="btn btn-ghost btn-block" id="scAI" style="margin-top:8px">' + I.spark + '請 AI 給我改善計畫</button>';
@@ -3528,8 +3719,10 @@ var Demo = (function () {
       var known = S.data.securities[sym];
       if (known && !val(nameId)) $('#' + nameId).value = known.name;
       var info = $('#' + infoId); info.hidden = false; info.className = 'alert info'; info.innerHTML = '<span>查詢 ' + esc(sym) + ' 中…</span>';
+      var saveBtn = $('.sheet-foot [data-b="1"]'); if (saveBtn) saveBtn.disabled = true;
       API.call('lookup', { symbol: sym }).then(function (r) {
-        if (val(symId).toUpperCase() !== sym) return;
+        var sb = $('.sheet-foot [data-b="1"]'); if (sb) sb.disabled = false;
+        if (!$('#' + symId) || val(symId).toUpperCase() !== sym) return;
         if (!r.ok) { info.className = 'alert'; info.innerHTML = '<span>' + esc(r.error || '查不到這個代號') + '，仍可手動填寫名稱與市場</span>'; return; }
         if (r.name && (!val(nameId) || !known)) $('#' + nameId).value = r.name;
         if (mktId && r.market) $('#' + mktId).value = r.market;
@@ -3604,6 +3797,11 @@ var Demo = (function () {
     btns.push({ label: '儲存', fn: function () {
       var sym = val('trSym').toUpperCase(), qty = num(val('trQty')), px = num(val('trPx'));
       if (!sym || qty <= 0 || px <= 0) { toast('請填寫代號、股數與成交價'); return; }
+      if (num(val('trFee')) < 0 || num(val('trTax')) < 0) { toast('手續費與交易稅不可為負數'); return; }
+      if (segVal('trSide') === 'sell') {
+        var heldQ = 0; S.data.trades.forEach(function (x) { if (x.symbol === sym && x.id !== t.id) heldQ = x.side === 'adjust' ? num(x.qty) : heldQ + (x.side === 'buy' ? 1 : -1) * num(x.qty); });
+        if (qty > heldQ + 1e-6) { toast('賣出 ' + fmt(qty) + ' 股超過目前持有 ' + fmt(Math.max(0, heldQ)) + ' 股，請先確認持股'); return; }
+      }
       var mkt = val('trMkt');
       var rec = { id: t.id || FC.uid(), date: val('trDate') || FC.twDay(), symbol: sym, name: val('trName') || sym, market: mkt, side: segVal('trSide'), qty: qty, price: px, fee: num(val('trFee')), tax: num(val('trTax')), settled: $('#trSet').checked, note: val('trNote') };
       S.data.securities[sym] = { name: rec.name, market: mkt, cls: val('trCls') };
@@ -3640,7 +3838,7 @@ var Demo = (function () {
     var recs = S.data.trades.filter(function (t) { return t.symbol === sym; });
     var body = '<div class="stack">' +
       '<div class="trio">' + kpi('現價', fmt(h.price, h.price >= 1000 ? 0 : 2), cp != null ? '<span class="' + (cp > 0 ? 'up' : cp < 0 ? 'down' : '') + '">' + (cp > 0 ? '▲' : cp < 0 ? '▼' : '') + pct(Math.abs(cp), 2) + '</span>' : '') +
-      kpi('市值', fmt(h.valueTWD)) + kpi('未實現', plSpan(h.uplTWD), plPct(h.uplPct)) + '</div>' +
+      kpi('市值', fa(h.valueTWD)) + kpi('未實現', plSpan(h.uplTWD), plPct(h.uplPct)) + '</div>' +
       '<div class="grid2"><div class="field"><label for="secQty">持有股數</label><input id="secQty" type="number" inputmode="decimal" min="0" value="' + FC.round(h.qty, 4) + '"></div>' +
       '<div class="field"><label for="secCost">平均成本</label><input id="secCost" type="number" inputmode="decimal" min="0" step="0.01" value="' + FC.round(h.avgCost, 2) + '"></div></div>' +
       '<div class="field"><label for="secCls">配置分類</label><select id="secCls">' + ['core', 'satellite', 'bond', 'defensive', 'other'].map(function (k) { return '<option value="' + k + '"' + (k === h.cls ? ' selected' : '') + '>' + FC.CLASSES[k].label + '</option>'; }).join('') + '</select></div>' +
@@ -3754,7 +3952,7 @@ var Demo = (function () {
     var pend = { role: 'assistant', pending: true }; S.chat.push(pend); drawChat();
     var msgs = S.chat.filter(function (m) { return !m.pending && !m.error; }).slice(-12).map(function (m) { return { role: m.role, content: m.content }; });
     API.call('ai', { messages: msgs, provider: S.data.settings.aiProvider, search: S.aiSearch !== false, quotes: S.quotes, fx: S.fx }).then(function (r) {
-      S.chat.pop();
+      var pi = S.chat.indexOf(pend); if (pi >= 0) S.chat.splice(pi, 1);
       if (r.ok) S.chat.push({ role: 'assistant', content: r.text || '（沒有回覆內容）', sources: r.sources, meta: (r.provider || '') + (r.model ? '・' + r.model : '') + '・' + FC.twTime() });
       else S.chat.push({ role: 'assistant', error: true, content: '⚠ ' + (r.error || '發生錯誤') + '\n請到「設定」確認 API Key 與模型名稱。' });
       drawChat();
@@ -3776,8 +3974,11 @@ var Demo = (function () {
       var p = sc <= 8 ? '保守' : sc <= 11 ? '穩健' : '積極';
       S.data.profile.riskProfile = p;
       var preset = { '保守': { core: 30, satellite: 5, bond: 35, defensive: 10, cash: 20 }, '穩健': { core: 50, satellite: 15, bond: 15, defensive: 5, cash: 15 }, '積極': { core: 55, satellite: 25, bond: 5, defensive: 5, cash: 10 } }[p];
-      S.data.targetAllocation = preset;
-      closeSheet(); commit('風險屬性：' + p + '（' + sc + ' 分），已套用建議目標配置'); route();
+      closeSheet(); commit('風險屬性：' + p + '（' + sc + ' 分）'); route();
+      var ta0 = S.data.targetAllocation, fundKeep = Math.min(40, num(ta0.fund)), scale = (100 - fundKeep) / 100, nx = { fund: fundKeep }, tot = fundKeep;
+      ['core', 'satellite', 'bond', 'defensive'].forEach(function (k) { nx[k] = Math.round(preset[k] * scale); tot += nx[k]; }); nx.cash = 100 - tot;
+      openSheet('要套用建議的目標配置嗎？', '<p>依「' + p + '」型建議的配置如下' + (fundKeep ? '（保留你原本的基金 ' + fundKeep + '%）' : '') + '：</p><div class="card"><dl class="kv">' + TA_KEYS.map(function (k) { return '<dt>' + FC.CLASSES[k].label + '</dt><dd>' + num(ta0[k]) + '% → <b>' + nx[k] + '%</b></dd>'; }).join('') + '</dl></div><p class="tiny">不套用也沒關係，之後可到「設定 › 目標配置」自行調整。</p>',
+        [{ label: '維持原本', ghost: true, fn: closeSheet }, { label: '套用建議', fn: function () { S.data.targetAllocation = nx; closeSheet(); commit('已套用建議目標配置'); route(); } }]);
     } }], function (b) {
       $$('.opts', b).forEach(function (g) { $$('.opt', g).forEach(function (o) { o.onclick = function () { $$('.opt', g).forEach(function (x) { x.setAttribute('aria-pressed', 'false'); }); o.setAttribute('aria-pressed', 'true'); ans[+g.dataset.qi] = +o.dataset.a; }; }); });
     });
@@ -3797,7 +3998,7 @@ var Demo = (function () {
   function pageAssets(v) {
     var s = sum();
     var h = '<div class="kpis">' + kpi('現金總和', money(s.cashTotal)) + kpi('金融資產總市值', money(s.financial)) + kpi('應收款', money(s.receivable)) + kpi('負債（貸款＋應付）', money(s.payable + s.loanTotal)) + '</div>';
-    h += '<section class="sec">' + secHead('CASH', '現金帳戶', '<button class="btn btn-sm" id="addAcc">' + I.plus + '新增</button>') + '<div class="list">';
+    h += '<section class="sec">' + secHead('CASH', '現金帳戶', (S.data.accounts.length > 1 ? '<button class="btn btn-sm btn-ghost" id="balAll">更新餘額</button> ' : '') + '<button class="btn btn-sm" id="addAcc">' + I.plus + '新增</button>') + '<div class="list">';
     if (!S.data.accounts.length) h += '<div class="empty">新增銀行、證券交割戶、電子支付或現金</div>';
     S.data.accounts.forEach(function (a) {
       var twd = FC.toTWD(a.balance, a.currency, S.fx);
@@ -3850,6 +4051,7 @@ var Demo = (function () {
     function fxCalc() { var c = val('fxCur'); $('#fxOut').textContent = rates[c] ? 'NT$ ' + fmt(num(val('fxAmt')) * rates[c]) : '—'; }
     if (curs.length) { $('#fxAmt').oninput = fxCalc; $('#fxCur').onchange = fxCalc; fxCalc(); }
     $('#addAcc').onclick = function () { accForm(); };
+    if ($('#balAll')) $('#balAll').onclick = balancesForm;
     $('#addLed').onclick = function () { ledForm(); };
     $('#addOth').onclick = function () { othForm(); };
     $('#addLoan').onclick = function () { loanForm(); };
@@ -3897,7 +4099,8 @@ var Demo = (function () {
       '<div class="field"><label for="lnPri">原始貸款金額（選填，用來算已還比例）</label><input id="lnPri" type="number" inputmode="decimal" value="' + esc(l.principal) + '"></div>' +
       '<div class="tiny" id="lnHint" style="margin:0"></div></div>';
     openSheet(isNew ? '新增貸款' : '編輯貸款', body, [isNew ? { label: '取消', ghost: true, fn: closeSheet } : delBtn('loans', l, l.name), { label: '儲存', fn: function () {
-      if (!val('lnName') || !(num(val('lnBal')) >= 0)) { toast('請填寫名稱與餘額'); return; }
+      if (!val('lnName') || val('lnBal') === '' || !(num(val('lnBal')) >= 0)) { toast('請填寫名稱與餘額'); return; }
+      if (num(val('lnRate')) < 0 || num(val('lnRate')) > 40) { toast('年利率請填 0～40 之間'); return; }
       if (!(num(val('lnMon')) > 0)) { toast('請填寫每月還款'); return; }
       crud('loans', { id: l.id, name: val('lnName'), type: val('lnType'), balance: num(val('lnBal')), rate: num(val('lnRate')), monthly: num(val('lnMon')), payDay: Math.min(28, Math.max(1, num(val('lnDay')) || 1)), principal: num(val('lnPri')), asOf: FC.twDay() }, isNew, isNew ? '已新增貸款' : '已儲存');
     } }], function () {
@@ -3914,6 +4117,7 @@ var Demo = (function () {
       '<div class="field"><label for="otVal">目前價值</label><input id="otVal" type="number" inputmode="decimal" value="' + esc(o.value) + '"></div></div>';
     openSheet(isNew ? '新增其他資產' : '編輯資產', body, [isNew ? { label: '取消', ghost: true, fn: closeSheet } : delBtn('otherAssets', o, o.name), { label: '儲存', fn: function () {
       if (!val('otName')) { toast('請輸入名稱'); return; }
+      if (num(val('otVal')) < 0) { toast('價值不可為負數'); return; }
       crud('otherAssets', { id: o.id, name: val('otName'), cls: val('otCls'), currency: val('otCur'), value: num(val('otVal')) }, isNew);
     } }]);
   }
@@ -3954,8 +4158,9 @@ var Demo = (function () {
 
   // ═════════ 新聞 ═════════
   function loadNews(force) {
-    if (S.news && !force) return Promise.resolve();
-    return API.call('news').then(function (r) { S.news = r.ok ? r.news : { tw: [], intl: [], error: r.error }; });
+    if (S.news && !force && !S.news.error && Date.now() - (S.newsAt || 0) < 1800000) return Promise.resolve();
+    if (S.news && S.news.error && !force && Date.now() - (S.newsAt || 0) < 60000) return Promise.resolve();
+    return API.call('news').then(function (r) { S.newsAt = Date.now(); S.news = r.ok ? r.news : { tw: [], intl: [], error: r.error || '新聞載入失敗' }; });
   }
   function newsItemHTML(n, i) {
     return '<div class="news-item"><a class="news-title" href="' + esc(n.link) + '" target="_blank" rel="noopener">' + esc(n.title) + '</a>' +
@@ -4002,29 +4207,30 @@ var Demo = (function () {
       '<button class="btn btn-block" id="rpSave">儲存排程</button><p class="tiny" style="margin:0">Google 排程會在設定時間前後 15 分鐘內執行。建議設在台股收盤資料公布後（14:30 以後）。</p></div></section>';
     h += '<section class="sec">' + secHead('PREVIEW', '報表預覽') + '<div id="rpBox"><div class="card empty">按「預覽今日報表」產生</div></div></section>';
     v.innerHTML = h;
-    if (S.reportHtml) showReport(S.reportHtml);
+    if (S.reportHtml && !S.hide) showReport(S.reportHtml);
     function run(send) {
       var btn = send ? $('#rpSend') : $('#rpPrev'); btn.disabled = true; var old = btn.textContent; btn.textContent = '產生中…';
       $('#rpBox').innerHTML = '<div class="card empty"><span class="typing"><i></i><i></i><i></i></span>正在擷取報價、匯率、新聞並分析…</div>';
       API.call('report', { send: send, ai: $('#rpAI').checked }).then(function (r) {
         btn.disabled = false; btn.textContent = old;
-        if (!r.ok) { $('#rpBox').innerHTML = '<div class="alert">' + I.alert + '<span>' + esc(r.error) + '</span></div>'; return; }
+        if (!S.data) return;
+        if (!r.ok) { if ($('#rpBox')) $('#rpBox').innerHTML = '<div class="alert">' + I.alert + '<span>' + esc(r.error) + '</span></div>'; else toast('報表產生失敗：' + r.error); return; }
         if (r.updatedAt) S.data.updatedAt = r.updatedAt;
         if (r.snapshots) S.data.snapshots = r.snapshots;
         if (r.quotes) S.quotes = r.quotes;
-        S.reportHtml = r.html; showReport(r.html);
+        S.reportHtml = r.html; if ($('#rpBox')) showReport(r.html); else toast('報表已產生，可到「每日報表」查看');
         if (r.sent) toast('已寄送至 ' + r.sent);
       });
     }
     $('#rpPrev').onclick = function () { run(false); };
     $('#rpSend').onclick = function () { run(true); };
     $('#rpSave').onclick = function () {
-      var t = (val('rpTime') || '20:30').split(':');
-      API.call('schedule', { hour: +t[0], minute: +t[1], enabled: $('#rpOn').checked, email: val('rpMail') }).then(function (r) {
+      var tv = val('rpTime') || '20:30', t = tv.split(':'), on = $('#rpOn').checked, mail = val('rpMail');
+      API.call('schedule', { hour: +t[0], minute: +t[1], enabled: on, email: mail }).then(function (r) {
         if (!r.ok) { toast(r.error); return; }
-        if (r.data && !S.demo) S.data = FC.normalize(r.data);
-        S.data.settings.reportEmail = val('rpMail'); S.data.settings.reportHour = +t[0]; S.data.settings.reportMinute = +t[1]; S.data.settings.reportEnabled = $('#rpOn').checked;
-        toast($('#rpOn').checked ? '已排程：每日 ' + val('rpTime') + ' 寄送' : '已停用每日寄送');
+        if (!S.data) return;
+        S.data.settings.reportEmail = mail; S.data.settings.reportHour = +t[0]; S.data.settings.reportMinute = +t[1]; S.data.settings.reportEnabled = on;
+        toast(on ? '已排程：每日 ' + tv + ' 寄送' : '已停用每日寄送');
       });
     };
   }
@@ -4093,13 +4299,13 @@ var Demo = (function () {
       '<div class="field"><label for="pfG1">短期目標（1 年內）</label><input id="pfG1" type="text" value="' + esc(P.goalShort) + '"></div>' +
       '<div class="field"><label for="pfG2">中期目標（1–5 年）</label><input id="pfG2" type="text" value="' + esc(P.goalMid) + '"></div>' +
       '<div class="field"><label for="pfG3">長期目標（5 年以上）</label><input id="pfG3" type="text" value="' + esc(P.goalLong) + '"></div>' +
-      '<button class="btn btn-block" id="pfSave">儲存個人檔案</button></div></section>';
+      '<div class="saved" id="pfStat" role="status">改完會自動儲存</div></div></section>';
 
     h += privacyHTML();
     h += '<section class="sec">' + secHead('TARGET ALLOCATION', '目標配置（%）') + '<div class="card stack">' +
       '<div class="grid2">' + TA_KEYS.map(function (k) { return '<div class="field"><label for="ta_' + k + '">' + FC.CLASSES[k].label + '</label><input id="ta_' + k + '" type="number" inputmode="numeric" min="0" max="100" value="' + esc(ta[k] || 0) + '"></div>'; }).join('') +
       '</div><div class="field"><span class="lbl">合計</span><div class="input" id="taSum" style="display:flex;align-items:center;justify-content:center;background:var(--bg);font-weight:700">—</div></div>' +
-      '<button class="btn btn-block" id="taSave">儲存目標配置</button></div></section>';
+      '<div class="saved" id="taStat" role="status">合計 100% 時自動儲存</div></div></section>';
 
     h += '<section class="sec">' + secHead('AI', 'AI 供應商與金鑰') + '<div class="card stack">' +
       '<div class="field"><label for="aiP">預設 AI</label><select id="aiP">' + [['gemini', 'Google Gemini'], ['openai', 'OpenAI ChatGPT'], ['claude', 'Anthropic Claude']].map(function (o) { return '<option value="' + o[0] + '"' + (o[0] === st.aiProvider ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select></div>' +
@@ -4124,18 +4330,28 @@ var Demo = (function () {
       (GAS ? '' : '<button class="btn btn-ghost btn-block" id="apiChange">變更後端連線</button>') + '</div></section>';
     v.innerHTML = h;
 
-    $('#pfSave').onclick = function () {
-      Object.assign(P, { name: val('pfName'), riskProfile: val('pfRisk'), monthlyIncome: num(val('pfInc')), monthlyExpense: num(val('pfExp')), targetAmount: num(val('pfTgt')) || 1000000, targetDate: val('pfTd'),
-        startAmount: num(val('pfSa')), startDate: val('pfSd'), horizonYears: num(val('pfHz')), goalShort: val('pfG1'), goalMid: val('pfG2'), goalLong: val('pfG3') });
-      commit('已儲存個人檔案');
+    var pfT, pfSave = function () {
+      if (!$('#pfName')) return;
+      var inc = num(val('pfInc')), ex = num(val('pfExp')), hz = num(val('pfHz')), st0 = $('#pfStat');
+      if (inc < 0 || ex < 0 || hz < 0 || num(val('pfTgt')) < 0) { st0.className = 'saved warn'; st0.textContent = '金額與年數不可為負數，尚未儲存'; return; }
+      if (!val('pfTd')) { st0.className = 'saved warn'; st0.textContent = '請選擇目標日，尚未儲存'; return; }
+      var tgt0 = P.targetAmount, td0 = P.targetDate;
+      Object.assign(P, { name: val('pfName'), riskProfile: val('pfRisk'), monthlyIncome: inc, monthlyExpense: ex, targetAmount: num(val('pfTgt')) || 1000000, targetDate: val('pfTd'),
+        startAmount: num(val('pfSa')), startDate: val('pfSd'), horizonYears: hz, goalShort: val('pfG1'), goalMid: val('pfG2'), goalLong: val('pfG3') });
+      if (P.targetAmount !== tgt0 || P.targetDate !== td0) st.obGoal = true;
+      commit(); st0.className = 'saved ok'; st0.textContent = '✓ 已自動儲存　' + FC.twTime();
     };
+    ['pfName', 'pfRisk', 'pfInc', 'pfExp', 'pfTgt', 'pfTd', 'pfSa', 'pfSd', 'pfHz', 'pfG1', 'pfG2', 'pfG3'].forEach(function (id) { var e = $('#' + id); if (!e) return; e.addEventListener('change', pfSave); e.addEventListener('input', function () { clearTimeout(pfT); pfT = setTimeout(pfSave, 900); }); });
     function taSum() { var t = 0; TA_KEYS.forEach(function (k) { t += num(val('ta_' + k)); }); $('#taSum').textContent = t + '%'; $('#taSum').style.color = t === 100 ? 'var(--down)' : 'var(--up)'; return t; }
-    $$('[id^=ta_]').forEach(function (i) { i.oninput = taSum; }); taSum();
-    $('#taSave').onclick = function () {
-      if (taSum() !== 100) { toast('合計需為 100%'); return; }
+    var taSave = function () {
+      var t = taSum(), st1 = $('#taStat');
+      if (TA_KEYS.some(function (k) { var x = num(val('ta_' + k)); return x < 0 || x > 100; })) { st1.className = 'saved warn'; st1.textContent = '每一項請填 0～100，尚未儲存'; return; }
+      if (t !== 100) { st1.className = 'saved warn'; st1.textContent = '目前合計 ' + t + '%，' + (t < 100 ? '還差 ' + (100 - t) : '超過 ' + (t - 100)) + '%，尚未儲存'; return; }
+      if (TA_KEYS.every(function (k) { return num(ta[k]) === num(val('ta_' + k)); })) { st1.className = 'saved ok'; st1.textContent = '✓ 合計 100%・已儲存'; return; }
       TA_KEYS.forEach(function (k) { ta[k] = num(val('ta_' + k)); });
-      commit('已儲存目標配置');
+      commit(); st1.className = 'saved ok'; st1.textContent = '✓ 合計 100%・已自動儲存　' + FC.twTime();
     };
+    $$('[id^=ta_]').forEach(function (i) { i.oninput = taSave; }); taSum();
     $('#aiSave').onclick = function () { st.aiProvider = val('aiP'); st.models = { gemini: val('mG'), openai: val('mO'), claude: val('mC') }; commit('已儲存 AI 設定'); };
     API.call('secretStatus').then(function (r) {
       var el = $('#keyStat'); if (!el) return;
@@ -4161,7 +4377,21 @@ var Demo = (function () {
       var f = e.target.files[0]; if (!f) return;
       var rd = new FileReader();
       rd.onload = function () {
-        try { var d = JSON.parse(rd.result); if (!d.profile || !d.trades) throw new Error('格式不符'); }
+        try {
+          var d = JSON.parse(rd.result); if (!d || typeof d !== 'object' || !d.profile || !Array.isArray(d.trades)) throw new Error('格式不符');
+          (function clean(o) {   // 匯入檔的 id 與日期欄位只留安全字元，避免壞資料或惡意內容
+            if (Array.isArray(o)) { o.forEach(clean); return; }
+            if (!o || typeof o !== 'object') return;
+            Object.keys(o).forEach(function (k) {
+              var v = o[k];
+              if (/^(id|fundId|botId)$/.test(k) && v != null) o[k] = String(v).replace(/[^A-Za-z0-9_\-]/g, '').slice(0, 40);
+              else if (/^(date|due|navDate|asOf|deadline|since|startDate|targetDate)$/.test(k) && v) o[k] = /^\d{4}-\d{2}-\d{2}$/.test(String(v)) ? String(v) : '';
+              else if (/^(currency|market|side|type|cls|kind|op)$/.test(k) && v != null) o[k] = String(v).replace(/[^A-Za-z0-9_]/g, '').slice(0, 16);
+              else clean(v);
+            });
+          })(d);
+          var chk = FC.normalize(JSON.parse(JSON.stringify(d))), sm = FC.summarize(chk, {}, S.fx || {}); FC.scores(chk, sm); FC.health(chk, sm, S.fx || {});
+        }
         catch (err) { toast('匯入失敗：' + err.message); return; }
         openSheet('確認匯入', '<p>匯入將覆蓋目前所有資料，確定嗎？（雲端仍會保留每日備份）</p>', [{ label: '取消', ghost: true, fn: closeSheet }, { label: '覆蓋匯入', danger: true, fn: function () { var keep = S.data.updatedAt; S.data = FC.normalize(d); S.data.updatedAt = keep; closeSheet(); commit('已匯入'); route(); } }]);
       };
@@ -4174,7 +4404,7 @@ var Demo = (function () {
   function init() {
     tick(); setInterval(tick, 1000);
     bindLogin();
-    $('#backBtn').onclick = function () { var R = ROUTES[currentRoute()]; location.hash = typeof R.back === 'string' ? R.back : '#/more'; };
+    $('#backBtn').onclick = function () { var R = ROUTES[currentRoute()]; if (navStack.length > 1) { history.back(); return; } location.hash = typeof R.back === 'string' ? R.back : '#/more'; };
     $('#syncBtn').onclick = function () { if ($('#syncBtn').dataset.s === 'error') doSave(); else toast({ ok: '資料已同步到 Google 雲端硬碟', saving: '同步中…', demo: '示範模式，資料不會儲存' }[$('#syncBtn').dataset.s]); };
     $('#exitDemo').onclick = function () { logout(); };
     $('#shield').onclick = function () { if (!checkLock()) shield(false); };
